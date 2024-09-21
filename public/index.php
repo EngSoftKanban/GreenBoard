@@ -1,3 +1,22 @@
+<?php
+
+$host = 'localhost';
+$dbname = 'GreenBoard';
+$user = 'root';
+$password = '';
+
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Erro ao conectar com o banco de dados: " . $e->getMessage());
+}
+
+
+$sql = "SELECT * FROM listas";
+$listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -21,75 +40,93 @@
     </div>
 
     <div class="kanban-board">
-        <?php
-        
-        $columns = [
-            "A fazer" => [
-                ["title" => "Uma feature qualquer no Kanban", "statuses" => ["blue", "yellow", "cyan"]],
-                ["title" => "Outra feature no Kanban como exemplo", "statuses" => []]
-            ],
-            "Em andamento" => [
-                ["title" => "Uma feature qualquer no Kanban", "statuses" => ["cyan"]],
-            ],
-            "Concluído" => []
-        ];
+        <?php foreach ($listas as $lista): ?>
+            <div class="column" id="lista_<?php echo $lista['id']; ?>">
+                <div class="column-header">
+                    <h2><?php echo $lista['titulo']; ?></h2>
+                    <div class="column-options">
+                    <span class="options-icon" onclick="toggleOptions(<?php echo $lista['id']; ?>)" style="color: black;">&#9998;</span>
+                        <div class="options-menu" id="options_menu_<?php echo $lista['id']; ?>">
+                            <button class="edit-list-btn">Editar</button>
+                            <button class="delete-list-btn" onclick="deleteColumn(<?php echo $lista['id']; ?>)">Excluir</button>
+                        </div>
+                    </div>
+                </div>
 
-        foreach ($columns as $columnName => $cards) {
-            $columnId = uniqid('col_'); 
-            echo '<div class="column" id="' . $columnId . '">';
-            echo '<div class="column-header">';
-            echo '<h2>' . $columnName . '</h2>';
-            echo '<div class="column-options">';
-            echo '<span class="options-icon">&#8226;&#8226;&#8226;</span>';
-            echo '<div class="options-menu">';
-            echo '<button class="edit-list-btn">Editar</button>';
-            echo '<button class="delete-list-btn" onclick="deleteColumn(\'' . $columnId . '\')">Excluir</button>'; 
-            echo '</div>';
-            echo '</div>';
-            echo '</div>';
+                <?php
+                
+                $sqlCards = "SELECT * FROM cartoes WHERE lista_id = :lista_id";
+                $stmt = $pdo->prepare($sqlCards);
+                $stmt->bindParam(':lista_id', $lista['id']);
+                $stmt->execute();
+                $cartoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                ?>
 
-            foreach ($cards as $index => $card) {
-                $cardId = uniqid('card_'); 
-                echo '<div class="card" id="' . $cardId . '">';
-                if (!empty($card['statuses'])) {
-                    echo '<div class="card-header">';
-                    foreach ($card['statuses'] as $status) {
-                        echo '<span class="status ' . $status . '"></span>';
-                    }
-                    echo '</div>';
-                }
-                echo '<p>' . $card['title'] . '</p>';
-                echo '<div class="card-options">';
-                echo '<button class="edit-btn">&#9998;</button>';
-                echo '<div class="card-options-menu">';
-                echo '<button class="edit-card-btn">Editar</button>';
-                echo '<button class="delete-card-btn" onclick="deleteCard(\'' . $cardId . '\')">Excluir</button>'; 
-                echo '</div>';
-                echo '</div>';
-                echo '</div>';
-            }
+                <?php foreach ($cartoes as $cartao): ?>
+                    <div class="card" id="card_<?php echo $cartao['id']; ?>">
+                        <div class="card-header">
+                            <p><?php echo $cartao['corpo']; ?></p>
+                            <div class="card-options">
+<span class="options-icon" onclick="toggleOptions(<?php echo $lista['id']; ?>)" style="color: black;">&#9998;</span>
+                                <div class="card-options-menu" id="card_options_menu_<?php echo $cartao['id']; ?>">
+                                    <button class="edit-card-btn">Editar</button>
+                                    <button class="delete-card-btn" onclick="deleteCard(<?php echo $cartao['id']; ?>)">Excluir</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
 
-            echo '<button class="add-card-btn">Adicionar cartão +</button>';
-            echo '</div>';
-        }
-        ?>
+                <button class="add-card-btn">Adicionar cartão +</button>
+            </div>
+        <?php endforeach; ?>
     </div>
 
     <script>
-        
-        function deleteColumn(columnId) {
-            const column = document.getElementById(columnId);
-            if (column) {
-                column.remove(); 
+        function deleteColumn(lista_id) {
+            if (confirm("Tem certeza que deseja excluir esta lista?")) {
+                const formData = new FormData();
+                formData.append('excluir_lista_id', lista_id);
+                
+                fetch('excluir_lista.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(result => {
+                    alert(result);
+                    document.getElementById(`lista_${lista_id}`).remove();
+                })
+                .catch(error => console.error('Erro:', error));
             }
         }
 
-        
-        function deleteCard(cardId) {
-            const card = document.getElementById(cardId);
-            if (card) {
-                card.remove(); 
+        function deleteCard(cartao_id) {
+            if (confirm("Tem certeza que deseja excluir este cartão?")) {
+                const formData = new FormData();
+                formData.append('excluir_cartao_id', cartao_id);
+                
+                fetch('excluir_cartao.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(result => {
+                    alert(result);
+                    document.getElementById(`card_${cartao_id}`).remove();
+                })
+                .catch(error => console.error('Erro:', error));
             }
+        }
+
+        function toggleOptions(lista_id) {
+            const menu = document.getElementById(`options_menu_${lista_id}`);
+            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function toggleCardOptions(cartao_id) {
+            const menu = document.getElementById(`card_options_menu_${cartao_id}`);
+            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
         }
     </script>
 </body>

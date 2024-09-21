@@ -28,7 +28,7 @@ body {
 .logo {
     width: 50px;
     height: 50px;
-    margin-right: 0px; 
+    margin-right: 0; 
 }
 
 .board-title h1 {
@@ -64,6 +64,7 @@ body {
     border-radius: 8px;
     width: 250px;
     min-height: 300px;
+    position: relative;
 }
 
 .column h2 {
@@ -71,7 +72,6 @@ body {
     color: #fff;
     margin-bottom: 15px;
 }
-
 
 .status {
     width: 20px;
@@ -107,15 +107,6 @@ body {
     background-color: #2e7d32;
 }
 
-.column {
-    background-color: #66bb6a;
-    padding: 15px;
-    border-radius: 8px;
-    width: 250px;
-    min-height: 300px;
-    position: relative;
-}
-
 .column-header {
     display: flex;
     justify-content: space-between;
@@ -130,7 +121,7 @@ body {
 .options-icon {
     font-size: 20px;
     cursor: pointer;
-    color: #fff;
+    color: black; 
 }
 
 .options-menu {
@@ -174,7 +165,7 @@ body {
 .card-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    align-items: center;
 }
 
 .card-options {
@@ -189,7 +180,7 @@ body {
     border: none;
     font-size: 15px;
     cursor: pointer;
-    margin-top: 10px;
+    color: black; 
 }
 
 .card-options-menu {
