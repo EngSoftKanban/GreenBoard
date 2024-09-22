@@ -16,14 +16,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['excluir_cartao_id'])) 
     $cartao_id = $_POST['excluir_cartao_id'];
 
     
-    $sqlCartao = "SELECT id_lista, posicao FROM cartoes WHERE id = :id";
+    $sqlCartao = "SELECT lista_id, posicao FROM cartoes WHERE id = :id";
     $stmtCartao = $pdo->prepare($sqlCartao);
     $stmtCartao->bindParam(':id', $cartao_id);
     $stmtCartao->execute();
     $cartao = $stmtCartao->fetch(PDO::FETCH_ASSOC);
 
     if ($cartao) {
-        $id_lista = $cartao['id_lista'];
+        $lista_id = $cartao['lista_id'];
         $posicao_cartao = $cartao['posicao'];
 
         
@@ -33,9 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['excluir_cartao_id'])) 
 
         if ($stmtExcluir->execute()) {
             
-            $sqlAtualizar = "UPDATE cartoes SET posicao = posicao - 1 WHERE id_lista = :id_lista AND posicao > :posicao";
+            $sqlAtualizar = "UPDATE cartoes SET posicao = posicao - 1 WHERE lista_id = :lista_id AND posicao > :posicao";
             $stmtAtualizar = $pdo->prepare($sqlAtualizar);
-            $stmtAtualizar->bindParam(':id_lista', $id_lista);
+            $stmtAtualizar->bindParam(':lista_id', $lista_id);
             $stmtAtualizar->bindParam(':posicao', $posicao_cartao);
             $stmtAtualizar->execute();
 
@@ -49,5 +49,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['excluir_cartao_id'])) 
 } else {
     echo "Método de requisição inválido.";
 }
-
 ?>
