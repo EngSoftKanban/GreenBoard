@@ -1,15 +1,9 @@
 <?php
-require 'vendor/autoload.php'; // Inclui o autoloader do Composer
-
-// Carrega as variáveis de ambiente do arquivo .env
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-
 // Usa as variáveis de ambiente
-$host = $_ENV['DB_HOST'];
-$db = $_ENV['DB_NAME'];
-$user = $_ENV['DB_USER'];
-$pass = $_ENV['DB_PASS'];
+$host = getenv('DB_HOST');
+$db = getenv('DB_NAME');
+$user = getenv('DB_USER');
+$pass = getenv('DB_PASS');
 
 header('Content-Type: application/json'); 
 
