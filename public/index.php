@@ -47,7 +47,7 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                     <div class="column-options">
                     <span class="options-icon" onclick="toggleOptions(<?php echo $lista['id']; ?>)" style="color: black;">&#9998;</span>
                         <div class="options-menu" id="options_menu_<?php echo $lista['id']; ?>">
-                            <button class="edit-list-btn">Editar</button>
+                            <button class="edit-list-btn" onclick="editItem('lista', <?php echo $lista['id']; ?>, '<?php echo $lista['titulo']; ?>')">Editar</button>
                             <button class="delete-list-btn" onclick="deleteColumn(<?php echo $lista['id']; ?>)">Excluir</button>
                         </div>
                     </div>
@@ -67,9 +67,9 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                         <div class="card-header">
                             <p><?php echo $cartao['corpo']; ?></p>
                             <div class="card-options">
-<span class="options-icon" onclick="toggleOptions(<?php echo $lista['id']; ?>)" style="color: black;">&#9998;</span>
+                                <span class="options-icon" onclick="toggleOptions(<?php echo $lista['id']; ?>)" style="color: black;">&#9998;</span>
                                 <div class="card-options-menu" id="card_options_menu_<?php echo $cartao['id']; ?>">
-                                    <button class="edit-card-btn">Editar</button>
+                                    <button class="edit-card-btn" onclick="editItem('cartao', <?php echo $cartao['id']; ?>, '<?php echo $cartao['corpo']; ?>')">Editar</button>
                                     <button class="delete-card-btn" onclick="deleteCard(<?php echo $cartao['id']; ?>)">Excluir</button>
                                 </div>
                             </div>
@@ -83,6 +83,26 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <script>
+        function editItem(tipo, item_id, texto) {
+            let novo_texto = prompt(tipo == 'lista' ? "Entre o novo título da lista" : "Entre o novo corpo do cartão", texto);
+            if (novo_texto) {
+                const formData = new FormData();
+                formData.append('editar_item_id', item_id);
+                formData.append('editar_item_tipo', tipo);
+                formData.append('editar_item_texto', novo_texto);
+                
+                fetch('editar_item.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(result => {
+                    alert(result);
+                    window.location.reload();
+                })
+                .catch(error => console.error('Erro:', error));
+            }
+        }
         function deleteColumn(lista_id) {
             if (confirm("Tem certeza que deseja excluir esta lista?")) {
                 const formData = new FormData();
