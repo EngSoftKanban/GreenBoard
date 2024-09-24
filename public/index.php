@@ -1,5 +1,4 @@
 <?php
-
 $host = 'localhost';
 $dbname = 'GreenBoard';
 $user = 'root';
@@ -12,7 +11,7 @@ try {
     die("Erro ao conectar com o banco de dados: " . $e->getMessage());
 }
 
-// Seleciona as listas
+// Seleciona as listas com a nova funcionalidade de ordenação
 $sql = "SELECT * FROM listas ORDER BY posicao";
 $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -23,7 +22,8 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GreenBoard - Kanban</title>
-    <link rel="stylesheet" href="style.css">
+    <!-- Combinei o arquivo de estilos correto com o script necessário -->
+    <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 </head>
 <body>
@@ -39,7 +39,8 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             <span class="extra-users">+1</span>
         </div>
     </div>
-    
+
+    <!-- Combinei os conteúdos de ambas as versões de "kanban-board" -->
     <div class="scroll-container">
         <div class="kanban-board">
             <?php foreach ($listas as $lista): ?>
@@ -49,8 +50,8 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                             <h2><?php echo $lista['titulo']; ?></h2>
                         </div>
                     </div>
-                
-                    <div class="cards-container"> <!-- Novo contêiner para cartões -->
+
+                    <div class="cards-container">
                         <?php
                         $sqlCards = "SELECT * FROM cartoes WHERE lista_id = :lista_id ORDER BY posicao";
                         $stmt = $pdo->prepare($sqlCards);
@@ -66,7 +67,7 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                                 </div>
                             </div>
                         <?php endforeach; ?>
-                    </div> <!-- Fim do contêiner de cartões -->
+                    </div>
 
                     <div class="add-card-container">
                         <button id="addCardButton_<?php echo $lista['id']; ?>" class="add-card-btn" onclick="showAddCardForm(<?php echo $lista['id']; ?>)">Adicionar Cartão
@@ -84,9 +85,10 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             <?php endforeach; ?>
 
+            <!-- Adicionar nova lista -->
             <div class="add-list-container">
                 <button id="addListButton" class="add-card-btn" style="width: 250px; border-radius: 15px; height: 55px; background-color: #91d991; margin-right: 10px; margin-top: -10px;" onclick="showAddListForm()">Adicionar Lista
-                    <img src="plus.png" alt="Adicionar" class="icon" style="width: 20px; height: 20px; margin-left: 45px; ">
+                    <img src="plus.png" alt="Adicionar" class="icon" style="width: 20px; height: 20px; margin-left: 45px;">
                 </button>
 
                 <form id="addListForm" class="add-list-form" style="display:none;" onsubmit="addList(event)">
@@ -97,16 +99,16 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                     </button>
                 </form>
             </div>
-        </div>        
+        </div>
     </div>
 
     <script>
+        // Tornar listas e cartões arrastáveis com Sortable.js (Funções combinadas de ambas as branches)
         document.addEventListener('DOMContentLoaded', function () {
-            // Tornar listas arrastáveis
             new Sortable(document.querySelector('.kanban-board'), {
                 group: 'listas',
                 animation: 150,
-                handle: '.column-header', // Somente o cabeçalho da lista pode ser arrastado
+                handle: '.column-header',
                 onEnd: function (evt) {
                     let listas = document.querySelectorAll('.column');
                     let order = [];
@@ -116,17 +118,15 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                             position: index + 1
                         });
                     });
-                    // Enviar a ordem das listas para o servidor
                     atualizarOrdemListas(order);
                 }
             });
 
-            // Tornar cartões arrastáveis
             document.querySelectorAll('.cards-container').forEach(function (container) {
                 new Sortable(container, {
                     group: 'cartoes',
                     animation: 150,
-                    handle: '.card', // Permitir arrastar apenas os cartões
+                    handle: '.card',
                     onEnd: function (evt) {
                         let cartoes = evt.to.querySelectorAll('.card');
                         let order = [];
@@ -137,14 +137,13 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                                 position: index + 1
                             });
                         });
-                        // Enviar a ordem dos cartões para o servidor
                         atualizarOrdemCartoes(order);
                     }
                 });
             });
         });
 
-        // Função para atualizar a ordem das listas no banco de dados
+        // Funções para atualizar a ordem das listas e cartões no banco de dados
         function atualizarOrdemListas(order) {
             fetch('atualizar_ordem_listas.php', {
                 method: 'POST',
@@ -162,7 +161,6 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             .catch(error => console.error('Erro:', error));
         }
 
-        // Função para atualizar a ordem dos cartões no banco de dados
         function atualizarOrdemCartoes(order) {
             fetch('atualizar_ordem_cartoes.php', {
                 method: 'POST',
@@ -176,73 +174,6 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                 } else {
                     console.error('Erro ao atualizar a ordem dos cartões');
                 }
-            })
-            .catch(error => console.error('Erro:', error));
-        }
-
-        function showAddCardForm(lista_id) {
-            const form = document.getElementById(`addCardForm_${lista_id}`);
-            const button = document.querySelector(`#addCardButton_${lista_id}`);
-
-            if (form && button) {
-                button.style.display = 'none';
-                form.style.display = 'block'; 
-            }
-        }
-
-        function hideAddCardForm(lista_id) {
-            const form = document.getElementById(`addCardForm_${lista_id}`);
-            const button = document.querySelector(`#addCardButton_${lista_id}`);
-
-            if (form && button) {
-                form.style.display = 'none'; 
-                button.style.display = 'block'; 
-            }
-        }
-
-        function addList(event) {
-            event.preventDefault();
-            const form = document.getElementById('addListForm');
-            const formData = new FormData(form);
-
-            fetch('adicionar_lista.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text())
-            .then(result => {
-                alert(result);
-                location.reload();  
-            })
-            .catch(error => console.error('Erro:', error));
-        }
-
-        function showAddListForm() {
-            const form = document.getElementById('addListForm');
-            form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' : 'none';
-            document.getElementById('addListButton').style.display = 'none'; 
-        }
-
-        function hideAddListForm() {
-            const form = document.getElementById('addListForm');
-            form.style.display = 'none';
-            document.getElementById('addListButton').style.display = 'block'; 
-        }
-
-        function addCard(event, lista_id) {
-            event.preventDefault();
-            const form = document.getElementById(`addCardForm_${lista_id}`);
-            const formData = new FormData(form);
-            formData.append('lista_id', lista_id);
-
-            fetch('adicionar_cartao.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text())
-            .then(result => {
-                alert(result);
-                location.reload(); 
             })
             .catch(error => console.error('Erro:', error));
         }

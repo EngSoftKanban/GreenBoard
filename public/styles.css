@@ -1,0 +1,214 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #2e7d32;
+    padding: 20px;
+}
+
+.board-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #81c784;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.board-title {
+    display: flex;
+    align-items: center; 
+}
+
+.logo {
+    width: 50px;
+    height: 50px;
+    margin-right: 0; 
+}
+
+.board-title h1 {
+    margin: 0;
+}
+
+.users {
+    display: flex;
+    align-items: center;
+}
+
+.user-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.extra-users {
+    font-size: 18px;
+    color: #fff;
+    margin-left: 10px;
+}
+
+.kanban-board {
+    display: flex;
+    gap: 20px;
+}
+
+.column {
+    background-color: #66bb6a;
+    padding: 15px;
+    border-radius: 8px;
+    width: 250px;
+    min-height: 300px;
+    position: relative;
+}
+
+.column h2 {
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.status {
+    width: 20px;
+    height: 5px;
+    border-radius: 3px;
+}
+
+.status.blue {
+    background-color: #1e88e5;
+}
+
+.status.yellow {
+    background-color: #fdd835;
+}
+
+.status.cyan {
+    background-color: #00acc1;
+}
+
+.add-card-btn {
+    background-color: #388e3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.add-card-btn:hover {
+    background-color: #2e7d32;
+}
+
+.column-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.column-options {
+    position: relative;
+}
+
+.options-icon {
+    font-size: 20px;
+    cursor: pointer;
+    color: black; 
+}
+
+.options-menu {
+    display: none; 
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #81c784;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 10;
+}
+
+.options-menu button {
+    background-color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.options-menu button:hover {
+    background-color: #e0e0e0;
+}
+
+.column-header:hover .options-menu {
+    display: block; 
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-options {
+    display: flex;
+    justify-content: flex-end; 
+    align-items: center;
+    position: relative;
+}
+
+.edit-btn {
+    background: none;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+    color: black; 
+}
+
+.card-options-menu {
+    display: none; 
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #81c784;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 10;
+}
+
+.card-options-menu button {
+    background-color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.card-options-menu button:hover {
+    background-color: #e0e0e0;
+}
+
+.card-options:hover .card-options-menu {
+    display: block; 
+}
