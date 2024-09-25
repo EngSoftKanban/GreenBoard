@@ -1,9 +1,8 @@
 <?php
-
-$host = 'localhost';
-$dbname = 'GreenBoard';
-$user = 'root';
-$password = '';
+$host = apache_getenv("DB_HOST");
+$dbname = apache_getenv("DB_NAME");
+$user = apache_getenv("DB_USER");
+$password = apache_getenv("DB_PASS");
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);
@@ -12,8 +11,8 @@ try {
     die("Erro ao conectar com o banco de dados: " . $e->getMessage());
 }
 
-
-$sql = "SELECT * FROM listas";
+// Seleciona as listas com a nova funcionalidade de ordenação
+$sql = "SELECT * FROM listas ORDER BY posicao";
 $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -23,7 +22,9 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GreenBoard - Kanban</title>
+    <!-- Combinei o arquivo de estilos correto com o script necessário -->
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 </head>
 <body>
     <div class="board-header">
@@ -38,48 +39,76 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             <span class="extra-users">+1</span>
         </div>
     </div>
-
-    <div class="kanban-board">
-        <?php foreach ($listas as $lista): ?>
-            <div class="column" id="lista_<?php echo $lista['id']; ?>">
-                <div class="column-header">
-                    <h2><?php echo $lista['titulo']; ?></h2>
-                    <div class="column-options">
-                    <span class="options-icon" onclick="toggleOptions(<?php echo $lista['id']; ?>)" style="color: black;">&#9998;</span>
-                        <div class="options-menu" id="options_menu_<?php echo $lista['id']; ?>">
-                            <button class="edit-list-btn" onclick="editItem('lista', <?php echo $lista['id']; ?>, '<?php echo $lista['titulo']; ?>')">Editar</button>
-                            <button class="delete-list-btn" onclick="deleteColumn(<?php echo $lista['id']; ?>)">Excluir</button>
+    <!-- Combinei os conteúdos de ambas as versões de "kanban-board" -->
+    <div class="scroll-container">
+        <div class="kanban-board">
+            <?php foreach ($listas as $lista): ?>
+                <div class="column" id="lista_<?php echo $lista['id']; ?>">
+                    <div class="column-header">
+                        <div class="title-container">
+                            <h2><?php echo $lista['titulo']; ?></h2>
                         </div>
-                    </div>
-                </div>
-
-                <?php
-                
-                $sqlCards = "SELECT * FROM cartoes WHERE lista_id = :lista_id";
-                $stmt = $pdo->prepare($sqlCards);
-                $stmt->bindParam(':lista_id', $lista['id']);
-                $stmt->execute();
-                $cartoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                ?>
-
-                <?php foreach ($cartoes as $cartao): ?>
-                    <div class="card" id="card_<?php echo $cartao['id']; ?>">
-                        <div class="card-header">
-                            <p><?php echo $cartao['corpo']; ?></p>
-                            <div class="card-options">
-                                <span class="options-icon" onclick="toggleOptions(<?php echo $lista['id']; ?>)" style="color: black;">&#9998;</span>
-                                <div class="card-options-menu" id="card_options_menu_<?php echo $cartao['id']; ?>">
-                                    <button class="edit-card-btn" onclick="editItem('cartao', <?php echo $cartao['id']; ?>, '<?php echo $cartao['corpo']; ?>')">Editar</button>
-                                    <button class="delete-card-btn" onclick="deleteCard(<?php echo $cartao['id']; ?>)">Excluir</button>
-                                </div>
+                        <div class="column-options">
+                            <span class="options-icon" onclick="toggleOptions(<?php echo $lista['id']; ?>)" style="color: black;">&#9998;</span>
+                            <div class="options-menu" id="options_menu_<?php echo $lista['id']; ?>">
+                                <button class="edit-list-btn" onclick="editItem('lista', <?php echo $lista['id']; ?>, '<?php echo $lista['titulo']; ?>')">Editar</button>
+                                <button class="delete-list-btn" onclick="deleteColumn(<?php echo $lista['id']; ?>)">Excluir</button>
                             </div>
                         </div>
                     </div>
-                <?php endforeach; ?>
+                    <div class="cards-container">
+                        <?php
+                        $sqlCards = "SELECT * FROM cartoes WHERE lista_id = :lista_id ORDER BY posicao";
+                        $stmt = $pdo->prepare($sqlCards);
+                        $stmt->bindParam(':lista_id', $lista['id']);
+                        $stmt->execute();
+                        $cartoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        ?>
+                        <?php foreach ($cartoes as $cartao): ?>
+                            <div class="card" id="card_<?php echo $cartao['id']; ?>">
+                                <div class="card-header">
+                                    <p><?php echo $cartao['corpo']; ?></p>
+                                    <div class="card-options">
+                                        <span class="options-icon" onclick="toggleOptions(<?php echo $lista['id']; ?>)" style="color: black;">&#9998;</span>
+                                        <div class="card-options-menu" id="card_options_menu_<?php echo $cartao['id']; ?>">
+                                            <button class="edit-card-btn" onclick="editItem('cartao', <?php echo $cartao['id']; ?>, '<?php echo $cartao['corpo']; ?>')">Editar</button>
+                                            <button class="delete-card-btn" onclick="deleteCard(<?php echo $cartao['id']; ?>)">Excluir</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                        <div class="add-card-container">
+                            <button id="addCardButton_<?php echo $lista['id']; ?>" class="add-card-btn" onclick="showAddCardForm(<?php echo $lista['id']; ?>)">Adicionar Cartão
+                                <img src="plus.png" alt="Adicionar" class="icon" style="width: 20px; height: 20px; margin-left: 5px;">
+                            </button>
+                            <form id="addCardForm_<?php echo $lista['id']; ?>" class="add-card-form" style="display:none;" onsubmit="addCard(event, <?php echo $lista['id']; ?>)">
+                                <input type="text" name="corpo_cartao" placeholder="Insira um nome para o cartão..." required>
+                                <button type="submit" style="font-size: 15px;">Adicionar Cartão</button>
+                                <button type="button" style="background-color: transparent;" onclick="hideAddCardForm(<?php echo $lista['id']; ?>)">
+                                    <img src="close_icon.png" alt="Fechar" style="width: 20px; height: 20px;">
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
 
-                <button class="add-card-btn">Adicionar cartão +</button>
+            <!-- Adicionar nova lista -->
+            <div class="add-list-container">
+                <button id="addListButton" class="add-card-btn" style="width: 250px; border-radius: 15px; height: 55px; background-color: #91d991; margin-right: 10px; margin-top: -10px;" onclick="showAddListForm()">Adicionar Lista
+                    <img src="plus.png" alt="Adicionar" class="icon" style="width: 20px; height: 20px; margin-left: 45px;">
+                </button>
+
+                <form id="addListForm" class="add-list-form" style="display:none;" onsubmit="addList(event)">
+                    <input type="text" name="titulo_lista" placeholder="Insira um título para a lista..." required>
+                    <button type="submit" style="font-size: 15px;">Adicionar Lista</button>
+                    <button type="button" style="background-color: transparent;" onclick="hideAddListForm()">
+                        <img src="close_icon.png" alt="Fechar" style="width: 20px; height: 20px;">
+                    </button>
+                </form>
             </div>
-        <?php endforeach; ?>
+        </div>
     </div>
 
     <script>
@@ -120,33 +149,79 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                 .catch(error => console.error('Erro:', error));
             }
         }
+        // Tornar listas e cartões arrastáveis com Sortable.js (Funções combinadas de ambas as branches)
+        document.addEventListener('DOMContentLoaded', function () {
+            new Sortable(document.querySelector('.kanban-board'), {
+                group: 'listas',
+                animation: 150,
+                handle: '.column-header',
+                onEnd: function (evt) {
+                    let listas = document.querySelectorAll('.column');
+                    let order = [];
+                    listas.forEach((lista, index) => {
+                        order.push({
+                            id: lista.id.replace('lista_', ''),
+                            position: index + 1
+                        });
+                    });
+                    atualizarOrdemListas(order);
+                }
+            });
 
-        function deleteCard(cartao_id) {
-            if (confirm("Tem certeza que deseja excluir este cartão?")) {
-                const formData = new FormData();
-                formData.append('excluir_cartao_id', cartao_id);
-                
-                fetch('excluir_cartao.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.text())
-                .then(result => {
-                    alert(result);
-                    document.getElementById(`card_${cartao_id}`).remove();
-                })
-                .catch(error => console.error('Erro:', error));
-            }
+            document.querySelectorAll('.cards-container').forEach(function (container) {
+                new Sortable(container, {
+                    group: 'cartoes',
+                    animation: 150,
+                    handle: '.card',
+                    onEnd: function (evt) {
+                        let cartoes = evt.to.querySelectorAll('.card');
+                        let order = [];
+                        cartoes.forEach((cartao, index) => {
+                            order.push({
+                                id: cartao.id.replace('card_', ''),
+                                lista_id: evt.to.closest('.column').id.replace('lista_', ''),
+                                position: index + 1
+                            });
+                        });
+                        atualizarOrdemCartoes(order);
+                    }
+                });
+            });
+        });
+
+        // Funções para atualizar a ordem das listas e cartões no banco de dados
+        function atualizarOrdemListas(order) {
+            fetch('atualizar_ordem_listas.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(order)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    console.log('Ordem das listas atualizada com sucesso');
+                } else {
+                    console.error('Erro ao atualizar a ordem das listas');
+                }
+            })
+            .catch(error => console.error('Erro:', error));
         }
 
-        function toggleOptions(lista_id) {
-            const menu = document.getElementById(`options_menu_${lista_id}`);
-            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
-        }
-
-        function toggleCardOptions(cartao_id) {
-            const menu = document.getElementById(`card_options_menu_${cartao_id}`);
-            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+        function atualizarOrdemCartoes(order) {
+            fetch('atualizar_ordem_cartoes.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(order)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    console.log('Ordem dos cartões atualizada com sucesso');
+                } else {
+                    console.error('Erro ao atualizar a ordem dos cartões');
+                }
+            })
+            .catch(error => console.error('Erro:', error));
         }
     </script>
 </body>
