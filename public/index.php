@@ -1,8 +1,8 @@
 <?php
-$host = 'localhost';
-$dbname = 'GreenBoard';
-$user = 'root';
-$password = '';
+$host = apache_getenv("DB_HOST");
+$dbname = apache_getenv("DB_NAME");
+$user = apache_getenv("DB_USER");
+$password = apache_getenv("DB_PASS");
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);
@@ -39,7 +39,6 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             <span class="extra-users">+1</span>
         </div>
     </div>
-
     <!-- Combinei os conteúdos de ambas as versões de "kanban-board" -->
     <div class="scroll-container">
         <div class="kanban-board">
@@ -49,8 +48,14 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                         <div class="title-container">
                             <h2><?php echo $lista['titulo']; ?></h2>
                         </div>
+                        <div class="column-options">
+                            <span class="options-icon" onclick="toggleOptions(<?php echo $lista['id']; ?>)" style="color: black;">&#9998;</span>
+                            <div class="options-menu" id="options_menu_<?php echo $lista['id']; ?>">
+                                <button class="edit-list-btn" onclick="editItem('lista', <?php echo $lista['id']; ?>, '<?php echo $lista['titulo']; ?>')">Editar</button>
+                                <button class="delete-list-btn" onclick="deleteColumn(<?php echo $lista['id']; ?>)">Excluir</button>
+                            </div>
+                        </div>
                     </div>
-
                     <div class="cards-container">
                         <?php
                         $sqlCards = "SELECT * FROM cartoes WHERE lista_id = :lista_id ORDER BY posicao";
@@ -59,28 +64,32 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                         $stmt->execute();
                         $cartoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         ?>
-
                         <?php foreach ($cartoes as $cartao): ?>
                             <div class="card" id="card_<?php echo $cartao['id']; ?>">
                                 <div class="card-header">
                                     <p><?php echo $cartao['corpo']; ?></p>
+                                    <div class="card-options">
+                                        <span class="options-icon" onclick="toggleOptions(<?php echo $lista['id']; ?>)" style="color: black;">&#9998;</span>
+                                        <div class="card-options-menu" id="card_options_menu_<?php echo $cartao['id']; ?>">
+                                            <button class="edit-card-btn" onclick="editItem('cartao', <?php echo $cartao['id']; ?>, '<?php echo $cartao['corpo']; ?>')">Editar</button>
+                                            <button class="delete-card-btn" onclick="deleteCard(<?php echo $cartao['id']; ?>)">Excluir</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         <?php endforeach; ?>
-                    </div>
-
-                    <div class="add-card-container">
-                        <button id="addCardButton_<?php echo $lista['id']; ?>" class="add-card-btn" onclick="showAddCardForm(<?php echo $lista['id']; ?>)">Adicionar Cartão
-                            <img src="plus.png" alt="Adicionar" class="icon" style="width: 20px; height: 20px; margin-left: 5px;">
-                        </button>
-
-                        <form id="addCardForm_<?php echo $lista['id']; ?>" class="add-card-form" style="display:none;" onsubmit="addCard(event, <?php echo $lista['id']; ?>)">
-                            <input type="text" name="corpo_cartao" placeholder="Insira um nome para o cartão..." required>
-                            <button type="submit" style="font-size: 15px;">Adicionar Cartão</button>
-                            <button type="button" style="background-color: transparent;" onclick="hideAddCardForm(<?php echo $lista['id']; ?>)">
-                                <img src="close_icon.png" alt="Fechar" style="width: 20px; height: 20px;">
+                        <div class="add-card-container">
+                            <button id="addCardButton_<?php echo $lista['id']; ?>" class="add-card-btn" onclick="showAddCardForm(<?php echo $lista['id']; ?>)">Adicionar Cartão
+                                <img src="plus.png" alt="Adicionar" class="icon" style="width: 20px; height: 20px; margin-left: 5px;">
                             </button>
-                        </form>
+                            <form id="addCardForm_<?php echo $lista['id']; ?>" class="add-card-form" style="display:none;" onsubmit="addCard(event, <?php echo $lista['id']; ?>)">
+                                <input type="text" name="corpo_cartao" placeholder="Insira um nome para o cartão..." required>
+                                <button type="submit" style="font-size: 15px;">Adicionar Cartão</button>
+                                <button type="button" style="background-color: transparent;" onclick="hideAddCardForm(<?php echo $lista['id']; ?>)">
+                                    <img src="close_icon.png" alt="Fechar" style="width: 20px; height: 20px;">
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -103,6 +112,43 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <script>
+        function editItem(tipo, item_id, texto) {
+            let novo_texto = prompt(tipo == 'lista' ? "Entre o novo título da lista" : "Entre o novo corpo do cartão", texto);
+            if (novo_texto) {
+                const formData = new FormData();
+                formData.append('editar_item_id', item_id);
+                formData.append('editar_item_tipo', tipo);
+                formData.append('editar_item_texto', novo_texto);
+                
+                fetch('editar_item.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(result => {
+                    alert(result);
+                    window.location.reload();
+                })
+                .catch(error => console.error('Erro:', error));
+            }
+        }
+        function deleteColumn(lista_id) {
+            if (confirm("Tem certeza que deseja excluir esta lista?")) {
+                const formData = new FormData();
+                formData.append('excluir_lista_id', lista_id);
+                
+                fetch('excluir_lista.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(result => {
+                    alert(result);
+                    document.getElementById(`lista_${lista_id}`).remove();
+                })
+                .catch(error => console.error('Erro:', error));
+            }
+        }
         // Tornar listas e cartões arrastáveis com Sortable.js (Funções combinadas de ambas as branches)
         document.addEventListener('DOMContentLoaded', function () {
             new Sortable(document.querySelector('.kanban-board'), {
