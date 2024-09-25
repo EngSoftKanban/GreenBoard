@@ -155,7 +155,7 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             event.preventDefault();
             const form = document.getElementById('addListForm');
             const formData = new FormData(form);
-
+            formData.append('quadro_id', 1);
             fetch('adicionar_lista.php', {
                 method: 'POST',
                 body: formData
@@ -203,23 +203,6 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             }
         }
 
-        function deleteColumn(lista_id) {
-            if (confirm("Tem certeza que deseja excluir esta lista?")) {
-                fetch('excluir_lista.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ lista_id: lista_id })
-                })
-                .then(response => response.text())
-                .then(result => {
-                    alert(result);
-                    location.reload(); 
-                })
-                .catch(error => console.error('Erro:', error));
-            }
-        }
         // Tornar listas e cartões arrastáveis com Sortable.js (Funções combinadas de ambas as branches)
         document.addEventListener('DOMContentLoaded', function () {
             new Sortable(document.querySelector('.kanban-board'), {
@@ -240,19 +223,35 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             });
 		});
 
-        function deleteCard(cartao_id) {
-            if (confirm("Tem certeza que deseja excluir este cartão?")) {
-                fetch('excluir_cartao.php', {
+        function deleteColumn(lista_id) {
+            if (confirm("Tem certeza que deseja excluir esta lista?")) {
+                const formData = new FormData();
+                formData.append('excluir_lista_id', lista_id);
+                fetch('excluir_lista.php', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ cartao_id: cartao_id })
+                    body: formData
                 })
                 .then(response => response.text())
                 .then(result => {
                     alert(result);
-                    location.reload(); 
+                    document.getElementById(`lista_${lista_id}`).remove();
+                })
+                .catch(error => console.error('Erro:', error));
+            }
+        }
+
+        function deleteCard(cartao_id) {
+            if (confirm("Tem certeza que deseja excluir este cartão?")) {
+                const formData = new FormData();
+                formData.append('excluir_cartao_id', cartao_id);
+                fetch('excluir_cartao.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(result => {
+                    alert(result);
+                    document.getElementById(`card_${cartao_id}`).remove();
                 })
                 .catch(error => console.error('Erro:', error));
             }
