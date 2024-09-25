@@ -39,6 +39,8 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             <span class="extra-users">+1</span>
         </div>
     </div>
+
+
     <!-- Combinei os conteúdos de ambas as versões de "kanban-board" -->
     <div class="scroll-container">
         <div class="kanban-board">
@@ -112,6 +114,74 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <script>
+        // Funções para exibir/ocultar formulários de adicionar cartão e lista
+        function showAddCardForm(lista_id) {
+            const form = document.getElementById(`addCardForm_${lista_id}`);
+            const button = document.querySelector(`#addCardButton_${lista_id}`);
+            if (form && button) {
+                button.style.display = 'none';
+                form.style.display = 'block'; 
+            }
+        }
+
+        function hideAddCardForm(lista_id) {
+            const form = document.getElementById(`addCardForm_${lista_id}`);
+            const button = document.querySelector(`#addCardButton_${lista_id}`);
+            if (form && button) {
+                form.style.display = 'none'; 
+                button.style.display = 'block'; 
+            }
+        }
+
+        function addCard(event, lista_id) {
+            event.preventDefault();
+            const form = document.getElementById(`addCardForm_${lista_id}`);
+            const formData = new FormData(form);
+            formData.append('lista_id', lista_id);
+
+            fetch('adicionar_cartao.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(result => {
+                alert(result);
+                location.reload(); 
+            })
+            .catch(error => console.error('Erro:', error));
+        }
+
+        function addList(event) {
+            event.preventDefault();
+            const form = document.getElementById('addListForm');
+            const formData = new FormData(form);
+
+            fetch('adicionar_lista.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(result => {
+                alert(result);
+                location.reload();  
+            })
+            .catch(error => console.error('Erro:', error));
+        }
+
+        function showAddListForm() {
+            const form = document.getElementById('addListForm');
+            form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' : 'none';
+            document.getElementById('addListButton').style.display = 'none'; 
+        }
+
+        function hideAddListForm() {
+            const form = document.getElementById('addListForm');
+            form.style.display = 'none';
+            document.getElementById('addListButton').style.display = 'block'; 
+        }
+
+        // Funções de excluir lista e cartão
+
         function editItem(tipo, item_id, texto) {
             let novo_texto = prompt(tipo == 'lista' ? "Entre o novo título da lista" : "Entre o novo corpo do cartão", texto);
             if (novo_texto) {
@@ -132,19 +202,20 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                 .catch(error => console.error('Erro:', error));
             }
         }
+
         function deleteColumn(lista_id) {
             if (confirm("Tem certeza que deseja excluir esta lista?")) {
-                const formData = new FormData();
-                formData.append('excluir_lista_id', lista_id);
-                
                 fetch('excluir_lista.php', {
                     method: 'POST',
-                    body: formData
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ lista_id: lista_id })
                 })
                 .then(response => response.text())
                 .then(result => {
                     alert(result);
-                    document.getElementById(`lista_${lista_id}`).remove();
+                    location.reload(); 
                 })
                 .catch(error => console.error('Erro:', error));
             }
@@ -167,25 +238,43 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                     atualizarOrdemListas(order);
                 }
             });
+		});
 
-            document.querySelectorAll('.cards-container').forEach(function (container) {
-                new Sortable(container, {
-                    group: 'cartoes',
-                    animation: 150,
-                    handle: '.card',
-                    onEnd: function (evt) {
-                        let cartoes = evt.to.querySelectorAll('.card');
-                        let order = [];
-                        cartoes.forEach((cartao, index) => {
-                            order.push({
-                                id: cartao.id.replace('card_', ''),
-                                lista_id: evt.to.closest('.column').id.replace('lista_', ''),
-                                position: index + 1
-                            });
+        function deleteCard(cartao_id) {
+            if (confirm("Tem certeza que deseja excluir este cartão?")) {
+                fetch('excluir_cartao.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ cartao_id: cartao_id })
+                })
+                .then(response => response.text())
+                .then(result => {
+                    alert(result);
+                    location.reload(); 
+                })
+                .catch(error => console.error('Erro:', error));
+            }
+        }
+        
+        document.querySelectorAll('.cards-container').forEach(function (container) {
+            new Sortable(container, {
+                group: 'cartoes',
+                animation: 150,
+                handle: '.card',
+                onEnd: function (evt) {
+                    let cartoes = evt.to.querySelectorAll('.card');
+                    let order = [];
+                    cartoes.forEach((cartao, index) => {
+                        order.push({
+                            id: cartao.id.replace('card_', ''),
+                            lista_id: evt.to.closest('.column').id.replace('lista_', ''),
+                            position: index + 1
                         });
-                        atualizarOrdemCartoes(order);
-                    }
-                });
+                    });
+                    atualizarOrdemCartoes(order);
+                }
             });
         });
 
