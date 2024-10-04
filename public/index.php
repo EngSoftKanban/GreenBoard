@@ -40,8 +40,6 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
-
-    <!-- Combinei os conteúdos de ambas as versões de "kanban-board" -->
     <div class="scroll-container">
         <div class="kanban-board">
             <?php foreach ($listas as $lista): ?>
@@ -82,13 +80,13 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                         <?php endforeach; ?>
                         <div class="add-card-container">
                             <button id="addCardButton_<?php echo $lista['id']; ?>" class="add-card-btn" onclick="showAddCardForm(<?php echo $lista['id']; ?>)">Adicionar Cartão
-                                <img src="plus.png" alt="Adicionar" class="icon" style="width: 20px; height: 20px; margin-left: 5px;">
+                                <img src="/resources/plus.png" alt="Adicionar" class="icon" style="width: 20px; height: 20px; margin-left: 5px;">
                             </button>
                             <form id="addCardForm_<?php echo $lista['id']; ?>" class="add-card-form" style="display:none;" onsubmit="addCard(event, <?php echo $lista['id']; ?>)">
                                 <input type="text" name="corpo_cartao" placeholder="Insira um nome para o cartão..." required>
                                 <button type="submit" style="font-size: 15px;">Adicionar Cartão</button>
                                 <button type="button" style="background-color: transparent;" onclick="hideAddCardForm(<?php echo $lista['id']; ?>)">
-                                    <img src="close_icon.png" alt="Fechar" style="width: 20px; height: 20px;">
+                                    <img src="/resources/close_icon.png" alt="Fechar" style="width: 20px; height: 20px;">
                                 </button>
                             </form>
                         </div>
@@ -99,14 +97,14 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             <!-- Adicionar nova lista -->
             <div class="add-list-container">
                 <button id="addListButton" class="add-card-btn" style="width: 250px; border-radius: 15px; height: 55px; background-color: #91d991; margin-right: 10px; margin-top: -10px;" onclick="showAddListForm()">Adicionar Lista
-                    <img src="plus.png" alt="Adicionar" class="icon" style="width: 20px; height: 20px; margin-left: 45px;">
+                    <img src="/resources/plus.png" alt="Adicionar" class="icon" style="width: 20px; height: 20px; margin-left: 45px;">
                 </button>
 
                 <form id="addListForm" class="add-list-form" style="display:none;" onsubmit="addList(event)">
                     <input type="text" name="titulo_lista" placeholder="Insira um título para a lista..." required>
                     <button type="submit" style="font-size: 15px;">Adicionar Lista</button>
                     <button type="button" style="background-color: transparent;" onclick="hideAddListForm()">
-                        <img src="close_icon.png" alt="Fechar" style="width: 20px; height: 20px;">
+                        <img src="/resources/close_icon.png" alt="Fechar" style="width: 20px; height: 20px;">
                     </button>
                 </form>
             </div>
