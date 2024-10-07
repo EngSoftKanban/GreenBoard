@@ -18,7 +18,7 @@ function generateTokenSession() {
 function sendResetEmail($email, $token) {
     $link = "http://localhost:8080/public/nova_senha?token=.php" . $token;
     $message = "Clique no link para redefinir sua senha: " . $link;
-    mail($email, "Recuperação de senha", $message, "From: suporte@seusite.com");
+    mail($email, "Recuperação de senha", $message, "From: green4board@hotmail.com");
 }
 
 function validateTokenSession($token) {
