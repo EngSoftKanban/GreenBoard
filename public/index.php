@@ -22,7 +22,6 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GreenBoard - Kanban</title>
-    <!-- Combinei o arquivo de estilos correto com o script necessário -->
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 </head>
@@ -37,11 +36,38 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             <img src="taylor.jpg" alt="Usuário 2" class="user-icon">
             <img src="lalisa.jpg" alt="Usuário 3" class="user-icon">
             <span class="extra-users">+1</span>
+            <button class="share-button" onclick="openShareModal()">Compartilhar</button> <!-- Botão de compartilhar -->
         </div>
     </div>
 
+    <!-- Modal de compartilhamento -->
+    <div id="shareModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeShareModal()">&times;</span>
+            <h2>Compartilhar Kanban</h2>
+            <form onsubmit="shareKanban(event)">
+                <input type="text" id="shareInput" placeholder="Endereço de e-mail ou nome" required>
+                <button type="submit" class="share-button">Enviar</button> <!-- Botão enviar -->
+            </form>
+            <button onclick="copyLink()" class="share-button">Copiar link</button> <!-- Botão copiar link -->
 
-    <!-- Combinei os conteúdos de ambas as versões de "kanban-board" -->
+            <h3>Membros do Kanban</h3>
+            <ul id="memberList">
+                <li>Fulana (você) - Administrador do Kanban</li>
+                <?php
+                // Buscar todos os usuários no banco de dados
+                $stmt = $pdo->query("SELECT nome FROM usuarios");
+                $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                
+                // Exibir a lista de usuários
+                foreach ($usuarios as $usuario) {
+                    echo "<li>" . htmlspecialchars($usuario['nome']) . "</li>";
+                }
+                ?>
+            </ul>
+        </div>
+    </div>
+
     <div class="scroll-container">
         <div class="kanban-board">
             <?php foreach ($listas as $lista): ?>
@@ -71,7 +97,7 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="card-header">
                                     <p><?php echo $cartao['corpo']; ?></p>
                                     <div class="card-options">
-                                        <span class="options-icon" onclick="toggleOptions(<?php echo $lista['id']; ?>)" style="color: black;">&#9998;</span>
+                                        <span class="options-icon" onclick="toggleOptions(<?php echo $cartao['id']; ?>)" style="color: black;">&#9998;</span>
                                         <div class="card-options-menu" id="card_options_menu_<?php echo $cartao['id']; ?>">
                                             <button class="edit-card-btn" onclick="editItem('cartao', <?php echo $cartao['id']; ?>, '<?php echo $cartao['corpo']; ?>')">Editar</button>
                                             <button class="delete-card-btn" onclick="deleteCard(<?php echo $cartao['id']; ?>)">Excluir</button>
@@ -311,6 +337,78 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             })
             .catch(error => console.error('Erro:', error));
         }
+
+        function openShareModal() {
+            document.getElementById('shareModal').style.display = 'block';
+        }
+
+        function closeShareModal() {
+            document.getElementById('shareModal').style.display = 'none';
+        }
+
+        function shareKanban(event) {
+            event.preventDefault();
+            const input = document.getElementById('shareInput').value;
+            const shareLink = document.getElementById('shareLink').checked;
+            
+            // Aqui você faria uma requisição para o backend para compartilhar
+            console.log('Compartilhando com:', input, 'Link ativado:', shareLink);
+            
+            // Exemplo de requisição AJAX
+            fetch('compartilhar_kanban.php', {
+                method: 'POST',
+                body: JSON.stringify({ user: input, link: shareLink }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                // Atualize a lista de membros aqui
+                closeShareModal();
+            })
+            .catch(error => console.error('Erro:', error));
+        }
+
+        function copyLink() {
+            const dummy = document.createElement('textarea');
+            dummy.value = "http://kanban.example.com/share-link";
+            document.body.appendChild(dummy);
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+            alert('Link copiado!');
+        }
+
+        function shareKanban(event) {
+    event.preventDefault();
+    const input = document.getElementById('shareInput').value;
+    const shareLink = document.getElementById('shareLink').checked;
+
+    fetch('compartilhar_kanban.php', {
+        method: 'POST',
+        body: JSON.stringify({ user: input, link: shareLink }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        // Atualizar a lista de membros dinamicamente
+        if (!shareLink) {
+            const memberList = document.getElementById('memberList');
+            const newUser = document.createElement('li');
+            newUser.textContent = input;
+            memberList.appendChild(newUser);
+        }
+        closeShareModal();
+    })
+    .catch(error => console.error('Erro:', error));
+}
+
+
     </script>
 </body>
 </html>
