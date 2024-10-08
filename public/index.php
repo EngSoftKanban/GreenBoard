@@ -86,8 +86,8 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                         <div class="column-options">
                             <span class="options-icon" onclick="toggleOptions(<?php echo $lista['id']; ?>)" style="color: black;">&#9998;</span>
                             <div class="options-menu" id="options_menu_<?php echo $lista['id']; ?>">
-                                <button class="edit-list-btn" onclick="editItem('lista', <?php echo $lista['id']; ?>, '<?php echo $lista['titulo']; ?>')">Editar</button>
-                                <button class="delete-list-btn" onclick="deleteColumn(<?php echo $lista['id']; ?>)">Excluir</button>
+                                <button class="edit-btn" onclick="editItem('lista', <?php echo $lista['id']; ?>, '<?php echo $lista['titulo']; ?>')">Editar</button>
+                                <button class="edit-btn" onclick="deleteColumn(<?php echo $lista['id']; ?>)">Excluir</button>
                             </div>
                         </div>
                     </div>
@@ -106,16 +106,17 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="card-options">
                                         <span class="options-icon" onclick="toggleOptions(<?php echo $cartao['id']; ?>)" style="color: black;">&#9998;</span>
                                         <div class="card-options-menu" id="card_options_menu_<?php echo $cartao['id']; ?>">
-                                            <button class="edit-card-btn" onclick="editItem('cartao', <?php echo $cartao['id']; ?>, '<?php echo $cartao['corpo']; ?>')">Editar</button>
-                                            <button class="delete-card-btn" onclick="deleteCard(<?php echo $cartao['id']; ?>)">Excluir</button>
+                                            <button class="edit-btn" onclick="editItem('cartao', <?php echo $cartao['id']; ?>, '<?php echo $cartao['corpo']; ?>')">Editar</button>
+                                            <button class="edit-btn" onclick="deleteCard(<?php echo $cartao['id']; ?>)">Excluir</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         <?php endforeach; ?>
                         <div class="add-card-container">
-                            <button id="addCardButton_<?php echo $lista['id']; ?>" class="add-card-btn" onclick="showAddCardForm(<?php echo $lista['id']; ?>)">Adicionar Cartão
-                                <img src="plus.png" alt="Adicionar" class="icon" style="width: 20px; height: 20px; margin-left: 5px;">
+                            <button id="addCardButton_<?php echo $lista['id']; ?>" class="add-card-btn" onclick="showAddCardForm(<?php echo $lista['id']; ?>)">
+								Adicionar Cartão
+                                <img src="plus.svg" alt="Adicionar" class="icon" style="width: 20px; height: 20x; margin-left: 5px;float: right">
                             </button>
                             <form id="addCardForm_<?php echo $lista['id']; ?>" class="add-card-form" style="display:none;" onsubmit="addCard(event, <?php echo $lista['id']; ?>)">
                                 <input type="text" name="corpo_cartao" placeholder="Insira um nome para o cartão..." required>
@@ -132,7 +133,7 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             <!-- Adicionar nova lista -->
             <div class="add-list-container">
                 <button id="addListButton" class="add-card-btn" style="width: 250px; border-radius: 15px; height: 55px; background-color: #91d991; margin-right: 10px; margin-top: -10px;" onclick="showAddListForm()">Adicionar Lista
-                    <img src="plus.png" alt="Adicionar" class="icon" style="width: 20px; height: 20px; margin-left: 45px;">
+                    <img src="plus.svg" alt="Adicionar" class="icon" style="width: 20px; height: 20px; margin-left: 45px; float:right">
                 </button>
 
                 <form id="addListForm" class="add-list-form" style="display:none;" onsubmit="addList(event)">
