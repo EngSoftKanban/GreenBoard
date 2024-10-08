@@ -33,11 +33,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         } else {
             // Senha incorreta, exibir erro
-            $erro = "Senha incorreta. Tente novamente.";
+            $erro = "E-mail ou senha erradas. Tente novamente.";
         }
     } else {
         // E-mail não encontrado, exibir erro
-        $erro = "E-mail não encontrado. Tente novamente.";
+        $erro = "E-mail ou senha erradas. Tente novamente.";
     }
 }
 ?>
@@ -175,7 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <!-- Link para cadastro -->
         <div class="signup">
-            Ainda não tem login? <a href="registrar.php">Cadastre-se</a>
+            Ainda não tem login? <a href="cadastrar.php">Cadastre-se</a>
         </div>
     </div>
 </body>
