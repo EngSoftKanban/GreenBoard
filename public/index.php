@@ -44,16 +44,23 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     <div id="shareModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeShareModal()">&times;</span>
-            <h2>Compartilhar Kanban</h2>
+            <h2 style="background-color: #91d991; width: 270px; border-radius: 15px; color: black; padding-left: 10px; padding-top: 5px; padding-bottom: 5px;">Compartilhar Kanban</h2>
             <form onsubmit="shareKanban(event)">
-                <input type="text" id="shareInput" placeholder="Endereço de e-mail ou nome" required>
-                <button type="submit" class="share-button">Enviar</button> <!-- Botão enviar -->
+                <input class="share-form" type="text" id="shareInput" placeholder="Endereço de e-mail ou nome" required>
+                <button type="submit" class="share-button">Enviar</button> 
             </form>
-            <button onclick="copyLink()" class="share-button">Copiar link</button> <!-- Botão copiar link -->
-
-            <h3>Membros do Kanban</h3>
+            <div class="share-container">
+                <div class= "icon-container">
+                    <img src="share.png" alt="Compartilhar" class="share-icon">
+                </div>    
+                <div class= "text-container">   
+                    <p style="color: black; font-size: 16px; padding-left: 5px; padding-top: 5px;">Compartilhar KanBan com um link</p>
+                    <button onclick="copyLink()" style="color: white; background-color: transparent; padding: 5px; width: 90px;">Copiar link</button> 
+                </div>
+            </div>     
+            <h4 style="color: black; font-size: 15px; margin-top: 20px;">Membros do Kanban</h4>
             <ul id="memberList">
-                <li>Fulana (você) - Administrador do Kanban</li>
+                <li style="color: black; margin-top: 15px; margin-left: 15px;">Fulana (você) - Administrador do Kanban</li>
                 <?php
                 // Buscar todos os usuários no banco de dados
                 $stmt = $pdo->query("SELECT nome FROM usuarios");
