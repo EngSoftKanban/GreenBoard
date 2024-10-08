@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['nome'] = $usuario['nome'];
 
             // Redirecionar o usuário para a página principal ou anterior
-            header("Location: " . ($_SESSION['redirect_url'] ?? 'dashboard.php')); // Se o usuário estava tentando acessar algo antes, redireciona para lá
+            header("Location: " . ($_SESSION['redirect_url'] ?? 'index.php')); // Se o usuário estava tentando acessar algo antes, redireciona para lá
             exit();
         } else {
             // Senha incorreta, exibir erro
