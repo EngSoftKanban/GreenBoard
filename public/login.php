@@ -33,11 +33,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         } else {
             // Senha incorreta, exibir erro
-            $erro = "E-mail ou senha erradas. Tente novamente.";
+            $erro = "E-mail ou senha incorreto(s). Tente novamente.";
         }
     } else {
         // E-mail não encontrado, exibir erro
-        $erro = "E-mail ou senha erradas. Tente novamente.";
+        $erro = "E-mail ou senha incorreto(s). Tente novamente.";
     }
 }
 ?>
