@@ -149,9 +149,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <div class="container">
         <!-- Logo e título -->
-        <img src="logo.png" alt="Logo GreenBoard"> <!-- Substitua com o caminho correto da imagem -->
-        <h1>GreenBoard</h1>
-        <p>Sua melhor opção!</p>
+        <img src="logo_login.png" alt="Logo GreenBoard" style="width: 150px; height: auto;">
 
         <!-- Exibe mensagem de erro, se houver -->
         <?php if (isset($erro)): ?>
