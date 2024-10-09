@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <style>
         /* Estilos que você já adicionou */
         body {
-            background-color: #3C7A3F; /* Verde do fundo */
+            background-color: #2e7d32; /* Verde do fundo */
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
@@ -94,13 +94,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin-bottom: 20px;
             border: 1px solid #ccc;
             border-radius: 30px; /* Borda arredondada */
-            background-color: #B1E3A3;
+            background-color: #81c784;
         }
 
         button {
             width: 100%;
             padding: 10px;
-            background-color: #337E47;
+            background-color: #2e7d32;
             color: white;
             border: none;
             border-radius: 30px; /* Borda arredondada */
