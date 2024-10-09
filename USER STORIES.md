@@ -196,7 +196,7 @@ Como um(a) usuário(a) do Green Board, quero ter acesso a uma tela de perfil ond
 N/A
 
 ### Dados:
-* Nome e E-mail.
+* Nome e E-maiL.
   
 ### Protótipo
 #### Editar Perfil:
