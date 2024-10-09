@@ -24,10 +24,19 @@ try {
 			$email = $_POST['email'];
 			$senha_hash = password_hash($_POST['senha'], PASSWORD_DEFAULT);
 			if ($stmt->execute()) {
-				header("Location: /index.php", true); // TODO Mudar para o dashboard/início de sessão quando ele estiver pronto
+				session_start();
+				$stmt = $pdo->prepare("SELECT * FROM usuarios WHERE nome = :nome AND email = :email AND senha = :senha");
+				$stmt->bindParam(':nome', $nome);
+				$stmt->bindParam(':email', $email);
+				$stmt->bindParam(':senha', $senha_hash);
+				$stmt->execute();
+				$usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+				$_SESSION['usuario_id'] = $usuario['id'];
+				$_SESSION['nome'] = $usuario['nome'];
+				header('Location: index.php');
 				exit();
 			} else {
-				$_REQUEST["erro"] = "Erro"; // TODO Mudar para erro significativo
+				$_REQUEST["erro"] = "Erro ao tentar cadastrar usuário";
 			}
 		}
 	}

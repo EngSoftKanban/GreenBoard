@@ -1,4 +1,8 @@
 <?php
+session_start();
+if (session_status() != PHP_SESSION_ACTIVE) {
+	header('Location: login.php');
+}
 $host = apache_getenv("DB_HOST");
 $dbname = apache_getenv("DB_NAME");
 $user = apache_getenv("DB_USER");
