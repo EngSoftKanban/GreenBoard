@@ -288,7 +288,3 @@ N/A
 
 ### Dados:
 N/A
-
-### Protótipo
-#### Manipulação de usuários:
-![Kanban Neutro](./resources/prototipo/Perfil.png)
