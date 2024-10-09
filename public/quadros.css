@@ -1,0 +1,219 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #2e7d32;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    background-color: #81c784; 
+    padding: 5px 20px; 
+    border: none; 
+    border-radius: 3px;
+}
+
+.board-title {
+    display: flex;
+    align-items: center; 
+}
+
+.board-title img.logo {
+    width: 50px; 
+    height: auto; 
+    margin-right: 5px; 
+}
+
+.board-title h1 {
+    font-size: 24px; 
+    line-height: 1.2; 
+    margin: 0; 
+}
+
+.user-avatar img.user-icon {
+    width: 40px; 
+    height: 40px; 
+    border-radius: 50%; 
+    object-fit: cover; 
+}
+
+.container {
+    display: flex;
+    height: calc(100vh - 60px); 
+}
+
+.sidebar {
+    width: 25%; 
+    background-color: #2e7d32; 
+    padding: 20px;
+}
+
+.menu {
+    margin-top: 20px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.menu-item.active {
+    background-color: #81c784;
+    border-radius: 8px; 
+}
+
+.main {
+    flex: 1;
+    background-color: #2e7d32;
+    padding: 20px;
+    margin-top: 30px; 
+    padding-left: 100px;
+}
+
+.recently-viewed div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; 
+}
+
+.recently-viewed .quadro {
+    background-color: #81c784; 
+    padding: 50px;
+    border-radius: 5px;
+    flex: 0 0 300px; 
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    color: rgb(0, 0, 0); 
+}
+
+
+#quadro-list {
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 10px; 
+}
+
+#quadro-list div {
+    background-color: #81c784; 
+    padding: 50px; 
+    border-radius: 5px;
+    flex: 0 0 300px; 
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    position: relative; 
+}
+
+#quadro-list div form {
+    display: inline; 
+    position: absolute; 
+    top: 5px; 
+    right: 5px; 
+}
+
+#quadro-list div button {
+    background-color: #3F8448; 
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#quadro-list div button:hover {
+    background-color: #cc0000; 
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+input[type="text"] {
+    width: 300px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button[type="submit"] {
+    background-color: #006400;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #004d00; 
+}
+
+.create-quadro {
+    background-color: #007bff; 
+}
+
+.create-quadro:hover {
+    background-color: #0056b3;
+}
+
+.cancel-button {
+    background-color: #dc3545; 
+    color: white; 
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px; 
+}
+
+.cancel-button:hover {
+    background-color: #c82333; 
+}
+
+#modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none; 
+    z-index: 999;
+}
+
+.recently-viewed h2 {
+    color: white;
+    font-size: 20px;
+    margin-bottom: 20px; 
+}
+
+.work-area h2 {
+    color: white; 
+    font-size: 20px;
+    margin-top: 20px; 
+    margin-bottom: 10px; 
+}
+

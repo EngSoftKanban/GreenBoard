@@ -184,6 +184,47 @@ N/A
 ![Quadros](./resources/prototipo/Quadros.png)
 ![Início](./resources/prototipo/Início.png)
 
+## US10 - Reconfigurar Apache.
+
+### Descrição:
+Como hosteador do serviço, quero que as regras de configuração do servidor Apaches sejam seguras e sólidas, tal que o hosteamento fique mais fácil.
+
+### Regras de negócio:
+* Seja possível criar ou remover quadros.
+
+### Observações:
+N/A
+
+### Dados:
+N/A
+
+## US12 - Como usuário, quero poder criar ou remover quadros ligados a mim.
+
+### Descrição:
+Como usuário, quero acessar uma tela que me mostre todos os meus quadros e que me permita adicionar ou remover um quadro para organizar minhas atividades de forma eficiente.
+
+### Regras de negócio:
+* O usuário deve ser capaz de criar novos quadros.
+* O usuário deve ser capaz de remover quadros existentes.
+* Os quadros criados devem ser vinculados ao usuário que os criou.
+* Apenas o dono do quadro pode removê-lo.
+
+### Critérios de aceitação:
+* O sistema deve exibir uma lista de todos os quadros vinculados ao usuário.
+* O botão "Criar Quadro" deve estar disponível na interface para que o usuário adicione um novo quadro.
+* Ao remover um quadro, o sistema deve solicitar uma confirmação antes de excluí-lo permanentemente.
+* O sistema deve garantir que, ao remover um quadro, todas as informações associadas a ele sejam excluídas corretamente.
+
+### Observações:
+N/A
+
+### Dados:
+* Quadro removido ou criado.
+
+### Protótipo
+#### Manipulação de quadros:
+![Quadros](./resources/prototipo/Quadros.png)
+
 ## US13 - Como um usuário do GreenBoard, quero poder acessar e editar minhas informações pessoais na tela de perfil, para manter meus dados atualizados.
 
 ### Descrição:
@@ -201,3 +242,17 @@ N/A
 ### Protótipo
 #### Editar Perfil:
 ![Editar Perfil](./resources/prototipo/Perfil.png)
+
+## US15 - Adicionar usuário a um cartão.
+
+### Descrição:
+Como usuário, quero poder me adicionar a um cartão, para isso clicarei num botão que me adicionará ao cartão, mostrando meu icone nele.
+
+### Regras de negócio:
+* Seja possível adicionar um usuário a um cartão.
+
+### Observações:
+N/A
+
+### Dados:
+* Quais e quantos usuários estão em cada cartão.
