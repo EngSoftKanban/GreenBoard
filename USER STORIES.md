@@ -183,3 +183,21 @@ N/A
 #### Manipulação de quadros:
 ![Quadros](./resources/prototipo/Quadros.png)
 ![Início](./resources/prototipo/Início.png)
+
+## US13 - Como um usuário do GreenBoard, quero poder acessar e editar minhas informações pessoais na tela de perfil, para manter meus dados atualizados.
+
+### Descrição:
+Como um(a) usuário(a) do Green Board, quero ter acesso a uma tela de perfil onde poderei visualizar e editar minhas informações pessoais, como nome, e-mail e foto de perfil. Isso me permitirá atualizar meus dados sempre que necessário.
+
+### Regras de negócio:
+* O usuário poderá visualizar e editar sua foto de perfil, nome completo, apelido, e-amil e data de nascimento.
+
+### Observações:
+N/A
+
+### Dados:
+* Nome e E-mail.
+  
+### Protótipo
+#### Editar Perfil:
+![Editar Perfil](./resources/prototipo/Perfil.png)
