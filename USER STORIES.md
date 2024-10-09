@@ -198,6 +198,24 @@ N/A
 ### Dados:
 N/A
 
+## US11 - Como desenvolvedor, quero refatorar listas e cartões para seguir MVC e melhorar a organização.
+
+### Descrição:
+Como desenvolvedor, eu quero refatorar o código das listas e cartões para seguir os princípios MVC para que a aplicação seja mais organizada, escalável e fácil de manter.
+
+### Regras de negócio:
+* Seguir o padrão MVC para garantir organização, escalabilidade e facilidade de manutenção.
+
+### Observações:
+N/A
+
+### Dados:
+N/A
+
+### Protótipo
+#### Manipulação de quadros:
+![Kanban Neutro](./resources/prototipo/Kanban%20-%20Neutro.png)
+
 ## US15 - Adicionar usuário a um cartão.
 
 ### Descrição:
