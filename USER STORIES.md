@@ -183,3 +183,109 @@ N/A
 #### Manipulação de quadros:
 ![Quadros](./resources/prototipo/Quadros.png)
 ![Início](./resources/prototipo/Início.png)
+
+## US10 - Reconfigurar Apache.
+
+### Descrição:
+Como hosteador do serviço, quero que as regras de configuração do servidor Apaches sejam seguras e sólidas, tal que o hosteamento fique mais fácil.
+
+### Regras de negócio:
+* Seja possível criar ou remover quadros.
+
+### Observações:
+N/A
+
+### Dados:
+N/A
+
+## US11 - Como desenvolvedor, quero refatorar listas e cartões para seguir MVC e melhorar a organização.
+
+### Descrição:
+Como desenvolvedor, eu quero refatorar o código das listas e cartões para seguir os princípios MVC para que a aplicação seja mais organizada, escalável e fácil de manter.
+
+### Regras de negócio:
+* Seguir o padrão MVC para garantir organização, escalabilidade e facilidade de manutenção.
+
+### Observações:
+N/A
+
+### Dados:
+N/A
+
+### Protótipo
+#### Manipulação de quadros:
+![Kanban Neutro](./resources/prototipo/Kanban%20-%20Neutro.png)
+
+## US12 - Como usuário, quero poder criar ou remover quadros ligados a mim.
+
+### Descrição:
+Como usuário, quero acessar uma tela que me mostre todos os meus quadros e que me permita adicionar ou remover um quadro para organizar minhas atividades de forma eficiente.
+
+### Regras de negócio:
+* O usuário deve ser capaz de criar novos quadros.
+* O usuário deve ser capaz de remover quadros existentes.
+* Os quadros criados devem ser vinculados ao usuário que os criou.
+* Apenas o dono do quadro pode removê-lo.
+
+### Critérios de aceitação:
+* O sistema deve exibir uma lista de todos os quadros vinculados ao usuário.
+* O botão "Criar Quadro" deve estar disponível na interface para que o usuário adicione um novo quadro.
+* Ao remover um quadro, o sistema deve solicitar uma confirmação antes de excluí-lo permanentemente.
+* O sistema deve garantir que, ao remover um quadro, todas as informações associadas a ele sejam excluídas corretamente.
+
+### Observações:
+N/A
+
+### Dados:
+* Quadro removido ou criado.
+
+### Protótipo
+#### Manipulação de quadros:
+![Quadros](./resources/prototipo/Quadros.png)
+
+## US13 - Como um usuário do GreenBoard, quero poder acessar e editar minhas informações pessoais na tela de perfil, para manter meus dados atualizados.
+
+### Descrição:
+Como um usuário do Green Board, quero ter acesso a uma tela de perfil onde poderei visualizar e editar minhas informações pessoais, como nome, e-mail e foto de perfil. Isso me permitirá atualizar meus dados sempre que necessário.
+
+### Regras de negócio:
+* O usuário poderá visualizar e editar sua foto de perfil, nome completo, apelido, E-amil e data de nascimento.
+
+### Observações:
+N/A
+
+### Dados:
+* Nome e E-maiL.
+  
+### Protótipo
+#### Editar Perfil:
+![Editar Perfil](./resources/prototipo/Perfil.png)
+
+## US14 - Como desenvolvedor, quero refatorar usuários para seguir Model-View-Controller (MVC) para melhor organização.
+
+### Descrição:
+Como desenvolvedor, eu quero refatorar os usuários seguindo os princípios MVC para que a aplicação seja mais organizada, entendível e fácil de manter.
+
+### Regras de negócio:
+* Seguir o padrão MVC para garantir organização e facilidade no entendimento e na manutenção.
+
+### Observações:
+N/A
+
+### Dados:
+N/A
+
+## US15 - Adicionar usuário a um cartão.
+
+### Descrição:
+Como usuário, quero poder me adicionar a um cartão, para isso clicarei num botão que me adicionará ao cartão, mostrando meu icone nele.
+
+### Regras de negócio:
+* Seja possível adicionar um usuário a um cartão.
+
+### Observações:
+N/A
+
+### Dados:
+* Quais e quantos usuários estão em cada cartão.
+
