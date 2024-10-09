@@ -261,6 +261,20 @@ N/A
 #### Editar Perfil:
 ![Editar Perfil](./resources/prototipo/Perfil.png)
 
+## US14 - Como desenvolvedor, quero refatorar usuários para seguir Model-View-Controller (MVC) para melhor organização.
+
+### Descrição:
+Como desenvolvedor, eu quero refatorar os usuários seguindo os princípios MVC para que a aplicação seja mais organizada, entendível e fácil de manter.
+
+### Regras de negócio:
+* Seguir o padrão MVC para garantir organização e facilidade no entendimento e na manutenção.
+
+### Observações:
+N/A
+
+### Dados:
+N/A
+
 ## US15 - Adicionar usuário a um cartão.
 
 ### Descrição:
@@ -275,16 +289,3 @@ N/A
 ### Dados:
 * Quais e quantos usuários estão em cada cartão.
 
-## US14 - Como desenvolvedor, quero refatorar usuários para seguir Model-View-Controller (MVC) para melhor organização.
-
-### Descrição:
-Como desenvolvedor, eu quero refatorar os usuários seguindo os princípios MVC para que a aplicação seja mais organizada, entendível e fácil de manter.
-
-### Regras de negócio:
-* Seguir o padrão MVC para garantir organização e facilidade no entendimento e na manutenção.
-
-### Observações:
-N/A
-
-### Dados:
-N/A
