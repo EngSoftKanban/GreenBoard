@@ -183,3 +183,31 @@ N/A
 #### Manipulação de quadros:
 ![Quadros](./resources/prototipo/Quadros.png)
 ![Início](./resources/prototipo/Início.png)
+
+## US10 - Reconfigurar Apache.
+
+### Descrição:
+Como hosteador do serviço, quero que as regras de configuração do servidor Apaches sejam seguras e sólidas, tal que o hosteamento fique mais fácil.
+
+### Regras de negócio:
+* Seja possível criar ou remover quadros.
+
+### Observações:
+N/A
+
+### Dados:
+N/A
+
+## US15 - Adicionar usuário a um cartão.
+
+### Descrição:
+Como usuário, quero poder me adicionar a um cartão, para isso clicarei num botão que me adicionará ao cartão, mostrando meu icone nele.
+
+### Regras de negócio:
+* Seja possível adicionar um usuário a um cartão.
+
+### Observações:
+N/A
+
+### Dados:
+* Quais e quantos usuários estão em cada cartão.
