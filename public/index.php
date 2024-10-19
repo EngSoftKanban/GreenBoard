@@ -36,12 +36,35 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             <h1>GreenBoard</h1>
         </div>
         <div class="users">
-            <img src="olivia.jpeg" alt="Usuário 1" class="user-icon">
-            <img src="taylor.jpg" alt="Usuário 2" class="user-icon">
-            <img src="lalisa.jpg" alt="Usuário 3" class="user-icon">
-            <span class="extra-users">+1</span>
-            <button class="share-button" onclick="openShareModal()">Compartilhar</button> <!-- Botão de compartilhar -->
+        <img src="olivia.jpeg" alt="Usuário 1" class="user-icon">
+        <img src="taylor.jpg" alt="Usuário 2" class="user-icon">
+        <img src="lalisa.jpg" alt="Usuário 3" class="user-icon">
+
+        <button class="share-button" onclick="openShareModal()">Compartilhar</button>
+        
+        <div class="menu-container">
+            <div class="profile-icon" onclick="toggleMenu()">
+            <img id="profileImageTopBar" src="" alt="Sem foto" class="profile-image-menu">
+                <div class="background-panel">
+                    <div class="profile-dropinfo">
+                        <div class="profile-photoinfo">
+                            <div class="profile-picture-placeholder">
+                                <img id="profileImageMenu" alt="Sem foto" class="profile-image-menu" style="display: none;">
+                            </div>
+                            <div class="profile-name">Fulana</div>
+                        </div>    
+        <div class="dropdown-content">
+            <a href="dados_pessoais.php">Dados Pessoais</a>
+            <a href="#">Alterar Conta</a>
+            <a href="#">Gerenciar Conta</a>
+            <a href="#">Configurações</a>
+            <a href="#">Logout</a>
         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 
     <!-- Modal de compartilhamento -->
@@ -150,8 +173,14 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
     </div>
-
+    <script src="./profileImage.js"></script>
     <script>
+      
+        function toggleMenu() {
+            var menuContainer = document.querySelector('.menu-container');
+            menuContainer.classList.toggle('active');
+        }
+   
         // Funções para exibir/ocultar formulários de adicionar cartão e lista
         function showAddCardForm(lista_id) {
             const form = document.getElementById(`addCardForm_${lista_id}`);
