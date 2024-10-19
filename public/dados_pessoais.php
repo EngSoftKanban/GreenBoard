@@ -50,7 +50,7 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                             <div class="profile-picture-placeholder">
                                 <img id="profileImageMenu" alt="Sem foto" class="profile-image-menu" style="display: none;">
                             </div>
-                            <div class="profile-name">Fulana</div>
+                            <div class="profile-name" id="displayName"></div>
                         </div>    
         <div class="dropdown-content">
             <a href="dados_pessoais.php">Dados Pessoais</a>
@@ -107,10 +107,28 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <script>
-      
-      window.onload = function() {
+        window.onload = function() {
+            initializeLocalStorage();
             loadData();
         };
+
+        function initializeLocalStorage() {
+            if (!localStorage.getItem('nome')) {
+                localStorage.setItem('nome', 'Fulana da Silva');
+            }
+            if (!localStorage.getItem('apelido')) {
+                localStorage.setItem('apelido', 'Fulana');
+            }
+            if (!localStorage.getItem('email')) {
+                localStorage.setItem('email', 'fulana@hotmail.com');
+            }
+            if (!localStorage.getItem('dataNascimento')) {
+                localStorage.setItem('dataNascimento', '01/05/1999');
+            }
+            if (!localStorage.getItem('profileImage')) {
+                localStorage.setItem('profileImage', ''); // ou URL de uma imagem padrão
+            }
+        }
 
         function toggleMenu() {
             var menuContainer = document.querySelector('.menu-container');
@@ -124,60 +142,7 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
             document.getElementById('chooseImageLabel').style.display = 'block';
             document.getElementById('profileImageInput').style.display = 'block';
-
             document.getElementById('saveButton').style.display = 'block';
-        }
-
-        function loadImage(event) {
-            const profileImage = document.getElementById('profileImage');
-            const profileImageMenu = document.getElementById('profileImageMenu');
-            const noImageText = document.getElementById('noImageText');
-            const profileImageTopBar = document.getElementById('profileImageTopBar');
-            
-            const newImageUrl = URL.createObjectURL(event.target.files[0]);
-            
-            // Define a nova imagem no perfil e no menu
-            profileImage.src = newImageUrl;
-            profileImageMenu.src = newImageUrl;
-            profileImageTopBar.src = newImageUrl;
-            
-            // Esconde o texto "Sem foto"
-            noImageText.style.display = 'none';
-
-            // Mostra a imagem
-            profileImage.style.display = 'block';
-            profileImageMenu.style.display = 'block';
-            profileImageTopBar.style.display = 'block';
-  
-        }
-
-        function saveChanges() {
-            
-            const nome = document.getElementById('nome').value;
-            const apelido = document.getElementById('apelido').value;
-            const email = document.getElementById('email').value;
-            const dataNascimento = document.getElementById('dataNascimento').value;
-
-            localStorage.setItem('nome', nome);
-            localStorage.setItem('apelido', apelido);
-            localStorage.setItem('email', email);
-            localStorage.setItem('dataNascimento', dataNascimento);
-
-            const profileImage = document.getElementById('profileImage');
-            if (profileImage.src) {
-                localStorage.setItem('profileImage', profileImage.src);
-            }
-
-            alert('Alterações salvas!');
-
-            document.querySelectorAll('.profile-info input').forEach(function(input) {
-                input.disabled = true;
-            });
-
-            document.getElementById('saveButton').style.display = 'none';
-
-            document.getElementById('chooseImageLabel').style.display = 'none';
-            document.getElementById('profileImageInput').style.display = 'none';
         }
 
         function loadData() {
@@ -185,29 +150,97 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             const apelido = localStorage.getItem('apelido');
             const email = localStorage.getItem('email');
             const dataNascimento = localStorage.getItem('dataNascimento');
-            const profileImage = localStorage.getItem('profileImage'); // Certifica-se de pegar a imagem do localStorage
+            const profileImage = localStorage.getItem('profileImage');
 
-            // Verifica e preenche os campos de texto
+            document.getElementById('displayName').textContent = apelido; // Exibe o apelido
+
             if (nome) document.getElementById('nome').value = nome;
-            if (apelido) document.getElementById('apelido').value = apelido;
+            if (apelido) document.getElementById('apelido').value = apelido; // Define o apelido no campo
             if (email) document.getElementById('email').value = email;
             if (dataNascimento) document.getElementById('dataNascimento').value = dataNascimento;
 
-            // Verifica e preenche a imagem de perfil
             if (profileImage) {
                 document.getElementById('profileImage').src = profileImage;
                 document.getElementById('profileImageMenu').src = profileImage;
                 document.getElementById('profileImageMenu').style.display = 'block';
                 document.getElementById('profileImageTopBar').src = profileImage;
-                document.getElementById('noImageText').style.display = 'none'; // Esconde o texto "Sem foto"
+                document.getElementById('noImageText').style.display = 'none'; 
             } else {
-                // Se não houver imagem salva, exibe o texto "Sem foto"
                 document.getElementById('noImageText').style.display = 'block';
             }
         }
-        function goToMainPage() {
-            window.location.href = "index.php"; // Substitua pelo link da sua página principal
+    
+            
+        function loadImage(event) {
+            const profileImage = document.getElementById('profileImage');
+            const profileImageMenu = document.getElementById('profileImageMenu');
+            const profileImageTopBar = document.getElementById('profileImageTopBar');
+            const noImageText = document.getElementById('noImageText');
+            
+            const newImageUrl = URL.createObjectURL(event.target.files[0]);
+            
+            profileImage.src = newImageUrl;
+            profileImageMenu.src = newImageUrl;
+            profileImageTopBar.src = newImageUrl;
+            
+            noImageText.style.display = 'none';
+            profileImage.style.display = 'block';
+            profileImageMenu.style.display = 'block';
+            profileImageTopBar.style.display = 'block';
+
+            // Salvar a imagem no localStorage
+            localStorage.setItem('profileImage', newImageUrl);
         }
-    </script>
+
+        function saveChanges() {
+            const nome = document.getElementById('nome').value;
+            const apelido = document.getElementById('apelido').value; // Captura o apelido
+            const email = document.getElementById('email').value;
+            const dataNascimento = document.getElementById('dataNascimento').value; // Captura a data de nascimento
+
+            const profileImage = document.getElementById('profileImage').src;
+
+            console.log('Dados a serem enviados:', { nome, apelido, email, dataNascimento, profileImage });
+
+            // Atualiza o localStorage com o novo apelido e data de nascimento
+            localStorage.setItem('apelido', apelido);
+            localStorage.setItem('dataNascimento', dataNascimento);
+
+            // Atualiza o apelido na interface imediatamente
+            document.getElementById('displayName').textContent = apelido; 
+
+            fetch('update_profile.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `nome=${encodeURIComponent(nome)}&email=${encodeURIComponent(email)}&profileImage=${encodeURIComponent(profileImage)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Alterações salvas no servidor!');
+                    // Você pode adicionar qualquer lógica adicional aqui, se necessário
+                } else {
+                    alert('Erro ao salvar as alterações.');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+            });
+
+            // Desativa os campos de entrada após salvar
+            document.querySelectorAll('.profile-info input').forEach(function(input) {
+                input.disabled = true;
+            });
+
+            document.getElementById('saveButton').style.display = 'none';
+            document.getElementById('chooseImageLabel').style.display = 'none';
+            document.getElementById('profileImageInput').style.display = 'none';
+        }
+        function goToMainPage() {
+            window.location.href = "index.php";
+        }
+</script>
 </body>
 </html>

@@ -15,7 +15,6 @@ try {
     die("Erro ao conectar com o banco de dados: " . $e->getMessage());
 }
 
-// Seleciona as listas com a nova funcionalidade de ordenação
 $sql = "SELECT * FROM listas ORDER BY posicao";
 $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -89,11 +88,10 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             <ul id="memberList">
                 <li style="color: black; margin-top: 15px; margin-left: 15px;">Fulana (você) - Administrador do Kanban</li>
                 <?php
-                // Buscar todos os usuários no banco de dados
+
                 $stmt = $pdo->query("SELECT nome FROM usuarios");
                 $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 
-                // Exibir a lista de usuários
                 foreach ($usuarios as $usuario) {
                     echo "<li>" . htmlspecialchars($usuario['nome']) . "</li>";
                 }
@@ -181,7 +179,6 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             menuContainer.classList.toggle('active');
         }
    
-        // Funções para exibir/ocultar formulários de adicionar cartão e lista
         function showAddCardForm(lista_id) {
             const form = document.getElementById(`addCardForm_${lista_id}`);
             const button = document.querySelector(`#addCardButton_${lista_id}`);
@@ -247,7 +244,6 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             document.getElementById('addListButton').style.display = 'block'; 
         }
 
-        // Funções de excluir lista e cartão
 
         function editItem(tipo, item_id, texto) {
             let novo_texto = prompt(tipo == 'lista' ? "Entre o novo título da lista" : "Entre o novo corpo do cartão", texto);
@@ -270,7 +266,6 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             }
         }
 
-        // Tornar listas e cartões arrastáveis com Sortable.js (Funções combinadas de ambas as branches)
         document.addEventListener('DOMContentLoaded', function () {
             new Sortable(document.querySelector('.kanban-board'), {
                 group: 'listas',

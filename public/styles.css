@@ -462,27 +462,25 @@ button:hover {
     text-align: left;
 }
 
-/* Quadro branco que aparece ao clicar */
 .background-panel {
-    display: none; /* Escondido inicialmente */
-    background-color: white; /* Cor de fundo branca */
-    border-radius: 10px; /* Bordas arredondadas */
+    display: none; 
+    background-color: white; 
+    border-radius: 10px; 
     padding:10px;
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-    position: absolute; /* Permite sobrepor outros elementos */
-    z-index: 1; /* Fica acima de outros elementos */
-    top: -15px; /* Ajuste para posição vertical */
+    position: absolute; 
+    z-index: 1; 
+    top: -15px; 
     left: -140px;
-    width: 200px; /* Largura do quadro */
+    width: 200px;
 }
 
 .profile-info {
-    display: flex; /* Flexbox para alinhar lado a lado */
+    display: flex;
     align-items: center;
-    gap: 10px; /* Alinha verticalmente no centro */
+    gap: 10px;
 }
 
-/* Ícone da foto do perfil */
 .profile-icon {
     width: 40px;
     height: 40px;
@@ -493,7 +491,6 @@ button:hover {
     margin-left: 10px;
 }
 
-/* Nome do usuário */
 .profile-name {
     font-weight: bold;
     background-color: #91D991;
@@ -505,19 +502,17 @@ button:hover {
     margin-top: 10px;
 }
 
-/* Estilo do dropdown */
 .dropdown-content {
-    display: none; /* Escondido inicialmente */
+    display: none; 
     background-color: #fff;
     border-radius: 10px;
-    margin-top: 5px; /* Espaço acima do dropdown */
+    margin-top: 5px;
     z-index: 1;
     width: 150px;
-    position: relative; /* Mantém a posição relativa */
+    position: relative;
     text-align: center;
 }
 
-/* Itens do dropdown */
 .dropdown-content a {
     color: black;
     padding: 12px 16px;
@@ -608,9 +603,9 @@ button:hover {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: #e0e0e0; /* Cor de fundo padrão quando não houver imagem */
+    background-color: #e0e0e0; 
     display: inline-block;
-    border: 2px solid #ccc; /* Borda para o círculo */
+    border: 2px solid #ccc; 
 }
 
 .profile-image-menu {
@@ -687,7 +682,7 @@ input:disabled {
     border-radius: 50%;
     object-fit: cover;
     background-color: #bee9be;
-    border: 2px solid #787575; /* Borda ao redor da imagem */
+    border: 2px solid #787575; 
 }
 
 #profile-image-container {
