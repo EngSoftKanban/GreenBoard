@@ -50,7 +50,7 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                             <div class="profile-picture-placeholder">
                                 <img id="profileImageMenu" alt="Sem foto" class="profile-image-menu" style="display: none;">
                             </div>
-                            <div class="profile-name">Fulana</div>
+                            <div class="profile-name" id="displayName"></div>
                         </div>    
         <div class="dropdown-content">
             <a href="dados_pessoais.php">Dados Pessoais</a>
@@ -173,7 +173,25 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     </div>
     <script src="./profileImage.js"></script>
     <script>
-      
+
+        window.onload = function() {
+            loadProfileData(); 
+        };
+
+        function loadProfileData() {
+            const apelido = localStorage.getItem('apelido');
+            const profileImage = localStorage.getItem('profileImage');
+
+            if (apelido) {
+                document.getElementById('displayName').textContent = apelido;
+            }
+
+            if (profileImage) {
+                document.getElementById('profileImageTopBar').src = profileImage; 
+                document.getElementById('profileImageMenu').src = profileImage; 
+            }
+        }
+
         function toggleMenu() {
             var menuContainer = document.querySelector('.menu-container');
             menuContainer.classList.toggle('active');

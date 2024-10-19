@@ -126,7 +126,7 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                 localStorage.setItem('dataNascimento', '01/05/1999');
             }
             if (!localStorage.getItem('profileImage')) {
-                localStorage.setItem('profileImage', ''); // ou URL de uma imagem padrão
+                localStorage.setItem('profileImage', '');
             }
         }
 
@@ -152,10 +152,10 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             const dataNascimento = localStorage.getItem('dataNascimento');
             const profileImage = localStorage.getItem('profileImage');
 
-            document.getElementById('displayName').textContent = apelido; // Exibe o apelido
+            document.getElementById('displayName').textContent = apelido; 
 
             if (nome) document.getElementById('nome').value = nome;
-            if (apelido) document.getElementById('apelido').value = apelido; // Define o apelido no campo
+            if (apelido) document.getElementById('apelido').value = apelido; 
             if (email) document.getElementById('email').value = email;
             if (dataNascimento) document.getElementById('dataNascimento').value = dataNascimento;
 
@@ -188,25 +188,22 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             profileImageMenu.style.display = 'block';
             profileImageTopBar.style.display = 'block';
 
-            // Salvar a imagem no localStorage
             localStorage.setItem('profileImage', newImageUrl);
         }
 
         function saveChanges() {
             const nome = document.getElementById('nome').value;
-            const apelido = document.getElementById('apelido').value; // Captura o apelido
+            const apelido = document.getElementById('apelido').value; 
             const email = document.getElementById('email').value;
-            const dataNascimento = document.getElementById('dataNascimento').value; // Captura a data de nascimento
+            const dataNascimento = document.getElementById('dataNascimento').value; 
 
             const profileImage = document.getElementById('profileImage').src;
 
             console.log('Dados a serem enviados:', { nome, apelido, email, dataNascimento, profileImage });
 
-            // Atualiza o localStorage com o novo apelido e data de nascimento
             localStorage.setItem('apelido', apelido);
             localStorage.setItem('dataNascimento', dataNascimento);
 
-            // Atualiza o apelido na interface imediatamente
             document.getElementById('displayName').textContent = apelido; 
 
             fetch('update_profile.php', {
@@ -220,7 +217,6 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             .then(data => {
                 if (data.status === 'success') {
                     alert('Alterações salvas no servidor!');
-                    // Você pode adicionar qualquer lógica adicional aqui, se necessário
                 } else {
                     alert('Erro ao salvar as alterações.');
                 }
@@ -229,7 +225,6 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                 console.error('Erro:', error);
             });
 
-            // Desativa os campos de entrada após salvar
             document.querySelectorAll('.profile-info input').forEach(function(input) {
                 input.disabled = true;
             });

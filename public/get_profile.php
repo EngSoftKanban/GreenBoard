@@ -1,8 +1,7 @@
 <?php
-require 'db_connection.php'; // Inclua seu arquivo de conexão com o banco de dados
+require 'db_connection.php'; 
 
-// ID do usuário de teste
-$userId = 1; // O mesmo ID que você usou para atualizar
+$userId = 1; 
 
 $stmt = $conn->prepare("SELECT nome, email, profile_image FROM users WHERE id = ?");
 $stmt->bind_param("i", $userId);

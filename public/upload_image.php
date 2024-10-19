@@ -5,12 +5,12 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-$targetDir = "uploads/"; // Diretório onde as imagens serão armazenadas
+$targetDir = "uploads/"; 
 $targetFile = $targetDir . basename($_FILES["profileImage"]["name"]);
 $uploadOk = 1;
 $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
 
-// Verificar se a imagem é um arquivo de imagem real
+
 if (isset($_POST["submit"])) {
     $check = getimagesize($_FILES["profileImage"]["tmp_name"]);
     if ($check !== false) {
@@ -21,30 +21,26 @@ if (isset($_POST["submit"])) {
     }
 }
 
-// Verificar se o arquivo já existe
 if (file_exists($targetFile)) {
     echo json_encode(['status' => 'error', 'message' => 'Desculpe, o arquivo já existe.']);
     $uploadOk = 0;
 }
 
-// Verificar tamanho do arquivo
-if ($_FILES["profileImage"]["size"] > 500000) { // Limite de 500KB
+if ($_FILES["profileImage"]["size"] > 500000) { 
     echo json_encode(['status' => 'error', 'message' => 'Desculpe, seu arquivo é muito grande.']);
     $uploadOk = 0;
 }
 
-// Permitir certos formatos de arquivo
 if (!in_array($imageFileType, ['jpg', 'png', 'jpeg', 'gif'])) {
     echo json_encode(['status' => 'error', 'message' => 'Desculpe, apenas arquivos JPG, JPEG, PNG e GIF são permitidos.']);
     $uploadOk = 0;
 }
 
-// Verificar se $uploadOk é 0 por erro
 if ($uploadOk == 0) {
     echo json_encode(['status' => 'error', 'message' => 'Desculpe, seu arquivo não foi enviado.']);
 } else {
     if (move_uploaded_file($_FILES["profileImage"]["tmp_name"], $targetFile)) {
-        // Salve o caminho da imagem no banco de dados
+        
         $user_id = $_SESSION['user_id'];
         $host = apache_getenv("DB_HOST");
         $dbname = apache_getenv("DB_NAME");
