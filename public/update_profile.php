@@ -1,53 +1,75 @@
 <?php
 session_start();
-$_SESSION['user_id'] = 1;
 
-
-if (!isset($_SESSION['user_id'])) {
-    echo json_encode(['status' => 'error', 'message' => 'Usuário não autenticado']);
-    exit;
+if (!isset($_SESSION['usuario_id'])) {
+    header('Location: login.php');
+    exit();
 }
 
+$host = apache_getenv("DB_HOST");
+$dbname = apache_getenv("DB_NAME");
+$user = apache_getenv("DB_USER");
+$password = apache_getenv("DB_PASS");
 
-include 'db_connection.php';
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Erro ao conectar com o banco de dados: " . $e->getMessage());
+}
 
-$user_id = $_SESSION['user_id'];
-$nome = $_POST['nome'];
-$email = $_POST['email'];
+$usuario_id = $_SESSION['usuario_id'];
+$nome = htmlspecialchars($_POST['nome'] ?? $_SESSION['nome'] ?? '');
+$email = htmlspecialchars($_POST['email'] ?? $_SESSION['email'] ?? '');
+$apelido = htmlspecialchars($_POST['apelido'] ?? $_SESSION['apelido'] ?? '');
+$dataNascimento = htmlspecialchars($_POST['dataNascimento'] ?? $_SESSION['dataNascimento'] ?? '');
+$profileImage = $_SESSION['icone'] ?? null;
 
+if (isset($_FILES['profileImage']) && $_FILES['profileImage']['error'] === UPLOAD_ERR_OK) {
+    $uploadDir = './resources/icones/';
+    $fileName = basename($_FILES['profileImage']['name']); 
+    $profileImage = $uploadDir . $fileName;
 
-if (isset($_FILES['profileImage']) && $_FILES['profileImage']['error'] == UPLOAD_ERR_OK) {
-    $file_tmp = $_FILES['profileImage']['tmp_name'];
-    $file_name = $_FILES['profileImage']['name'];
-    $file_ext = pathinfo($file_name, PATHINFO_EXTENSION);
-    $dest_path = "uploads/" . uniqid() . '.' . $file_ext; 
-
-    
-    if (move_uploaded_file($file_tmp, $dest_path)) {
-        $icone = $dest_path;
-
-        
-        $sql = "UPDATE usuarios SET nome=?, email=?, icone=? WHERE user_id=?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssi", $nome, $email, $icone, $user_id);
+    if (move_uploaded_file($_FILES['profileImage']['tmp_name'], $profileImage)) {
+        $_SESSION['icone'] = $profileImage; 
+        echo "Imagem enviada com sucesso: " . $profileImage; 
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Erro ao mover o arquivo para o diretório de uploads']);
+        echo "Erro ao mover o arquivo.";
         exit;
     }
 } else {
-    
-    $sql = "UPDATE usuarios SET nome=?, email=? WHERE user_id=?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssi", $nome, $email, $user_id);
-}
+    echo "Erro no upload da imagem: " . $_FILES['profileImage']['error']; 
+} 
+
+$sql = "UPDATE usuarios SET nome = ?, email = ?, icone = ? WHERE id = ?";
+$stmt = $pdo->prepare($sql);
+$stmt->bindParam(1, $nome);
+$stmt->bindParam(2, $email);
+$stmt->bindParam(3, $profileImage);
+$stmt->bindParam(4, $usuario_id);
 
 
 if ($stmt->execute()) {
-    echo json_encode(['status' => 'success']);
+
+    $_SESSION['nome'] = $nome;
+    $_SESSION['email'] = $email;
+    $_SESSION['apelido'] = $_POST['apelido'] ?? $_SESSION['apelido'] ?? '';
+    $_SESSION['dataNascimento'] = $_POST['dataNascimento'] ?? $_SESSION['dataNascimento'] ?? '';
+    $_SESSION['icone'] = $profileImage; 
+
+    echo json_encode([
+        'status' => 'success',
+        'data' => [
+            'nome' => $nome,
+            'email' => $email,
+            'apelido' => $_SESSION['apelido'],
+            'dataNascimento' => $_SESSION['dataNascimento'],
+            'icone' => $_SESSION['icone'] 
+        ]
+    ]);
 } else {
-    echo json_encode(['status' => 'error', 'message' => 'Erro ao atualizar os dados no banco de dados']);
+    echo json_encode(['status' => 'error', 'message' => 'Erro ao atualizar o perfil.']);
 }
 
-$stmt->close();
-$conn->close();
+$pdo = null;
 ?>

@@ -50,7 +50,7 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                             <div class="profile-picture-placeholder">
                                 <img id="profileImageMenu" alt="Sem foto" class="profile-image-menu" style="display: none;">
                             </div>
-                            <div class="profile-name" id="displayName"></div>
+                            <div class="profile-name" id="displayName"><?php echo $_SESSION['apelido'] ?? ''; ?></div>
                         </div>    
         <div class="dropdown-content">
             <a href="dados_pessoais.php">Dados Pessoais</a>

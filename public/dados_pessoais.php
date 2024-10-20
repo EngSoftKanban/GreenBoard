@@ -1,8 +1,10 @@
 <?php
 session_start();
-if (session_status() != PHP_SESSION_ACTIVE) {
-	header('Location: login.php');
+if (!isset($_SESSION['usuario_id'])) {
+    header('Location: login.php');
+    exit(); 
 }
+
 $host = apache_getenv("DB_HOST");
 $dbname = apache_getenv("DB_NAME");
 $user = apache_getenv("DB_USER");
@@ -19,7 +21,7 @@ $sql = "SELECT * FROM listas ORDER BY posicao";
 $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -50,7 +52,7 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                             <div class="profile-picture-placeholder">
                                 <img id="profileImageMenu" alt="Sem foto" class="profile-image-menu" style="display: none;">
                             </div>
-                            <div class="profile-name" id="displayName"></div>
+                            <div class="profile-name" id="displayName"><?php echo $_SESSION['apelido'] ?? ''; ?></div>
                         </div>    
         <div class="dropdown-content">
             <a href="dados_pessoais.php">Dados Pessoais</a>
@@ -65,8 +67,7 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
     </div>
-       
-
+    
     <div class="profile-container">
     <div class="profile-header">
         <div class= "back-container">
@@ -77,59 +78,36 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
            <img src="./edit.svg" class="edit-icon" onclick="enableEdit()">
         </div>
     </div>
-
-    <div class="profile-image-container">
-        <img id="profileImage" src="" alt="Sem foto" class="profile-image">
-        <p id="noImageText"></p>
-        <label id="chooseImageLabel" style="display: none;" for="profileImageInput"></label>
-        <input type="file" id="profileImageInput" style="display: none;" onchange="loadImage(event)">
-    </div>
-
-    <div class="profile-info">
-        <div class="info-item">
-            <label>Nome:</label>
-            <input type="text" id="nome" value="Fulana da Silva" disabled>
+    
+    <form id="profileForm" method="post" enctype="multipart/form-data" action="update_profile.php">
+        <div class="profile-image-container">
+                    <img id="profileImage" src="getImage.php" alt="Sem foto" class="profile-image">
+                    <p id="noImageText"></p>
+                    <label id="chooseImageLabel" for="profileImageInput"></label>
+                    <input type="file" id="profileImageInput" name="profileImage" style="display: none;" onchange="loadImage(event)">
         </div>
-        <div class="info-item">
-            <label>Apelido:</label>
-            <input type="text" id="apelido" value="Fulana" disabled>
+        <div class="profile-info">
+            <div class="info-item">
+                <label>Nome:</label>
+                <input type="text" id="nome" name="nome" value="<?php echo $_SESSION['nome'] ?? ''; ?>" disabled>
+            </div>
+            <div class="info-item">
+                <label>Apelido:</label>
+                <input type="text" id="apelido" name="apelido" value="<?php echo $_SESSION['apelido'] ?? ''; ?>" disabled>
+            </div>
+            <div class="info-item">
+                <label>E-mail:</label>
+                <input type="email" id="email" name="email" value="<?php echo $_SESSION['email'] ?? ''; ?>" disabled>
+            </div>
+            <div class="info-item">
+                <label>Data de Nascimento:</label>
+                <input type="text" id="dataNascimento" name="dataNascimento" value="<?php echo $_SESSION['dataNascimento'] ?? ''; ?>" disabled>
+            </div>
         </div>
-        <div class="info-item">
-            <label>E-mail:</label>
-            <input type="email" id="email" value="fulana@hotmail.com" disabled>
-        </div>
-        <div class="info-item">
-            <label>Data de Nascimento:</label>
-            <input type="text" id="dataNascimento" value="01/05/1999" disabled>
-        </div>
-    </div>
-    <button id="saveButton" style="display: none;"  onclick="saveChanges()">Salvar</button>
-    </div>
-
+        <button id="saveButton" onclick="saveChanges()" style="display: none;" type="submit">Salvar</button>
+    </form>
     <script>
-        window.onload = function() {
-            initializeLocalStorage();
-            loadData();
-        };
-
-        function initializeLocalStorage() {
-            if (!localStorage.getItem('nome')) {
-                localStorage.setItem('nome', 'Fulana da Silva');
-            }
-            if (!localStorage.getItem('apelido')) {
-                localStorage.setItem('apelido', 'Fulana');
-            }
-            if (!localStorage.getItem('email')) {
-                localStorage.setItem('email', 'fulana@hotmail.com');
-            }
-            if (!localStorage.getItem('dataNascimento')) {
-                localStorage.setItem('dataNascimento', '01/05/1999');
-            }
-            if (!localStorage.getItem('profileImage')) {
-                localStorage.setItem('profileImage', '');
-            }
-        }
-
+    
         function toggleMenu() {
             var menuContainer = document.querySelector('.menu-container');
             menuContainer.classList.toggle('active');
@@ -147,9 +125,9 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
         function loadData() {
             const nome = localStorage.getItem('nome');
-            const apelido = localStorage.getItem('apelido');
+            const apelido = localStorage.getItem('apelido') || '<?php echo $_SESSION["apelido"]; ?>'; // Carrega da sessão
             const email = localStorage.getItem('email');
-            const dataNascimento = localStorage.getItem('dataNascimento');
+            const dataNascimento = localStorage.getItem('dataNascimento') || '<?php echo $_SESSION["dataNascimento"]; ?>'; // Carrega da sessão
             const profileImage = localStorage.getItem('profileImage');
 
             document.getElementById('displayName').textContent = apelido; 
@@ -169,73 +147,116 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                 document.getElementById('noImageText').style.display = 'block';
             }
         }
-    
-            
-        function loadImage(event) {
-            const profileImage = document.getElementById('profileImage');
-            const profileImageMenu = document.getElementById('profileImageMenu');
-            const profileImageTopBar = document.getElementById('profileImageTopBar');
-            const noImageText = document.getElementById('noImageText');
-            
-            const newImageUrl = URL.createObjectURL(event.target.files[0]);
-            
-            profileImage.src = newImageUrl;
-            profileImageMenu.src = newImageUrl;
-            profileImageTopBar.src = newImageUrl;
-            
-            noImageText.style.display = 'none';
-            profileImage.style.display = 'block';
-            profileImageMenu.style.display = 'block';
-            profileImageTopBar.style.display = 'block';
 
-            localStorage.setItem('profileImage', newImageUrl);
+
+        document.getElementById('profileForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+
+            fetch('update_profile.php', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Perfil atualizado com sucesso!');
+                    document.getElementById('nome').value = data.data.nome;
+                    document.getElementById('email').value = data.data.email;
+                    document.getElementById('apelido').value = data.data.apelido || '';
+                    document.getElementById('dataNascimento').value = data.data.dataNascimento || '';
+                    const profileImage = document.getElementById('profileImage');
+                    if (data.data.icone) {
+                        profileImage.src = 'getImage.php'; 
+                    } else {
+                        profileImage.src = ''; 
+                    }
+
+                    document.querySelectorAll('.profile-info input').forEach(function(input) {
+                        input.disabled = true;
+                    });
+                
+                    document.getElementById('saveButton').style.display = 'none';
+                    document.getElementById('chooseImageLabel').style.display = 'none';
+                    document.getElementById('profileImageInput').style.display = 'none';
+                } else {
+                    alert(data.message || 'Ocorreu um erro ao atualizar o perfil. Tente novamente. Detalhes: ${error.message}');
+                }
+            })
+            .catch(error => {
+                console.error('Erro completo:', error);
+                alert('Erro ao enviar os dados. Por favor, tente novamente.');
+            });
+        });
+
+
+        function loadImage(event) {
+            const image = document.getElementById('profileImage');
+            const reader = new FileReader();
+
+            reader.onload = function() {
+                image.src = reader.result;
+                document.getElementById('chooseImageLabel').style.display = 'none';
+                document.getElementById('noImageText').style.display = 'none';
+            }
+
+            reader.readAsDataURL(event.target.files[0]);
         }
 
         function saveChanges() {
             const nome = document.getElementById('nome').value;
-            const apelido = document.getElementById('apelido').value; 
+            const apelido = document.getElementById('apelido').value;
             const email = document.getElementById('email').value;
-            const dataNascimento = document.getElementById('dataNascimento').value; 
+            const dataNascimento = document.getElementById('dataNascimento').value;
+            const profileImageInput = document.getElementById('profileImageInput'); 
+            const profileImageFile = profileImageInput.files[0]; 
+            const formData = new FormData(); 
 
-            const profileImage = document.getElementById('profileImage').src;
+            formData.append('nome', nome);
+            formData.append('apelido', apelido);
+            formData.append('email', email);
+            formData.append('dataNascimento', dataNascimento);
 
-            console.log('Dados a serem enviados:', { nome, apelido, email, dataNascimento, profileImage });
-
-            localStorage.setItem('apelido', apelido);
-            localStorage.setItem('dataNascimento', dataNascimento);
-
-            document.getElementById('displayName').textContent = apelido; 
+            if (profileImageFile) {
+                formData.append('profileImage', profileImageFile);
+            }
 
             fetch('update_profile.php', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: `nome=${encodeURIComponent(nome)}&email=${encodeURIComponent(email)}&profileImage=${encodeURIComponent(profileImage)}`
+                body: formData 
             })
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    alert('Alterações salvas no servidor!');
+                    alert('Alterações salvas com sucesso!');
+                    
+                    if (data.data.icone) {
+                        document.getElementById('profileImage').src = data.data.icone; 
+                    }
                 } else {
                     alert('Erro ao salvar as alterações.');
                 }
+
+                document.querySelectorAll('.profile-info input').forEach(function(input) {
+                    input.disabled = true;
+                });
+                document.getElementById('saveButton').style.display = 'none';
+                document.getElementById('chooseImageLabel').style.display = 'none';
+                document.getElementById('profileImageInput').style.display = 'none';
             })
             .catch(error => {
                 console.error('Erro:', error);
             });
-
-            document.querySelectorAll('.profile-info input').forEach(function(input) {
-                input.disabled = true;
-            });
-
-            document.getElementById('saveButton').style.display = 'none';
-            document.getElementById('chooseImageLabel').style.display = 'none';
-            document.getElementById('profileImageInput').style.display = 'none';
         }
         function goToMainPage() {
             window.location.href = "index.php";
         }
+        
 </script>
 </body>
 </html>
