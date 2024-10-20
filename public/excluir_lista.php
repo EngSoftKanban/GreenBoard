@@ -1,9 +1,14 @@
 <?php
+// Habilita a exibição de erros
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-$host = 'localhost';
-$dbname = 'GreenBoard';
-$user = 'root';
-$password = '';
+// Conexão com o banco de dados
+$host = apache_getenv("DB_HOST");
+$dbname = apache_getenv("DB_NAME");
+$user = apache_getenv("DB_USER");
+$password = apache_getenv("DB_PASS");
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);
@@ -12,35 +17,28 @@ try {
     die("Erro ao conectar com o banco de dados: " . $e->getMessage());
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['excluir_lista_id'])) {
+require_once '../controllers/ListasController.php';
+
+$controller = new ListaController($pdo);
+
+// Verifica se há uma ação de excluir lista
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['excluir_lista_id'])) {
     $lista_id = $_POST['excluir_lista_id'];
 
-    
-    $sqlCartoes = "DELETE FROM cartoes WHERE lista_id = :lista_id";
-    $stmtCartoes = $pdo->prepare($sqlCartoes);
-    $stmtCartoes->bindParam(':lista_id', $lista_id);
-    
-    if ($stmtCartoes->execute()) {
-    
-        $sqlLista = "DELETE FROM listas WHERE id = :id";
-        $stmtLista = $pdo->prepare($sqlLista);
-        $stmtLista->bindParam(':id', $lista_id);
-
-        if ($stmtLista->execute()) {
-            echo "Lista e cartões excluídos com sucesso!";
-
-            
-            $sqlAtualizarPosicoes = "UPDATE listas SET posicao = posicao - 1 WHERE posicao > (SELECT posicao FROM listas WHERE id = :id)";
-            $stmtAtualizarPosicoes = $pdo->prepare($sqlAtualizarPosicoes);
-            $stmtAtualizarPosicoes->bindParam(':id', $lista_id);
-            $stmtAtualizarPosicoes->execute();
+    // Verifica se o ID da lista foi fornecido
+    if ($lista_id) {
+        if ($controller->deletarLista($lista_id)) {
+            echo json_encode(['success' => true, 'message' => 'Lista e cartões excluídos com sucesso!']);
         } else {
-            echo "Erro ao excluir a lista.";
+            echo json_encode(['success' => false, 'message' => 'Erro ao excluir a lista.']);
         }
     } else {
-        echo "Erro ao excluir os cartões da lista.";
+        echo json_encode(['success' => false, 'message' => 'ID da lista não fornecido.']);
     }
-} else {
-    echo "Método de requisição inválido.";
+    exit; // Garante que o script não continue após a resposta JSON
 }
+
+// Se não for um POST, retorna um erro
+echo json_encode(['success' => false, 'message' => 'Método de requisição inválido.']);
+exit; // Garante que o script não continue após a resposta JSON
 ?>
