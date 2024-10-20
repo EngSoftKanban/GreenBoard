@@ -27,7 +27,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Senha correta, iniciar a sessão
             $_SESSION['usuario_id'] = $usuario['id'];
             $_SESSION['nome'] = $usuario['nome'];
-
+            
+            setcookie('usuario_id', $usuario['id'], 0, "/");
+            
             // Redirecionar o usuário para a página principal ou anterior
             header("Location: " . ($_SESSION['redirect_url'] ?? 'index.php')); // Se o usuário estava tentando acessar algo antes, redireciona para lá
             exit();
