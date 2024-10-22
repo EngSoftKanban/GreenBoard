@@ -43,15 +43,22 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
         
         <div class="menu-container">
             <div class="profile-icon" onclick="toggleMenu()">
-            <img id="profileImageTopBar" src="" alt="Sem foto" class="profile-image-menu">
-                <div class="background-panel">
-                    <div class="profile-dropinfo">
-                        <div class="profile-photoinfo">
-                            <div class="profile-picture-placeholder">
-                                <img id="profileImageMenu" alt="Sem foto" class="profile-image-menu" style="display: none;">
+                <img id="profileImageTopBar" 
+                    src="<?php echo !empty($_SESSION['icone']) ? $_SESSION['icone'] : 'taylor.jpg'; ?>" alt="Sem foto" class="profile-image-menu">
+            </div>
+            <div class="background-panel">
+                <div class="profile-dropinfo">
+                    <div class="profile-photoinfo">
+                        <div class="profile-picture-placeholder">
+                            
+                            <img id="profileImageMenu" 
+                                src="<?php echo !empty($_SESSION['icone']) ? $_SESSION['icone'] : 'taylor.jpg'; ?>" alt="Sem foto" class="profile-image-menu">
                             </div>
-                            <div class="profile-name" id="displayName"><?php echo $_SESSION['apelido'] ?? ''; ?></div>
-                        </div>    
+                        <div class="profile-name" id="displayName">
+                            <?php echo $_SESSION['apelido'] ?? 'Sem nome'; ?>
+                        </div>
+                    </div>    
+                </div>      
         <div class="dropdown-content">
             <a href="dados_pessoais.php">Dados Pessoais</a>
             <a href="#">Alterar Conta</a>

@@ -26,45 +26,50 @@ $dataNascimento = htmlspecialchars($_POST['dataNascimento'] ?? $_SESSION['dataNa
 $profileImage = $_SESSION['icone'] ?? null;
 
 if (isset($_FILES['profileImage']) && $_FILES['profileImage']['error'] === UPLOAD_ERR_OK) {
-    $uploadDir = './resources/icones/';
-    $fileName = basename($_FILES['profileImage']['name']); 
+    $uploadDir = realpath(__DIR__ . '/resources/icones/');
+    if (!$uploadDir) {
+        mkdir(__DIR__ . '/resources/icones/', 0755, true);
+        $uploadDir = realpath(__DIR__ . '/resources/icones/') . '/';
+    }
+
+    $fileName = uniqid() . '-' . basename($_FILES['profileImage']['name']); 
     $profileImage = $uploadDir . $fileName;
 
     if (move_uploaded_file($_FILES['profileImage']['tmp_name'], $profileImage)) {
         $_SESSION['icone'] = $profileImage; 
-        echo "Imagem enviada com sucesso: " . $profileImage; 
     } else {
-        echo "Erro ao mover o arquivo.";
+        echo json_encode(['status' => 'error', 'message' => 'Erro ao mover o arquivo.']);
         exit;
     }
 } else {
-    echo "Erro no upload da imagem: " . $_FILES['profileImage']['error']; 
-} 
+    $profileImage = $_SESSION['icone'] ?? null; 
+}
 
-$sql = "UPDATE usuarios SET nome = ?, email = ?, icone = ? WHERE id = ?";
+
+$sql = "UPDATE usuarios SET icone = ?, nome = ?, email = ?  WHERE id = ?";
 $stmt = $pdo->prepare($sql);
-$stmt->bindParam(1, $nome);
-$stmt->bindParam(2, $email);
-$stmt->bindParam(3, $profileImage);
+$stmt->bindParam(1, $profileImage);;
+$stmt->bindParam(2, $nome);
+$stmt->bindParam(3, $email);
 $stmt->bindParam(4, $usuario_id);
 
 
 if ($stmt->execute()) {
 
+    $_SESSION['icone'] = $profileImage; 
     $_SESSION['nome'] = $nome;
     $_SESSION['email'] = $email;
     $_SESSION['apelido'] = $_POST['apelido'] ?? $_SESSION['apelido'] ?? '';
     $_SESSION['dataNascimento'] = $_POST['dataNascimento'] ?? $_SESSION['dataNascimento'] ?? '';
-    $_SESSION['icone'] = $profileImage; 
 
     echo json_encode([
         'status' => 'success',
         'data' => [
+            'icone' => $_SESSION['icone'],
             'nome' => $nome,
             'email' => $email,
             'apelido' => $_SESSION['apelido'],
-            'dataNascimento' => $_SESSION['dataNascimento'],
-            'icone' => $_SESSION['icone'] 
+            'dataNascimento' => $_SESSION['dataNascimento'], 
         ]
     ]);
 } else {

@@ -45,15 +45,22 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
         
         <div class="menu-container">
             <div class="profile-icon" onclick="toggleMenu()">
-            <img id="profileImageTopBar" src="" alt="Sem foto" class="profile-image-menu">
-                <div class="background-panel">
-                    <div class="profile-dropinfo">
-                        <div class="profile-photoinfo">
-                            <div class="profile-picture-placeholder">
-                                <img id="profileImageMenu" alt="Sem foto" class="profile-image-menu" style="display: none;">
+                <img id="profileImageTopBar" 
+                    src="<?php echo !empty($_SESSION['icone']) ? $_SESSION['icone'] : 'taylor.jpg'; ?>" alt="Sem foto" class="profile-image-menu">
+            </div>
+            <div class="background-panel">
+                <div class="profile-dropinfo">
+                    <div class="profile-photoinfo">
+                        <div class="profile-picture-placeholder">
+                            
+                            <img id="profileImageMenu" 
+                                src="<?php echo !empty($_SESSION['icone']) ? $_SESSION['icone'] : 'taylor.jpg'; ?>" alt="Sem foto" class="profile-image-menu">
                             </div>
-                            <div class="profile-name" id="displayName"><?php echo $_SESSION['apelido'] ?? ''; ?></div>
-                        </div>    
+                        <div class="profile-name" id="displayName">
+                            <?php echo $_SESSION['apelido'] ?? 'Sem nome'; ?>
+                        </div>
+                    </div>    
+                </div>  
         <div class="dropdown-content">
             <a href="dados_pessoais.php">Dados Pessoais</a>
             <a href="#">Alterar Conta</a>
@@ -125,7 +132,7 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
         function loadData() {
             const nome = localStorage.getItem('nome');
-            const apelido = localStorage.getItem('apelido') || '<?php echo $_SESSION["apelido"]; ?>'; // Carrega da sessão
+            const apelido = localStorage.getItem('apelido') || '<?php echo $_SESSION["apelido"]; ?>'; 
             const email = localStorage.getItem('email');
             const dataNascimento = localStorage.getItem('dataNascimento') || '<?php echo $_SESSION["dataNascimento"]; ?>'; // Carrega da sessão
             const profileImage = localStorage.getItem('profileImage');
@@ -151,46 +158,23 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
         document.getElementById('profileForm').addEventListener('submit', function(event) {
             event.preventDefault();
-            const formData = new FormData(this);
+
+            let formData = new FormData(this); 
 
             fetch('update_profile.php', {
                 method: 'POST',
                 body: formData,
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Erro HTTP! status: ${response.status}`);
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    alert('Perfil atualizado com sucesso!');
-                    document.getElementById('nome').value = data.data.nome;
-                    document.getElementById('email').value = data.data.email;
-                    document.getElementById('apelido').value = data.data.apelido || '';
-                    document.getElementById('dataNascimento').value = data.data.dataNascimento || '';
-                    const profileImage = document.getElementById('profileImage');
-                    if (data.data.icone) {
-                        profileImage.src = 'getImage.php'; 
-                    } else {
-                        profileImage.src = ''; 
-                    }
-
-                    document.querySelectorAll('.profile-info input').forEach(function(input) {
-                        input.disabled = true;
-                    });
-                
-                    document.getElementById('saveButton').style.display = 'none';
-                    document.getElementById('chooseImageLabel').style.display = 'none';
-                    document.getElementById('profileImageInput').style.display = 'none';
+                   location.reload();
                 } else {
-                    alert(data.message || 'Ocorreu um erro ao atualizar o perfil. Tente novamente. Detalhes: ${error.message}');
+                    alert('Erro ao atualizar o perfil');
                 }
             })
             .catch(error => {
-                console.error('Erro completo:', error);
-                alert('Erro ao enviar os dados. Por favor, tente novamente.');
+                console.error('Erro:', error);
             });
         });
 
