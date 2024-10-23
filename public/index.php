@@ -15,7 +15,6 @@ try {
     die("Erro ao conectar com o banco de dados: " . $e->getMessage());
 }
 
-// Seleciona as listas com a nova funcionalidade de ordenação
 $sql = "SELECT * FROM listas ORDER BY posicao";
 $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -36,12 +35,42 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             <h1>GreenBoard</h1>
         </div>
         <div class="users">
-            <img src="olivia.jpeg" alt="Usuário 1" class="user-icon">
-            <img src="taylor.jpg" alt="Usuário 2" class="user-icon">
-            <img src="lalisa.jpg" alt="Usuário 3" class="user-icon">
-            <span class="extra-users">+1</span>
-            <button class="share-button" onclick="openShareModal()">Compartilhar</button> <!-- Botão de compartilhar -->
+        <img src="olivia.jpeg" alt="Usuário 1" class="user-icon">
+        <img src="taylor.jpg" alt="Usuário 2" class="user-icon">
+        <img src="lalisa.jpg" alt="Usuário 3" class="user-icon">
+
+        <button class="share-button" onclick="openShareModal()">Compartilhar</button>
+        
+        <div class="menu-container">
+            <div class="profile-icon" onclick="toggleMenu()">
+                <img id="profileImageTopBar" 
+                    src="<?php echo !empty($_SESSION['icone']) ? $_SESSION['icone'] : 'taylor.jpg'; ?>" alt="Sem foto" class="profile-image-menu">
+            </div>
+            <div class="background-panel">
+                <div class="profile-dropinfo">
+                    <div class="profile-photoinfo">
+                        <div class="profile-picture-placeholder">
+                            
+                            <img id="profileImageMenu" 
+                                src="<?php echo !empty($_SESSION['icone']) ? $_SESSION['icone'] : 'taylor.jpg'; ?>" alt="Sem foto" class="profile-image-menu">
+                            </div>
+                        <div class="profile-name" id="displayName">
+                            <?php echo $_SESSION['nome'] ?? 'Sem nome'; ?>
+                        </div>
+                    </div>    
+                </div>      
+        <div class="dropdown-content">
+            <a href="dados_pessoais.php">Dados Pessoais</a>
+            <a href="#">Alterar Conta</a>
+            <a href="#">Gerenciar Conta</a>
+            <a href="#">Configurações</a>
+            <a href="#">Logout</a>
         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 
     <!-- Modal de compartilhamento -->
@@ -66,11 +95,10 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             <ul id="memberList">
                 <li style="color: black; margin-top: 15px; margin-left: 15px;">Fulana (você) - Administrador do Kanban</li>
                 <?php
-                // Buscar todos os usuários no banco de dados
+
                 $stmt = $pdo->query("SELECT nome FROM usuarios");
                 $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 
-                // Exibir a lista de usuários
                 foreach ($usuarios as $usuario) {
                     echo "<li>" . htmlspecialchars($usuario['nome']) . "</li>";
                 }
@@ -150,9 +178,32 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
     </div>
-
+    <script src="./profileImage.js"></script>
     <script>
-        // Funções para exibir/ocultar formulários de adicionar cartão e lista
+
+        window.onload = function() {
+            loadProfileData(); 
+        };
+
+        function loadProfileData() {
+            const apelido = localStorage.getItem('apelido');
+            const profileImage = localStorage.getItem('profileImage');
+
+            if (apelido) {
+                document.getElementById('displayName').textContent = apelido;
+            }
+
+            if (profileImage) {
+                document.getElementById('profileImageTopBar').src = profileImage; 
+                document.getElementById('profileImageMenu').src = profileImage; 
+            }
+        }
+
+        function toggleMenu() {
+            var menuContainer = document.querySelector('.menu-container');
+            menuContainer.classList.toggle('active');
+        }
+   
         function showAddCardForm(lista_id) {
             const form = document.getElementById(`addCardForm_${lista_id}`);
             const button = document.querySelector(`#addCardButton_${lista_id}`);
@@ -218,7 +269,6 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             document.getElementById('addListButton').style.display = 'block'; 
         }
 
-        // Funções de excluir lista e cartão
 
         function editItem(tipo, item_id, texto) {
             let novo_texto = prompt(tipo == 'lista' ? "Entre o novo título da lista" : "Entre o novo corpo do cartão", texto);
@@ -241,7 +291,6 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             }
         }
 
-        // Tornar listas e cartões arrastáveis com Sortable.js (Funções combinadas de ambas as branches)
         document.addEventListener('DOMContentLoaded', function () {
             new Sortable(document.querySelector('.kanban-board'), {
                 group: 'listas',
