@@ -27,7 +27,9 @@ class LoginController {
                         // Senha correta, iniciar a sessão
                         session_start();
                         $_SESSION['usuario_id'] = $usuario['id'];
-                        $_SESSION['nome'] = $usuario['nome'];
+						$_SESSION['nome'] = $usuario['nome'];
+						$_SESSION['email'] = $usuario['email'];
+						$_SESSION['icone'] = $usuario['icone'];
 
                         // Redirecionar o usuário para a página principal ou anterior
                         header("Location: " . ($_SESSION['redirect_url'] ?? 'index.php'));
