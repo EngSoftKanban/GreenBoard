@@ -1,17 +1,8 @@
 <?php
-$host = apache_getenv("DB_HOST");
-$dbname = apache_getenv("DB_NAME");
-$user = apache_getenv("DB_USER");
-$password = apache_getenv("DB_PASS");
-
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Erro ao conectar com o banco de dados: " . $e->getMessage());
+if (session_status() == PHP_SESSION_NONE) {
+	//header('Location: login.php');
 }
 
-// Seleciona as listas com a nova funcionalidade de ordenação
 $sql = "SELECT * FROM listas ORDER BY posicao";
 $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -22,8 +13,7 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GreenBoard - Kanban</title>
-    <!-- Combinei o arquivo de estilos correto com o script necessário -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/resources/css/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 </head>
 <body>
@@ -33,14 +23,78 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             <h1>GreenBoard</h1>
         </div>
         <div class="users">
-            <img src="/resources/olivia.jpeg" alt="Usuário 1" class="user-icon">
-            <img src="/resources/taylor.jpg" alt="Usuário 2" class="user-icon">
-            <img src="/resources/lalisa.jpg" alt="Usuário 3" class="user-icon">
-            <span class="extra-users">+1</span>
+        <img src="/resources/olivia.jpeg" alt="Usuário 1" class="user-icon">
+        <img src="/resources/taylor.jpg" alt="Usuário 2" class="user-icon">
+        <img src="/resources/lalisa.jpg" alt="Usuário 3" class="user-icon">
+
+        <button class="share-button" onclick="openShareModal()">Compartilhar</button>
+        
+        <div class="menu-container">
+            <div class="profile-icon" onclick="toggleMenu()">
+                <img id="profileImageTopBar" 
+                    src="<?php echo !empty($_SESSION['icone']) ? $_SESSION['icone'] : '/resources/taylor.jpg'; ?>" alt="Sem foto" class="profile-image-menu">
+            </div>
+            <div class="background-panel">
+                <div class="profile-dropinfo">
+                    <div class="profile-photoinfo">
+                        <div class="profile-picture-placeholder">
+                            
+                            <img id="profileImageMenu" 
+                                src="<?php echo !empty($_SESSION['icone']) ? $_SESSION['icone'] : '/resources/taylor.jpg'; ?>" alt="Sem foto" class="profile-image-menu">
+                            </div>
+                        <div class="profile-name" id="displayName">
+                            <?php echo $_SESSION['nome'] ?? 'Sem nome'; ?>
+                        </div>
+                    </div>    
+                </div>      
+        <div class="dropdown-content">
+            <a href="dados_pessoais.php">Dados Pessoais</a>
+            <a href="#">Alterar Conta</a>
+            <a href="#">Gerenciar Conta</a>
+            <a href="#">Configurações</a>
+            <a href="#">Logout</a>
+        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Modal de compartilhamento -->
+    <div id="shareModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeShareModal()">&times;</span>
+            <h2 style="background-color: #91d991; width: 270px; border-radius: 15px; color: black; padding-left: 10px; padding-top: 5px; padding-bottom: 5px;">Compartilhar Kanban</h2>
+            <form onsubmit="shareKanban(event)">
+                <input class="share-form" type="text" id="shareInput" placeholder="Endereço de e-mail ou nome" required>
+                <button type="submit" class="share-button">Enviar</button> 
+            </form>
+            <div class="share-container">
+                <div class= "icon-container">
+                    <img src="/resources/share.png" alt="Compartilhar" class="share-icon">
+                </div>    
+                <div class= "text-container">   
+                    <p style="color: black; font-size: 16px; padding-left: 5px; padding-top: 5px;">Compartilhar KanBan com um link</p>
+                    <button onclick="copyLink()" style="color: white; background-color: transparent; padding: 5px; width: 90px;">Copiar link</button> 
+                </div>
+            </div>     
+            <h4 style="color: black; font-size: 15px; margin-top: 20px;">Membros do Kanban</h4>
+            <ul id="memberList">
+                <li style="color: black; margin-top: 15px; margin-left: 15px;">Fulana (você) - Administrador do Kanban</li>
+                <?php
+
+                $stmt = $pdo->query("SELECT nome FROM usuarios");
+                $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                
+                foreach ($usuarios as $usuario) {
+                    echo "<li>" . htmlspecialchars($usuario['nome']) . "</li>";
+                }
+                ?>
+            </ul>
         </div>
     </div>
 
-    <!-- Combinei os conteúdos de ambas as versões de "kanban-board" -->
     <div class="scroll-container">
         <div class="kanban-board">
             <?php foreach ($listas as $lista): ?>
@@ -52,8 +106,8 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                         <div class="column-options">
                             <span class="options-icon" onclick="toggleOptions(<?php echo $lista['id']; ?>)" style="color: black;">&#9998;</span>
                             <div class="options-menu" id="options_menu_<?php echo $lista['id']; ?>">
-                                <button class="edit-list-btn" onclick="editItem('lista', <?php echo $lista['id']; ?>, '<?php echo $lista['titulo']; ?>')">Editar</button>
-                                <button class="delete-list-btn" onclick="deleteColumn(<?php echo $lista['id']; ?>)">Excluir</button>
+                                <button class="edit-btn" onclick="editItem('lista', <?php echo $lista['id']; ?>, '<?php echo $lista['titulo']; ?>')">Editar</button>
+                                <button class="edit-btn" onclick="deleteColumn(<?php echo $lista['id']; ?>)">Excluir</button>
                             </div>
                         </div>
                     </div>
@@ -70,18 +124,19 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="card-header">
                                     <p><?php echo $cartao['corpo']; ?></p>
                                     <div class="card-options">
-                                        <span class="options-icon" onclick="toggleOptions(<?php echo $lista['id']; ?>)" style="color: black;">&#9998;</span>
+                                        <span class="options-icon" onclick="toggleOptions(<?php echo $cartao['id']; ?>)" style="color: black;">&#9998;</span>
                                         <div class="card-options-menu" id="card_options_menu_<?php echo $cartao['id']; ?>">
-                                            <button class="edit-card-btn" onclick="editItem('cartao', <?php echo $cartao['id']; ?>, '<?php echo $cartao['corpo']; ?>')">Editar</button>
-                                            <button class="delete-card-btn" onclick="deleteCard(<?php echo $cartao['id']; ?>)">Excluir</button>
+                                            <button class="edit-btn" onclick="editItem('cartao', <?php echo $cartao['id']; ?>, '<?php echo $cartao['corpo']; ?>')">Editar</button>
+                                            <button class="edit-btn" onclick="deleteCard(<?php echo $cartao['id']; ?>)">Excluir</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         <?php endforeach; ?>
                         <div class="add-card-container">
-                            <button id="addCardButton_<?php echo $lista['id']; ?>" class="add-card-btn" onclick="showAddCardForm(<?php echo $lista['id']; ?>)">Adicionar Cartão
-                                <img src="/resources/plus.png" alt="Adicionar" class="icon" style="width: 20px; height: 20px; margin-left: 5px;">
+                            <button id="addCardButton_<?php echo $lista['id']; ?>" class="add-card-btn" onclick="showAddCardForm(<?php echo $lista['id']; ?>)">
+								Adicionar Cartão
+                                <img src="/resources/plus.svg" alt="Adicionar" class="icon" style="width: 20px; height: 20x; margin-left: 5px;float: right">
                             </button>
                             <form id="addCardForm_<?php echo $lista['id']; ?>" class="add-card-form" style="display:none;" onsubmit="addCard(event, <?php echo $lista['id']; ?>)">
                                 <input type="text" name="corpo_cartao" placeholder="Insira um nome para o cartão..." required>
@@ -98,7 +153,7 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             <!-- Adicionar nova lista -->
             <div class="add-list-container">
                 <button id="addListButton" class="add-card-btn" style="width: 250px; border-radius: 15px; height: 55px; background-color: #91d991; margin-right: 10px; margin-top: -10px;" onclick="showAddListForm()">Adicionar Lista
-                    <img src="/resources/plus.png" alt="Adicionar" class="icon" style="width: 20px; height: 20px; margin-left: 45px;">
+                    <img src="/resources/plus.svg" alt="Adicionar" class="icon" style="width: 20px; height: 20px; margin-left: 45px; float:right">
                 </button>
 
                 <form id="addListForm" class="add-list-form" style="display:none;" onsubmit="addList(event)">
@@ -111,9 +166,32 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
     </div>
-
+    <script src="./profileImage.js"></script>
     <script>
-        // Funções para exibir/ocultar formulários de adicionar cartão e lista
+
+        window.onload = function() {
+            loadProfileData(); 
+        };
+
+        function loadProfileData() {
+            const apelido = localStorage.getItem('apelido');
+            const profileImage = localStorage.getItem('profileImage');
+
+            if (apelido) {
+                document.getElementById('displayName').textContent = apelido;
+            }
+
+            if (profileImage) {
+                document.getElementById('profileImageTopBar').src = profileImage; 
+                document.getElementById('profileImageMenu').src = profileImage; 
+            }
+        }
+
+        function toggleMenu() {
+            var menuContainer = document.querySelector('.menu-container');
+            menuContainer.classList.toggle('active');
+        }
+   
         function showAddCardForm(lista_id) {
             const form = document.getElementById(`addCardForm_${lista_id}`);
             const button = document.querySelector(`#addCardButton_${lista_id}`);
@@ -179,7 +257,6 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             document.getElementById('addListButton').style.display = 'block'; 
         }
 
-        // Funções de excluir lista e cartão
 
         function editItem(tipo, item_id, texto) {
             let novo_texto = prompt(tipo == 'lista' ? "Entre o novo título da lista" : "Entre o novo corpo do cartão", texto);
@@ -202,7 +279,6 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             }
         }
 
-        // Tornar listas e cartões arrastáveis com Sortable.js (Funções combinadas de ambas as branches)
         document.addEventListener('DOMContentLoaded', function () {
             new Sortable(document.querySelector('.kanban-board'), {
                 group: 'listas',
@@ -310,6 +386,78 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             })
             .catch(error => console.error('Erro:', error));
         }
+
+        function openShareModal() {
+            document.getElementById('shareModal').style.display = 'block';
+        }
+
+        function closeShareModal() {
+            document.getElementById('shareModal').style.display = 'none';
+        }
+
+        function shareKanban(event) {
+            event.preventDefault();
+            const input = document.getElementById('shareInput').value;
+            const shareLink = document.getElementById('shareLink').checked;
+            
+            // Aqui você faria uma requisição para o backend para compartilhar
+            console.log('Compartilhando com:', input, 'Link ativado:', shareLink);
+            
+            // Exemplo de requisição AJAX
+            fetch('compartilhar_kanban.php', {
+                method: 'POST',
+                body: JSON.stringify({ user: input, link: shareLink }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                // Atualize a lista de membros aqui
+                closeShareModal();
+            })
+            .catch(error => console.error('Erro:', error));
+        }
+
+        function copyLink() {
+            const dummy = document.createElement('textarea');
+            dummy.value = "http://kanban.example.com/share-link";
+            document.body.appendChild(dummy);
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+            alert('Link copiado!');
+        }
+
+        function shareKanban(event) {
+    event.preventDefault();
+    const input = document.getElementById('shareInput').value;
+    const shareLink = document.getElementById('shareLink').checked;
+
+    fetch('compartilhar_kanban.php', {
+        method: 'POST',
+        body: JSON.stringify({ user: input, link: shareLink }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        // Atualizar a lista de membros dinamicamente
+        if (!shareLink) {
+            const memberList = document.getElementById('memberList');
+            const newUser = document.createElement('li');
+            newUser.textContent = input;
+            memberList.appendChild(newUser);
+        }
+        closeShareModal();
+    })
+    .catch(error => console.error('Erro:', error));
+}
+
+
     </script>
 </body>
 </html>
