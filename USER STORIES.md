@@ -289,3 +289,103 @@ N/A
 ### Dados:
 * Quais e quantos usuários estão em cada cartão.
 
+## US16 - Editar remotamente cartões e/ou listas.
+
+### Descrição:
+Como tech lead, quero poder enviar mudanças de cartões ou listas remotamente para o serviço através de uma token.
+
+### Regras de negócio:
+* Seja possível editar um cartão ou lista remotamente.
+
+### Observações:
+N/A
+
+### Dados:
+* Quais operações e em quais cartões/listas;
+* Endpoints para recebimento de dados.
+
+## US17 - Receber conteúdo via webhook.
+
+### Descrição:
+Como usuário, quero poder adicionar um webhook ao github e que cartões sejam criados baseados no conteúdo dele.
+
+### Regras de negócio:
+* Seja possível adicionar um webhook a uma lista, tal que cartões sejam criados quando o hook é ativado.
+
+### Observações:
+N/A
+
+### Dados:
+* Quais listas tem webhook;
+* Endpoint para receber webhook;
+
+## US18 - Entrar via Google.
+
+### Descrição:
+Como usuário, quero poder me conectar ao serviço através da minha conta do Google.
+
+### Regras de negócio:
+* Seja possível conectar através Google via OAuth.
+
+### Observações:
+N/A
+
+### Dados:
+* Dados da conta do Google.
+
+## US19 - Criar página inicial.
+
+### Descrição:
+Como usuário, quero entrar por uma tela específica ao invés de ser redirecionado ao login.
+
+### Regras de negócio:
+* Seja possível acessar a página inicial;
+
+### Observações:
+N/A
+
+### Dados:
+*N/A
+
+### Protótipo:
+#### Página inicial:
+![Página inicial](./resources/prototipo/Landing%20Page.png)
+
+## US20 - Adicionar etiquetas.
+
+### Descrição:
+Como usuário, quero poder adicionar etiquetas a cartões para organiza-los.
+
+### Regras de negócio:
+* Seja possível adicionar uma etiqueta a um cartão.
+
+### Observações:
+N/A
+
+### Dados:
+* Qual cartão, nome e cor da etiqueta.
+
+### Protótipo:
+#### Etiqueta num cartão:
+![Etiqueta num cartão](./resources/prototipo/Landing%20Page.png)
+
+#### Etiqueta no editar cartão:
+![Etiqueta no editar cartão](./resources/prototipo/Kanban%20-%20Editar%20cartão%201.png)
+
+#### Editar etiqueta:
+![Editar etiqueta](./resources/prototipo/Kanban%20-%20Editar%20etiqueta.png)
+
+## US21 - Enviar eventos via Webhook.
+
+### Descrição:
+Como senior, quero poder enviar eventos webhook para nosso serviço proprietário.
+
+### Regras de negócio:
+* Seja possível enviar um webhook.
+
+### Observações:
+N/A
+
+### Dados:
+* Endpoint para receber webhook;
+* Url do webhook.
