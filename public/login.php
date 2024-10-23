@@ -10,5 +10,5 @@ use EngSoftKanban\GreenBoard\Controller\LoginController;
 $controller = new LoginController($pdo);
 $erro = $controller->login();
 
+
 require realpath(__DIR__ . '/../src/View/login.php');
-?>
