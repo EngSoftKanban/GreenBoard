@@ -29,13 +29,13 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 <body>
     <div class="board-header">
         <div class="board-title">
-            <img src="logo.png" alt="Logo GreenBoard" class="logo">
+            <img src="/resources/logo.png" alt="Logo GreenBoard" class="logo">
             <h1>GreenBoard</h1>
         </div>
         <div class="users">
-            <img src="olivia.jpeg" alt="Usuário 1" class="user-icon">
-            <img src="taylor.jpg" alt="Usuário 2" class="user-icon">
-            <img src="lalisa.jpg" alt="Usuário 3" class="user-icon">
+            <img src="/resources/olivia.jpeg" alt="Usuário 1" class="user-icon">
+            <img src="/resources/taylor.jpg" alt="Usuário 2" class="user-icon">
+            <img src="/resources/lalisa.jpg" alt="Usuário 3" class="user-icon">
             <span class="extra-users">+1</span>
         </div>
     </div>
@@ -81,13 +81,13 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                         <?php endforeach; ?>
                         <div class="add-card-container">
                             <button id="addCardButton_<?php echo $lista['id']; ?>" class="add-card-btn" onclick="showAddCardForm(<?php echo $lista['id']; ?>)">Adicionar Cartão
-                                <img src="plus.png" alt="Adicionar" class="icon" style="width: 20px; height: 20px; margin-left: 5px;">
+                                <img src="/resources/plus.png" alt="Adicionar" class="icon" style="width: 20px; height: 20px; margin-left: 5px;">
                             </button>
                             <form id="addCardForm_<?php echo $lista['id']; ?>" class="add-card-form" style="display:none;" onsubmit="addCard(event, <?php echo $lista['id']; ?>)">
                                 <input type="text" name="corpo_cartao" placeholder="Insira um nome para o cartão..." required>
                                 <button type="submit" style="font-size: 15px;">Adicionar Cartão</button>
                                 <button type="button" style="background-color: transparent;" onclick="hideAddCardForm(<?php echo $lista['id']; ?>)">
-                                    <img src="close_icon.png" alt="Fechar" style="width: 20px; height: 20px;">
+                                    <img src="/resources/close_icon.png" alt="Fechar" style="width: 20px; height: 20px;">
                                 </button>
                             </form>
                         </div>
@@ -98,14 +98,14 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             <!-- Adicionar nova lista -->
             <div class="add-list-container">
                 <button id="addListButton" class="add-card-btn" style="width: 250px; border-radius: 15px; height: 55px; background-color: #91d991; margin-right: 10px; margin-top: -10px;" onclick="showAddListForm()">Adicionar Lista
-                    <img src="plus.png" alt="Adicionar" class="icon" style="width: 20px; height: 20px; margin-left: 45px;">
+                    <img src="/resources/plus.png" alt="Adicionar" class="icon" style="width: 20px; height: 20px; margin-left: 45px;">
                 </button>
 
                 <form id="addListForm" class="add-list-form" style="display:none;" onsubmit="addList(event)">
                     <input type="text" name="titulo_lista" placeholder="Insira um título para a lista..." required>
                     <button type="submit" style="font-size: 15px;">Adicionar Lista</button>
                     <button type="button" style="background-color: transparent;" onclick="hideAddListForm()">
-                        <img src="close_icon.png" alt="Fechar" style="width: 20px; height: 20px;">
+                        <img src="/resources/close_icon.png" alt="Fechar" style="width: 20px; height: 20px;">
                     </button>
                 </form>
             </div>

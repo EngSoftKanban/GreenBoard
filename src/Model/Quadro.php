@@ -1,4 +1,8 @@
 <?php
+namespace EngSoftKanban\GreenBoard\Model;
+
+use \PDO;
+
 class Quadro {
     private $pdo;
 
@@ -12,7 +16,7 @@ class Quadro {
     }
 
     public function getRecent() {
-        $stmt = $this->pdo->query("SELECT * FROM quadros ORDER BY data_acesso DESC LIMIT 5");
+        $stmt = $this->pdo->query("SELECT * FROM quadros ORDER BY ultimo_acesso DESC LIMIT 5");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -22,7 +26,14 @@ class Quadro {
         $stmt->execute();
     }
 
-    public function deleteAllRelated($quadro_id) {
+	public function updateAcesso($quadro_id) {
+		$sqlUpdateAcesso = "UPDATE quadros SET ultimo_acesso = NOW() WHERE id = :quadro_id";
+		$stmtUpdate = $pdo->prepare($sqlUpdateAcesso);
+		$stmtUpdate->bindParam(':quadro_id', $quadro_id);
+		$stmtUpdate->execute();
+	}
+
+    public function deleteQuadro($quadro_id) {
         
         $this->pdo->beginTransaction();
 
