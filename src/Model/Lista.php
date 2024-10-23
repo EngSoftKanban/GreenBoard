@@ -1,6 +1,9 @@
 <?php
+namespace EngSoftKanban\GreenBoard\Model;
 
-class Listas {
+use \PDO;
+
+class Lista {
 
     private $pdo;
 

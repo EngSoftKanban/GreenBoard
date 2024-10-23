@@ -1,4 +1,8 @@
 <?php
+namespace EngSoftKanban\GreenBoard\Model;
+
+use \PDO;
+
 class Cartao {
     private $pdo;
 

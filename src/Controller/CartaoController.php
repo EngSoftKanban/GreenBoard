@@ -1,5 +1,9 @@
 <?php
-require_once '../models/Cartao.php';
+namespace EngSoftKanban\GreenBoard\Controller;
+
+require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Model/Cartao.php';
+
+use EngSoftKanban\GreenBoard\Model\Cartao;
 
 class CartaoController {
     private $cartaoModel;

@@ -1,5 +1,5 @@
 <?php
-
+namespace EngSoftKanban\GreenBoard\Model;
 // models/Usuario.php
 
 class Usuario {

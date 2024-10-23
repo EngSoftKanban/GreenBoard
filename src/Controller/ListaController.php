@@ -1,7 +1,13 @@
 <?php
-require_once '../models/Listas.php';  
-require_once('../models/Usuario.php');  
-require_once '../models/Cartao.php';
+namespace EngSoftKanban\GreenBoard\Controller;
+
+require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Model/Lista.php';
+require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Model/Usuario.php';
+require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Model/Cartao.php';
+
+use EngSoftKanban\GreenBoard\Model\Lista;
+use EngSoftKanban\GreenBoard\Model\Usuario;
+use EngSoftKanban\GreenBoard\Model\Cartao;
 
 class ListaController {
     private $listaModel;
@@ -9,7 +15,7 @@ class ListaController {
     private $pdo;
 
     public function __construct($pdo) {
-        $this->listaModel = new Listas();
+        $this->listaModel = new Lista();
         $this->cartaoModel = new Cartao($pdo);  
         $this->pdo = $pdo;
     }

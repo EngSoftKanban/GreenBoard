@@ -17,16 +17,23 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <?php
-require_once '../controllers/ListasController.php';
+require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Controller/ListaController.php';
+require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Controller/CartaoController.php';
+
+use EngSoftKanban\GreenBoard\Controller\ListaController;
+use EngSoftKanban\GreenBoard\Controller\CartaoController;
 
 $controller = new ListaController($pdo);
 $listas = $controller->listar();  // Chama o método listar() do controller
 $usuarios = $controller->buscarUsuarios();  // Chama o método buscarUsuarios()
 
-require_once '../controllers/CartoesController.php';
 $cartaoController = new CartaoController($pdo);  // Crie uma instância do controlador de cartões
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_GET['action'] === 'adicionarLista') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ordem_cartoes'])) {
+	$cartaoController->atualizarPosicoes($_POST['ordem_cartoes']);
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'adicionarLista') {
     $titulo_lista = $_POST['titulo_lista'];
     $quadro_id = $_POST['quadro_id'];  
 
@@ -39,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_GET['action'] === 'adicionarLista
 }
 
 // Verifica se há uma ação de adicionar cartão
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_GET['action'] === 'adicionarCartao') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'adicionarCartao') {
     $corpo_cartao = $_POST['corpo_cartao'];
     $lista_id = $_POST['lista_id'];
 
@@ -64,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editar_item_id'])) {
             echo json_encode(['success' => false, 'message' => 'Erro ao atualizar a lista']);
         }
     } elseif ($item_tipo === 'cartao') {
-        if ($cartaoController->atualizarCartao($item_id, $item_texto)) {
+        if ($cartaoController->atualizar($item_id, $item_texto)) {
             echo json_encode(['success' => true, 'message' => 'Corpo do cartão atualizado']);
         } else {
             echo json_encode(['success' => false, 'message' => 'Erro ao atualizar o cartão']);
@@ -93,7 +100,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     exit; // Garante que o script não continue após a resposta JSON
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['excluir_lista_id'])) {
+    $lista_id = $_POST['excluir_lista_id'];
 
+    // Verifica se o ID do cartão foi fornecido
+    if ($lista_id) {
+        $deletado = $controller->deletarLista($lista_id); // Chama o método deletar
+        if ($deletado) {
+            echo json_encode(['success' => true, 'message' => 'Lista excluída com sucesso!']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Erro ao excluir a lista.']);
+        }
+    } else {
+        echo json_encode(['success' => false, 'message' => 'ID da lista não fornecido.']);
+    }
+    exit; // Garante que o script não continue após a resposta JSON
+}
 ?>
 
 <!DOCTYPE html>
@@ -155,35 +177,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
         </div>
     </div>
 
-    <div class="scroll-container">
-    <div class="kanban-board">
-        <?php foreach ($listas as $lista): ?>
-                <div class="column" id="lista_<?php echo $lista['id']; ?>">
-                    <div class="column-header">
-                        <div class="title-container">
-                            <h2><?php echo $lista['titulo']; ?></h2>
-                        </div>
-                        <div class="column-options">
-                            <span class="options-icon" onclick="toggleOptions(<?php echo $lista['id']; ?>)" style="color: black;">&#9998;</span>
-                            <div class="options-menu" id="options_menu_<?php echo $lista['id']; ?>">
-                                <button class="edit-btn" onclick="editItem('lista', <?php echo $lista['id']; ?>, '<?php echo $lista['titulo']; ?>')">Editar</button>
-                                <button class="edit-btn" onclick="deleteColumn(<?php echo $lista['id']; ?>)">Excluir</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="cards-container">
-                        <?php
-                        $cartaoController = new CartaoController($pdo);
-                        $cartoes = $cartaoController->listarCartoesPorLista($lista['id']);  // Busca cartões específicos da lista atual
-                        foreach ($cartoes as $cartao): ?>
-                            <div class="card" id="card_<?php echo $cartao['id']; ?>">
-                                <div class="card-header">
-                                    <p><?php echo $cartao['corpo']; ?></p>
-                                    <div class="card-options">
-                                        <span class="options-icon" onclick="toggleOptions(<?php echo $cartao['id']; ?>)" style="color: black;">&#9998;</span>
-                                        <div class="card-options-menu" id="card_options_menu_<?php echo $cartao['id']; ?>">
-                                            <button class="edit-btn" onclick="editItem('cartao', <?php echo $cartao['id']; ?>, '<?php echo $cartao['corpo']; ?>')">Editar</button>
-                                            <button class="edit-btn" onclick="deleteCard(<?php echo $cartao['id']; ?>)">Excluir</button>
+	<div class="scroll-container">
+	<div class="kanban-board">
+		<?php foreach ($listas as $lista): ?>
+				<div class="column" id="lista_<?php echo $lista['id']; ?>">
+					<div class="column-header">
+						<div class="title-container">
+							<h2><?php echo $lista['titulo']; ?></h2>
+						</div>
+						<div class="column-options">
+							<span class="options-icon" onclick="toggleOptions(<?php echo $lista['id']; ?>)" style="color: black;">&#9998;</span>
+							<div class="options-menu" id="options_menu_<?php echo $lista['id']; ?>">
+								<button class="edit-btn" onclick="editItem('lista', <?php echo $lista['id']; ?>, '<?php echo $lista['titulo']; ?>')">Editar</button>
+								<button class="edit-btn" onclick="deleteColumn(<?php echo $lista['id']; ?>)">Excluir</button>
+							</div>
+						</div>
+					</div>
+					<div class="cards-container">
+						<?php
+						$cartaoController = new CartaoController($pdo);
+						$cartoes = $cartaoController->listarCartoesPorLista($lista['id']);  // Busca cartões específicos da lista atual
+						foreach ($cartoes as $cartao): ?>
+							<div class="card" id="card_<?php echo $cartao['id']; ?>">
+								<div class="card-header">
+									<p><?php echo $cartao['corpo']; ?></p>
+									<div class="card-options">
+										<span class="options-icon" onclick="toggleOptions(<?php echo $cartao['id']; ?>)" style="color: black;">&#9998;</span>
+										<div class="card-options-menu" id="card_options_menu_<?php echo $cartao['id']; ?>">
+											<button class="edit-btn" onclick="editItem('cartao', <?php echo $cartao['id']; ?>, '<?php echo $cartao['corpo']; ?>')">Editar</button>
+											<button class="edit-btn" onclick="deleteCard(<?php echo $cartao['id']; ?>)">Excluir</button>
                                         </div>
                                     </div>
                                 </div>
@@ -313,7 +335,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
         function editItem(tipo, id, textoAtual) {
             const novoTexto = prompt("Edite o texto:", textoAtual);
             if (novoTexto !== null) {
-                fetch('controllers\ListasController.php', {
+                fetch('index.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -364,7 +386,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
                 const formData = new FormData();
                 formData.append('id', cartao_id);  // Altera o nome para 'id' para corresponder ao PHP
 
-                fetch('excluir_cartao.php', {  // Chamando o arquivo para excluir o cartão
+                fetch('index.php', {  // Chamando o arquivo para excluir o cartão
                     method: 'POST',
                     body: formData
                 })
@@ -387,7 +409,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
                 const formData = new FormData();
                 formData.append('excluir_lista_id', lista_id);
 
-                fetch('excluir_lista.php', {
+                fetch('index.php', {
                     method: 'POST',
                     body: formData
                 })
@@ -426,7 +448,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
 
         // Funções para atualizar a ordem das listas e cartões no banco de dados
         function atualizarOrdemListas(order) {
-            fetch('atualizar_ordem_listas.php', {
+            fetch('index.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(order)
@@ -443,7 +465,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
         }
 
         function atualizarOrdemCartoes(order) {
-            fetch('atualizar_ordem_cartoes.php', {
+            fetch('index.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(order)
