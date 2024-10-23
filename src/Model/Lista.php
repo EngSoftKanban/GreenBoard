@@ -13,9 +13,11 @@ class Lista {
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    public function listar() {
-        $sql = "SELECT * FROM listas ORDER BY posicao";
-        $stmt = $this->pdo->query($sql);
+    public function listar($quadro_id) {
+        $sql = "SELECT * FROM listas WHERE quadro_id = :quadro_id ORDER BY posicao";
+		$stmt = $this->pdo->prepare($sql);
+		$stmt->bindParam(':quadro_id', $quadro_id, PDO::PARAM_INT);
+        $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

@@ -1,12 +1,3 @@
-<?php
-if (session_status() == PHP_SESSION_NONE) {
-	//header('Location: login.php');
-}
-
-$sql = "SELECT * FROM listas ORDER BY posicao";
-$listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -38,23 +29,22 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                 <div class="profile-dropinfo">
                     <div class="profile-photoinfo">
                         <div class="profile-picture-placeholder">
-                            
-                            <img id="profileImageMenu" 
-                                src="<?php echo !empty($_SESSION['icone']) ? $_SESSION['icone'] : '/resources/taylor.jpg'; ?>" alt="Sem foto" class="profile-image-menu">
-                            </div>
-                        <div class="profile-name" id="displayName">
-                            <?php echo $_SESSION['nome'] ?? 'Sem nome'; ?>
-                        </div>
-                    </div>    
-                </div>      
-        <div class="dropdown-content">
-            <a href="dados_pessoais.php">Dados Pessoais</a>
-            <a href="#">Alterar Conta</a>
-            <a href="#">Gerenciar Conta</a>
-            <a href="#">Configurações</a>
-            <a href="#">Logout</a>
-        </div>
-                    </div>
+							<img id="profileImageMenu" 
+								src="<?php echo !empty($_SESSION['icone']) ? $_SESSION['icone'] : '/resources/taylor.jpg'; ?>" alt="Sem foto" class="profile-image-menu">
+						</div>
+						<div class="profile-name" id="displayName">
+							<?php echo $_SESSION['nome'] ?? 'Sem nome'; ?>
+						</div>
+					</div>    
+				</div>      
+					<div class="dropdown-content">
+						<a href="perfil.php">Dados Pessoais</a>
+						<a href="#">Alterar Conta</a>
+						<a href="#">Gerenciar Conta</a>
+						<a href="#">Configurações</a>
+						<a href="#">Logout</a>
+					</div>
+				</div>
                 </div>
             </div>
         </div>
@@ -112,24 +102,37 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
                     <div class="cards-container">
-                        <?php
-                        $sqlCards = "SELECT * FROM cartoes WHERE lista_id = :lista_id ORDER BY posicao";
-                        $stmt = $pdo->prepare($sqlCards);
-                        $stmt->bindParam(':lista_id', $lista['id']);
-                        $stmt->execute();
-                        $cartoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                        ?>
-                        <?php foreach ($cartoes as $cartao): ?>
+                        <?php $cartoes = $cartaoController->listarCartoesPorLista($lista['id']);
+							  foreach ($cartoes as $cartao): ?>
                             <div class="card" id="card_<?php echo $cartao['id']; ?>">
                                 <div class="card-header">
-                                    <p><?php echo $cartao['corpo']; ?></p>
-                                    <div class="card-options">
-                                        <span class="options-icon" onclick="toggleOptions(<?php echo $cartao['id']; ?>)" style="color: black;">&#9998;</span>
-                                        <div class="card-options-menu" id="card_options_menu_<?php echo $cartao['id']; ?>">
-                                            <button class="edit-btn" onclick="editItem('cartao', <?php echo $cartao['id']; ?>, '<?php echo $cartao['corpo']; ?>')">Editar</button>
-                                            <button class="edit-btn" onclick="deleteCard(<?php echo $cartao['id']; ?>)">Excluir</button>
-                                        </div>
-                                    </div>
+									<div>
+										<p><?php echo $cartao['corpo']; ?></p>
+										<div style="display:flex">
+											<form action="" method="post">
+												<input type="hidden" name="cartao_id" value="<?php echo $cartao['id'];?>">
+												<?php if ($membroController->encontrar($_SESSION['usuario_id'], $cartao['id'])) { ?>
+													<input type="hidden" name="membro_rm">
+													<input class="membro-btn" type="image" src="/resources/minus.svg"/>
+												<?php } else { ?>
+													<input type="hidden" name="membro_add">
+													<input class="membro-btn" type="image" src="/resources/plus.svg"/>
+												<?php } ?>
+											</form>
+											<?php 
+												$membros = $membroController->listar($cartao['id']);
+												foreach ($membros as $membro): ?>
+												<img class="membro-btn" src="<?php echo($membroController->getIcone($membro['usuario_id']));?>" alt="">
+											<?php endforeach;?>
+										</div>
+									</div>
+									<div class="card-options">
+										<span class="options-icon" onclick="toggleOptions(<?php echo $cartao['id']; ?>)" style="color: black;">&#9998;</span>
+										<div class="card-options-menu" id="card_options_menu_<?php echo $cartao['id']; ?>">
+											<button class="edit-btn" onclick="editItem('cartao', <?php echo $cartao['id']; ?>, '<?php echo $cartao['corpo']; ?>')">Editar</button>
+											<button class="edit-btn" onclick="deleteCard(<?php echo $cartao['id']; ?>)">Excluir</button>
+										</div>
+									</div>
                                 </div>
                             </div>
                         <?php endforeach; ?>

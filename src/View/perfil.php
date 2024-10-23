@@ -1,52 +1,29 @@
-<?php
-session_start();
-if (!isset($_SESSION['usuario_id'])) {
-    header('Location: login.php');
-    exit(); 
-}
-
-$host = apache_getenv("DB_HOST");
-$dbname = apache_getenv("DB_NAME");
-$user = apache_getenv("DB_USER");
-$password = apache_getenv("DB_PASS");
-
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Erro ao conectar com o banco de dados: " . $e->getMessage());
-}
-
-$sql = "SELECT * FROM listas ORDER BY posicao";
-$listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-?>
-
 <!DOCTYPE html> 
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GreenBoard - Kanban</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/resources/css/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 </head>
 <body>
     <div class="board-header">
         <div class="board-title">
-            <img src="logo.png" alt="Logo GreenBoard" class="logo">
+            <img src="/resources/logo.png" alt="Logo GreenBoard" class="logo">
             <h1>GreenBoard</h1>
         </div>
         <div class="users">
-        <img src="olivia.jpeg" alt="Usuário 1" class="user-icon">
-        <img src="taylor.jpg" alt="Usuário 2" class="user-icon">
-        <img src="lalisa.jpg" alt="Usuário 3" class="user-icon">
+        <img src="/resources/olivia.jpeg" alt="Usuário 1" class="user-icon">
+        <img src="/resources/taylor.jpg" alt="Usuário 2" class="user-icon">
+        <img src="/resources/lalisa.jpg" alt="Usuário 3" class="user-icon">
 
         <button class="share-button" onclick="openShareModal()">Compartilhar</button>
         
         <div class="menu-container">
             <div class="profile-icon" onclick="toggleMenu()">
                 <img id="profileImageTopBar" 
-                    src="<?php echo !empty($_SESSION['icone']) ? $_SESSION['icone'] : 'taylor.jpg'; ?>" alt="Sem foto" class="profile-image-menu">
+                    src="<?php echo !empty($_SESSION['icone']) ? $_SESSION['icone'] : '/resources/taylor.jpg'; ?>" alt="Sem foto" class="profile-image-menu">
             </div>
             <div class="background-panel">
                 <div class="profile-dropinfo">
@@ -54,7 +31,7 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                         <div class="profile-picture-placeholder">
                             
                             <img id="profileImageMenu" 
-                                src="<?php echo !empty($_SESSION['icone']) ? $_SESSION['icone'] : 'taylor.jpg'; ?>" alt="Sem foto" class="profile-image-menu">
+                                src="<?php echo !empty($_SESSION['icone']) ? $_SESSION['icone'] : '/resources/taylor.jpg'; ?>" alt="Sem foto" class="profile-image-menu">
                             </div>
                         <div class="profile-name" id="displayName">
                             <?php echo $_SESSION['nome'] ?? 'Sem nome'; ?>
@@ -78,11 +55,11 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     <div class="profile-container">
     <div class="profile-header">
         <div class= "back-container">
-            <img src="./arrow.svg" alt="Voltar" class="back-button" onclick="goToMainPage()">
+            <img src="/resources/arrow.svg" alt="Voltar" class="back-button" onclick="goToMainPage()">
         </div>   
         <h2 style="font-size: 20px;">Dados Pessoais</h2>
         <div class= "edit-button">
-           <img src="./edit.svg" class="edit-icon" onclick="enableEdit()">
+           <img src="/resources/edit.svg" class="edit-icon" onclick="enableEdit()">
         </div>
     </div>
     
@@ -238,7 +215,7 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
             });
         }
         function goToMainPage() {
-            window.location.href = "index.php";
+            window.location.href = "quadro.php?quadro_id=<?php echo $_SESSION['quadro_id'];?>";
         }
         
 </script>

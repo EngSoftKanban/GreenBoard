@@ -23,11 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redefinição de senha</title>
-    <link rel="stylesheet" href="style_rec.css">
+    <link rel="stylesheet" href="resources/css/style_rec.css">
 </head>
 <body>
     <div class="container">
-        <img src="logo_rec_senha.png" alt="GreenBoard Logo" class="logo">
+        <img src="/resources/logo_rec_senha.png" alt="GreenBoard Logo" class="logo">
         <?php if ($message): ?>
             <p><?php echo htmlspecialchars($message); ?></p>
         <?php endif; ?>

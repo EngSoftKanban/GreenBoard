@@ -717,3 +717,10 @@ input:disabled {
 #saveButton:hover {
     background-color: #45a049;
 }
+
+.membro-btn {
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	margin-top: 4px;
+}
