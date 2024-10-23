@@ -1,42 +1,11 @@
-<?php
-$host = apache_getenv("DB_HOST");
-$dbname = apache_getenv("DB_NAME");
-$user = apache_getenv("DB_USER");
-$password = apache_getenv("DB_PASS");
-
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Erro ao conectar com o banco de dados: " . $e->getMessage());
-}
-
-try {
-    $sql = "SELECT * FROM quadros ORDER BY ultimo_acesso DESC";
-    $stmt = $pdo->query($sql);
-    $quadros = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    die("Erro ao buscar quadros: " . $e->getMessage());
-}
-
-try {
-    $sqlRecentes = "SELECT * FROM quadros ORDER BY ultimo_acesso DESC LIMIT 5"; 
-    $stmtRecentes = $pdo->query($sqlRecentes);
-    $recentes = $stmtRecentes->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    die("Erro ao buscar quadros visualizados recentemente: " . $e->getMessage());
-}
-?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quadros - GreenBoard</title>
-    <link rel="stylesheet" href="quadros.css">
+    <link rel="stylesheet" href="resources/css/quadros.css">
     <style>
-        
         #create-modal {
             display: none; 
             position: absolute; 
@@ -64,11 +33,11 @@ try {
 <body>
     <header>
         <div class="board-title">
-            <img src="logo.png" alt="Logo GreenBoard" class="logo">
+            <img src="/resources/logo.png" alt="Logo GreenBoard" class="logo">
             <h1>GreenBoard</h1>
         </div>
         <div class="user-avatar">
-            <img src="user.png" alt="Usuário" class="user-icon">
+            <img src="/resources/user.png" alt="Usuário" class="user-icon">
         </div>
     </header>
     
@@ -95,7 +64,7 @@ try {
                     <?php else: ?>
                         <?php foreach ($recentes as $quadro): ?>
                             <div class="quadro">
-                                <a href="gerenciar_listas.php?quadro_id=<?php echo $quadro['id']; ?>"><?php echo $quadro['nome']; ?></a>
+                                <a href="quadro.php?quadro_id=<?php echo $quadro['id']; ?>"><?php echo $quadro['nome']; ?></a> <!-- Caminho mantido -->
                             </div>
                         <?php endforeach; ?>
                     <?php endif; ?>
@@ -109,8 +78,8 @@ try {
                     <?php else: ?>
                         <?php foreach ($quadros as $quadro): ?>
                             <div>
-                                <a href="gerenciar_listas.php?quadro_id=<?php echo $quadro['id']; ?>"><?php echo $quadro['nome']; ?></a>
-                                <form action="quadros_backend.php" method="POST" style="display:inline;">
+                                <a href="quadro.php?quadro_id=<?php echo $quadro['id']; ?>"><?php echo $quadro['nome']; ?></a>
+                                <form action="" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja remover esse quadro?');">
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="quadro_id" value="<?php echo $quadro['id']; ?>">
                                     <button type="submit">X</button>
@@ -125,7 +94,7 @@ try {
                 
                 <div id="create-modal">
                     <h3>Criar novo quadro</h3>
-                    <form id="create-board-form" action="quadros_backend.php" method="POST">
+                    <form id="create-board-form" action="" method="POST">
                         <input type="hidden" name="action" value="create">
                         <label for="nome_quadro">Nome:</label>
                         <input type="text" id="nome_quadro" name="nome_quadro" required>
