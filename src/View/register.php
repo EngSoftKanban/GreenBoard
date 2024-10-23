@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GreenBoard - Registrar</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/resources/css/styles.css">
 </head>
 <body style="justify-content: center; height:100vh">
     <div class="div-form-cadastrar">
         <div class="board-title" style="display: flex; justify-content: center; width:100%; margin-top: 5%">
-            <img src="logo_clean.png" alt="Logo GreenBoard" class="logo" style="height:10vh; width:auto; margin-right: 2%">
+            <img src="/resources/logo_clean.png" alt="Logo GreenBoard" class="logo" style="height:10vh; width:auto; margin-right: 2%">
             <h1>GreenBoard</h1>
         </div>
         <?php if (isset($erro)) { ?>

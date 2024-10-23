@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sucesso na Alteração da Senha</title>
-    <link rel="stylesheet" href="style_rec.css"> 
+    <link rel="stylesheet" href="/resources/css/style_rec.css"> 
 </head>
 <body>
     <div style="height: 350px;" class="container">

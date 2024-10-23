@@ -81,7 +81,7 @@
 </head>
 <body>
     <div class="container">
-        <img src="logo_login.png" alt="Logo GreenBoard" style="width: 150px; height: auto;">
+        <img src="/resources/logo_login.png" alt="Logo GreenBoard" style="width: 150px; height: auto;">
 
         <!-- Exibe mensagem de erro, se houver -->
         <?php if (isset($erro)): ?>

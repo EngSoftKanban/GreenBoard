@@ -2,11 +2,11 @@
 namespace EngSoftKanban\GreenBoard\Controller;
 
 require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Model/Lista.php';
-require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Model/Usuario.php';
+require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Model/User.php';
 require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Model/Cartao.php';
 
 use EngSoftKanban\GreenBoard\Model\Lista;
-use EngSoftKanban\GreenBoard\Model\Usuario;
+use EngSoftKanban\GreenBoard\Model\User;
 use EngSoftKanban\GreenBoard\Model\Cartao;
 
 class ListaController {
@@ -20,12 +20,11 @@ class ListaController {
         $this->pdo = $pdo;
     }
 
-    public function listar() {
-        return $this->listaModel->listar();
-    }
+	public function listar($quadro_id) {
+		return $this->listaModel->listar($quadro_id);
+	}
 
     public function buscarUsuarios() {
-        return Usuario::buscarTodos();
     }
 
     public function adicionarLista($titulo, $quadro_id) {

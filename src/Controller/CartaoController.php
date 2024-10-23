@@ -12,8 +12,8 @@ class CartaoController {
         $this->cartaoModel = new Cartao($pdo);
     }
 
-    public function listarCartoesPorLista($listaId) {
-        return $this->cartaoModel->listarPorLista($listaId);
+    public function listarCartoesPorLista($lista_id) {
+        return $this->cartaoModel->listarPorLista($lista_id);
     }
 
     public function adicionar($corpo, $lista_id) {

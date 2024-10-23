@@ -26,13 +26,14 @@ class LoginController {
                     if (password_verify($senha, $usuario['senha'])) {
                         // Senha correta, iniciar a sessão
                         session_start();
+						session_regenerate_id();
                         $_SESSION['usuario_id'] = $usuario['id'];
 						$_SESSION['nome'] = $usuario['nome'];
 						$_SESSION['email'] = $usuario['email'];
 						$_SESSION['icone'] = $usuario['icone'];
-
+						//Ssession_commit();
                         // Redirecionar o usuário para a página principal ou anterior
-                        header("Location: " . ($_SESSION['redirect_url'] ?? 'index.php'));
+                        header("Location: " . ($_SESSION['redirect_url'] ?? 'painel.php'));
                         exit();
                     } else {
                         // Senha incorreta, exibir erro
