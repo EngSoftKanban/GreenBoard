@@ -23,3 +23,27 @@ Permitir autenticação pelos usuários, o que permite controle de acesso aos qu
 3. Recuperar senha do usuário;
 4. Convidar membros a quadro;
 5. Criar e remover quadros.
+
+## Iteração 3
+
+### Valor da Sprint:
+Refatoração do projeto para deixá-lo mais organizado, portanto possiblitando desenvolvimento mais eficiente.
+
+### Funcionalidades:
+1. Refatorar em MVC, cartões e listas;
+2. Refatorar em MVC, cartões e listas;
+3. Refatorar em MVC, cartões e listas;
+4. Adicionar tela de perfil;
+5. Adicionar usuário a quadro.
+
+## Iteração 4
+
+### Valor da Sprint:
+Elaborar APIs para o serviço, o que o permitá receber e enviar dados ao exterior.
+
+### Funcionalidades:
+1. Editar remotamente cartões e/ou listas;
+2. Receber conteúdo via Webhook;
+3. Entra via Google;
+4. Criar página inicial;
+5. Enviar eventos via Webhook.
