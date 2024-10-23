@@ -55,7 +55,7 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                                 src="<?php echo !empty($_SESSION['icone']) ? $_SESSION['icone'] : 'taylor.jpg'; ?>" alt="Sem foto" class="profile-image-menu">
                             </div>
                         <div class="profile-name" id="displayName">
-                            <?php echo $_SESSION['apelido'] ?? 'Sem nome'; ?>
+                            <?php echo $_SESSION['nome'] ?? 'Sem nome'; ?>
                         </div>
                     </div>    
                 </div>      

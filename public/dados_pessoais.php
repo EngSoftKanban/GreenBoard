@@ -57,7 +57,7 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                                 src="<?php echo !empty($_SESSION['icone']) ? $_SESSION['icone'] : 'taylor.jpg'; ?>" alt="Sem foto" class="profile-image-menu">
                             </div>
                         <div class="profile-name" id="displayName">
-                            <?php echo $_SESSION['apelido'] ?? 'Sem nome'; ?>
+                            <?php echo $_SESSION['nome'] ?? 'Sem nome'; ?>
                         </div>
                     </div>    
                 </div>  
@@ -98,18 +98,18 @@ $listas = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
                 <label>Nome:</label>
                 <input type="text" id="nome" name="nome" value="<?php echo $_SESSION['nome'] ?? ''; ?>" disabled>
             </div>
-            <div class="info-item">
+            <!--div class="info-item">
                 <label>Apelido:</label>
                 <input type="text" id="apelido" name="apelido" value="<?php echo $_SESSION['apelido'] ?? ''; ?>" disabled>
-            </div>
+            </div-->
             <div class="info-item">
                 <label>E-mail:</label>
                 <input type="email" id="email" name="email" value="<?php echo $_SESSION['email'] ?? ''; ?>" disabled>
             </div>
-            <div class="info-item">
+            <!--div class="info-item">
                 <label>Data de Nascimento:</label>
                 <input type="text" id="dataNascimento" name="dataNascimento" value="<?php echo $_SESSION['dataNascimento'] ?? ''; ?>" disabled>
-            </div>
+            </div-->
         </div>
         <button id="saveButton" onclick="saveChanges()" style="display: none;" type="submit">Salvar</button>
     </form>

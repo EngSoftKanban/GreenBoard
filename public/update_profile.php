@@ -21,9 +21,9 @@ try {
 $usuario_id = $_SESSION['usuario_id'];
 $nome = htmlspecialchars($_POST['nome'] ?? $_SESSION['nome'] ?? '');
 $email = htmlspecialchars($_POST['email'] ?? $_SESSION['email'] ?? '');
-$apelido = htmlspecialchars($_POST['apelido'] ?? $_SESSION['apelido'] ?? '');
-$dataNascimento = htmlspecialchars($_POST['dataNascimento'] ?? $_SESSION['dataNascimento'] ?? '');
-$profileImage = $_SESSION['icone'] ?? null;
+//$apelido = htmlspecialchars($_POST['apelido'] ?? $_SESSION['apelido'] ?? '');
+//$dataNascimento = htmlspecialchars($_POST['dataNascimento'] ?? $_SESSION['dataNascimento'] ?? '');
+$profileImage = $_SESSION['icone'] ?? "/resources/icone.svg";
 
 if (isset($_FILES['profileImage']) && $_FILES['profileImage']['error'] === UPLOAD_ERR_OK) {
     $uploadDir = realpath(__DIR__ . '/resources/icones/');
@@ -42,7 +42,7 @@ if (isset($_FILES['profileImage']) && $_FILES['profileImage']['error'] === UPLOA
         exit;
     }
 } else {
-    $profileImage = $_SESSION['icone'] ?? null; 
+    $profileImage = $_SESSION['icone'] ?? "/resources/icone.svg"; 
 }
 
 
@@ -59,8 +59,8 @@ if ($stmt->execute()) {
     $_SESSION['icone'] = $profileImage; 
     $_SESSION['nome'] = $nome;
     $_SESSION['email'] = $email;
-    $_SESSION['apelido'] = $_POST['apelido'] ?? $_SESSION['apelido'] ?? '';
-    $_SESSION['dataNascimento'] = $_POST['dataNascimento'] ?? $_SESSION['dataNascimento'] ?? '';
+    //$_SESSION['apelido'] = $_POST['apelido'] ?? $_SESSION['apelido'] ?? '';
+    //$_SESSION['dataNascimento'] = $_POST['dataNascimento'] ?? $_SESSION['dataNascimento'] ?? '';
 
     echo json_encode([
         'status' => 'success',
@@ -68,8 +68,8 @@ if ($stmt->execute()) {
             'icone' => $_SESSION['icone'],
             'nome' => $nome,
             'email' => $email,
-            'apelido' => $_SESSION['apelido'],
-            'dataNascimento' => $_SESSION['dataNascimento'], 
+            //'apelido' => $_SESSION['apelido'],
+            //'dataNascimento' => $_SESSION['dataNascimento'], 
         ]
     ]);
 } else {
