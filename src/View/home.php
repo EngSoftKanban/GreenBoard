@@ -4,14 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GreenBoard - Sistema de Kanban</title>
+    <!-- Estilos CSS internos -->
     <style>
         /* Estilos globais */
+        .container-principal {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-
+        
         body {
             font-family: Arial, sans-serif;
             background-color: #2b3d29;
@@ -23,37 +28,37 @@
 
         /* Barra superior */
         .top-bar {
-            background-color: white; /* Cor da barra */
-            height: 60px; /* Altura da barra */
-            display: flex; /* Para alinhar itens horizontalmente */
-            align-items: center; /* Alinha itens verticalmente ao centro */
-            padding: 0 20px; /* Espaçamento nas laterais */
-            position: relative; /* Para que os filhos possam usar posicionamento absoluto */
+            background-color: white;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            position: relative;
             width: 100%;
         }
 
         .logo {
-            height: 40px; /* Altura do logo */
-            position: absolute; /* Permite que o logo fique sobreposto */
-            left: 20px; /* Distância da esquerda */
+            height: 40px;
+            position: absolute;
+            left: 20px;
         }
 
         .enter-button {
-            padding: 10px 20px; /* Espaçamento interno do botão */
-            background-color: #2e7d32; /* Cor de fundo do botão para combinar com o login */
-            color: white; /* Cor do texto do botão */
-            border: none; /* Remove borda padrão */
-            border-radius: 30px; /* Bordas arredondadas */
-            cursor: pointer; /* Cursor como mão ao passar por cima */
-            text-decoration: none; /* Remove sublinhado do link */
-            font-size: 16px; /* Tamanho da fonte do botão */
+            padding: 10px 20px;
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
             font-weight: bold;
-            position: absolute; /* Posicionamento absoluto para ficar à direita */
-            right: 20px; /* Distância da direita */
+            position: absolute;
+            right: 20px;
         }
 
         .enter-button:hover {
-            background-color: #2D6A3F; /* Cor de fundo ao passar o mouse */
+            background-color: #2D6A3F;
         }
 
         /* Restante do conteúdo */
@@ -139,17 +144,30 @@
             max-width: 600px;
             color: #c2c2c2;
         }
+
+        .home {
+            max-width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body>
+    <!-- Barra superior -->
     <div class="top-bar">
         <img src="/resources/logo_1.png" alt="Logo GreenBoard" class="logo">
         <a href="/login.php" class="enter-button">Entre. É grátis</a>
     </div>
-    <header class="header">
-    </header>
-    <main>
-        <img src="/resources/homepage.png" alt="Homepage" class="home">
-    </main>
+
+    <!-- Conteúdo principal centralizado -->
+    <div class="container-principal">
+        <header class="header">
+            <!-- Espaço para o conteúdo do cabeçalho, se necessário -->
+        </header>
+        <main>
+            <!-- Imagem principal ou conteúdo da página inicial -->
+            <img src="/resources/homepage.png" alt="Homepage" class="home">
+            </div>
+        </main>
+    </div>
 </body>
 </html>
