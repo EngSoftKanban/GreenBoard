@@ -9,7 +9,9 @@
 <body style="justify-content: center; height:100vh">
     <div class="div-form-cadastrar">
         <div class="board-title" style="display: flex; justify-content: center; width:100%; margin-top: 5%">
+            <a href="index.php">
             <img src="/resources/logo_clean.png" alt="Logo GreenBoard" class="logo" style="height:10vh; width:auto; margin-right: 2%">
+            </a>
             <h1>GreenBoard</h1>
         </div>
         <?php if (isset($erro)) { ?>

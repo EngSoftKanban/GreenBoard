@@ -33,7 +33,7 @@
 <body>
     <header>
         <div class="board-title">
-            <img src="/resources/logo.png" alt="Logo GreenBoard" class="logo">
+        <img src="/resources/logo.png" alt="Logo GreenBoard" class="logo">
             <h1>GreenBoard</h1>
         </div>
         <div class="user-avatar">
