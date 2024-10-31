@@ -165,7 +165,7 @@
         </header>
         <main>
             <!-- Imagem principal ou conteúdo da página inicial -->
-            <img src="/resources/homepage.png" alt="Homepage" class="home">
+            <img src="/resources/homepage1.png" alt="Homepage" class="home">
             </div>
         </main>
     </div>
