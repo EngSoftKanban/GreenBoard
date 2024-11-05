@@ -81,7 +81,9 @@
 </head>
 <body>
     <div class="container">
+        <a href="index.php">
         <img src="/resources/logo_login.png" alt="Logo GreenBoard" style="width: 150px; height: auto;">
+        </a>
 
         <!-- Exibe mensagem de erro, se houver -->
         <?php if (isset($erro)): ?>
