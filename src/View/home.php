@@ -4,13 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GreenBoard - Sistema de Kanban</title>
-    <!-- Estilos CSS internos -->
     <style>
         /* Estilos globais */
-        .container-principal {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
         * {
             box-sizing: border-box;
             margin: 0;
@@ -24,6 +19,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
 
         /* Barra superior */
@@ -61,96 +58,44 @@
             background-color: #2D6A3F;
         }
 
-        /* Restante do conteúdo */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        /* Container da imagem principal */
+        .description-container {
+            position: relative;
             width: 100%;
+            height: 100vh; /* Ocupa toda a altura da tela */
+            background-image: url('/resources/homepage21.png');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-start; /* Alinha o conteúdo ao início da imagem */
+            justify-content: flex-end; /* Alinha o conteúdo à direita */
             padding: 20px;
-            background-color: #2b3d29;
         }
 
-        .kanban-board {
-            display: flex;
-            gap: 20px;
+        /* Estilos para o texto sobreposto */
+        .text-overlay {
+            background-color: rgba(43, 61, 41, 0.8); /* Fundo semi-transparente */
+            color: white;
             padding: 20px;
-        }
-
-        .kanban-column {
-            background-color: #3a5240;
-            padding: 15px;
-            border-radius: 8px;
-            width: 200px;
-        }
-
-        .kanban-column h3 {
-            margin-bottom: 15px;
-            font-size: 18px;
-            color: white;
-        }
-
-        .kanban-card {
-            background-color: #d4d8d2;
-            color: black;
-            padding: 10px;
-            border-radius: 4px;
-            margin-bottom: 10px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card-labels {
-            display: flex;
-            gap: 4px;
-            margin-bottom: 8px;
-        }
-
-        .label-blue {
-            width: 30px;
-            height: 6px;
-            background-color: #4f93c7;
-            border-radius: 3px;
-        }
-
-        .label-yellow {
-            width: 30px;
-            height: 6px;
-            background-color: #e7c63c;
-            border-radius: 3px;
-        }
-
-        .add-card {
-            background-color: transparent;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-
-        .description {
-            padding: 30px;
-            text-align: center;
-        }
-
-        .description h2 {
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
-
-        .description p {
+            max-width: 40%; /* Limita a largura do texto */
+            text-align: justify;
             font-size: 16px;
-            max-width: 600px;
-            color: #c2c2c2;
+            border-radius: 8px;
+            margin-top: 250px; /* Adiciona margem superior para levantar o texto */
         }
 
-        .home {
-            max-width: 100%;
-            height: auto;
+        .text-overlay h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .text-overlay p {
+            font-size: 14px;
+            line-height: 1.5;
         }
     </style>
 </head>
+
 <body>
     <!-- Barra superior -->
     <div class="top-bar">
@@ -158,16 +103,12 @@
         <a href="/login.php" class="enter-button">Entre. É grátis</a>
     </div>
 
-    <!-- Conteúdo principal centralizado -->
-    <div class="container-principal">
-        <header class="header">
-            <!-- Espaço para o conteúdo do cabeçalho, se necessário -->
-        </header>
-        <main>
-            <!-- Imagem principal ou conteúdo da página inicial -->
-            <img src="/resources/homepage1.png" alt="Homepage" class="home">
-            </div>
-        </main>
+    <!-- Conteúdo principal com a imagem de fundo e texto sobreposto -->
+    <div class="description-container">
+        <div class="text-overlay">
+            <h1>Sistema de Kanban</h1>
+            <p>Aprimore a produtividade e aumente a efetividade da sua empresa usando o sistema de Kanban gratuito número 1 do mercado. Controle as tarefas e fluxos de trabalho do seu time ou de um projeto importante. Use o Greenboard e aproveite!</p>
+        </div>
     </div>
 </body>
 </html>
