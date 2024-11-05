@@ -102,6 +102,13 @@
             <button type="submit">Entrar</button>
         </form>
 
+        <!-- Botão de Login com o Google -->
+        <a href="google_login.php">
+            <button style="margin-top: 10px; background-color: #db4437; color: white;">
+                Login com Google
+            </button>
+        </a>
+
         <div class="signup">
             Ainda não tem login? <a href="cadastrar.php">Cadastre-se</a>
         </div>
