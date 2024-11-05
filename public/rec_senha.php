@@ -27,7 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="container">
-        <img src="/resources/logo_rec_senha.png" alt="GreenBoard Logo" class="logo">
+        <a href="index.php"> <!-- Link para a página inicial -->
+            <img src="/resources/logo_rec_senha.png" alt="GreenBoard Logo" class="logo">
+        </a>
         <?php if ($message): ?>
             <p><?php echo htmlspecialchars($message); ?></p>
         <?php endif; ?>
