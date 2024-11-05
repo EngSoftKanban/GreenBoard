@@ -11,13 +11,13 @@ try {
     die("Erro ao conectar com o banco de dados: " . $e->getMessage());
 }
 
-// Verifica se há uma ação de editar item (lista ou cartão)
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_GET['action'] === 'editarItem') {
     $item_id = $_POST['editar_item_id'];
     $item_tipo = $_POST['editar_item_tipo'];
     $item_texto = $_POST['editar_item_texto'];
 
-    // Prepara a consulta SQL para atualizar o item
+    
     $sqlItem = strcmp($item_tipo, "lista") == 0 
         ? "UPDATE listas SET titulo = :texto WHERE id = :id" 
         : "UPDATE cartoes SET corpo = :texto WHERE id = :id";
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_GET['action'] === 'editarItem') {
     $stmtItem->bindParam(':id', $item_id);
     $stmtItem->bindParam(':texto', $item_texto);
 
-    // Executa a consulta e retorna resposta JSON
+    
     if ($stmtItem->execute()) {
         echo json_encode(['success' => true, 'message' => strcmp($item_tipo, "lista") == 0 
             ? "Título da lista atualizado" 
@@ -40,4 +40,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_GET['action'] === 'editarItem') {
     echo json_encode(['success' => false, 'message' => "Método de requisição inválido."]);
 }
 ?>
-
