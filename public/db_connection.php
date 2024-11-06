@@ -1,8 +1,8 @@
 <?php
-$host = getenv('DB_HOST');
-$db = getenv('DB_NAME');
-$user = getenv('DB_USER');
-$pass = getenv('DB_PASSWORD');
+$host = apache_getenv('DB_HOST');
+$db = apache_getenv('DB_NAME');
+$user = apache_getenv('DB_USER');
+$pass = apache_getenv('DB_PASSWORD');
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
@@ -17,4 +17,3 @@ try {
 } catch (PDOException $e) {
     throw new PDOException($e->getMessage(), (int)$e->getCode());
 }
-?>

@@ -63,4 +63,8 @@ class CartaoController {
             return json_encode(["success" => false, "message" => "Erro: " . $e->getMessage()]);
         }
     }
+
+	public function acharPorCorpo($corpo) {
+		return $this->cartaoModel->acharPorCorpo($corpo);
+	}
 }

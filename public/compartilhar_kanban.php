@@ -45,4 +45,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['message' => 'Usuário ' . htmlspecialchars($user) . ' já existe e pode ser adicionado ao kanban']);
     }
 }
-?>

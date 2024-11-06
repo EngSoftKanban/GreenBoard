@@ -39,5 +39,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_GET['action'] === 'editarItem') {
 } else {
     echo json_encode(['success' => false, 'message' => "Método de requisição inválido."]);
 }
-?>
-
