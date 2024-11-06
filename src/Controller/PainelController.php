@@ -12,12 +12,12 @@ class PainelController {
         $this->quadroModel = new Quadro($pdo);
     }
 
-	public function getRecent() {
-		return $this->quadroModel->getRecent();
+	public function getRecent($usuario_id) {
+		return $this->quadroModel->getRecent($usuario_id);
 	}
 
-    public function getAll() {
-		return $this->quadroModel->getAll();
+    public function getAll($usuario_id) {
+		return $this->quadroModel->getAll($usuario_id);
     }
 
     public function deleteQuadro($id) {
@@ -25,8 +25,8 @@ class PainelController {
         $this->quadroModel->deleteQuadro($id); 
     }
 
-    public function create($nome) {
-        $this->quadroModel->create($nome);
+    public function create($nome, $usuario_id) {
+        $this->quadroModel->create($nome, $usuario_id);
     }
 
 	public function post() {
@@ -38,7 +38,7 @@ class PainelController {
 					echo "Erro ao remover quadro: " . $e->getMessage();
 				}
 			} elseif ($_POST['action'] === 'create') {
-				$this->create($_POST['nome_quadro']);
+				$this->create($_POST['nome_quadro'], $_SESSION['usuario_id']);
 			}
 		}
 	}

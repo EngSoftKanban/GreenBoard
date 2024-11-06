@@ -43,11 +43,11 @@ class Membro {
 		return $stmt->execute();
 	}
 
-	public function getIcone($usuario_id) {
-		$sql = "SELECT icone FROM usuarios WHERE id = :usuario_id";
+	public function getUsuario($usuario_id) {
+		$sql = "SELECT * FROM usuarios WHERE id = :usuario_id";
 		$stmt = $this->pdo->prepare($sql);
 		$stmt->bindParam(':usuario_id', $usuario_id);
 		$stmt->execute();
-		return $stmt->fetch(PDO::FETCH_ASSOC)['icone'];
+		return $stmt->fetch(PDO::FETCH_ASSOC);
 	}
 }

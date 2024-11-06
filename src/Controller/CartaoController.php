@@ -63,4 +63,18 @@ class CartaoController {
             return json_encode(["success" => false, "message" => "Erro: " . $e->getMessage()]);
         }
     }
+
+	public function acharPorCorpo($corpo) {
+		return $this->cartaoModel->acharPorCorpo($corpo);
+	}
+
+	public function post() {
+		if (isset($_POST['membro_add'])) {
+			error_log($_POST['cartao_id']);
+			$this->adicionar($_SESSION['usuario_id'], $_POST['cartao_id']);
+		}
+		else if (isset($_POST['membro_rm'])) {
+			$this->remover($_SESSION['usuario_id'], $_POST['cartao_id']);
+		}
+	}
 }
