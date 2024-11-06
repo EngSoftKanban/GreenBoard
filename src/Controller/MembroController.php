@@ -28,8 +28,8 @@ class MembroController {
 		return $this->membroModel->removerUsuario($usuario_id, $cartao_id);
 	}
 
-	public function getIcone($usuario_id) {
-		return $this->membroModel->getIcone($usuario_id);
+	public function getUsuario($usuario_id) {
+		return $this->membroModel->getUsuario($usuario_id);
 	}
 
 	public function post() {

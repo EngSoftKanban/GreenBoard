@@ -10,7 +10,9 @@
 <body>
     <div class="board-header">
         <div class="board-title">
+            <a href="painel.php">
             <img src="/resources/logo.png" alt="Logo GreenBoard" class="logo">
+            </a>
             <h1>GreenBoard</h1>
         </div>
         <div class="users">
@@ -23,30 +25,9 @@
         <div class="menu-container">
             <div class="profile-icon" onclick="toggleMenu()">
                 <img id="profileImageTopBar" 
-                    src="<?php echo !empty($_SESSION['icone']) ? $_SESSION['icone'] : '/resources/taylor.jpg'; ?>" alt="Sem foto" class="profile-image-menu">
+                    src="<?php echo $_SESSION['icone']; ?>" class="profile-image-menu">
             </div>
-            <div class="background-panel">
-                <div class="profile-dropinfo">
-                    <div class="profile-photoinfo">
-                        <div class="profile-picture-placeholder">
-							<img id="profileImageMenu" 
-								src="<?php echo !empty($_SESSION['icone']) ? $_SESSION['icone'] : '/resources/taylor.jpg'; ?>" alt="Sem foto" class="profile-image-menu">
-						</div>
-						<div class="profile-name" id="displayName">
-							<?php echo $_SESSION['nome'] ?? 'Sem nome'; ?>
-						</div>
-					</div>    
-				</div>      
-					<div class="dropdown-content">
-						<a href="perfil.php">Dados Pessoais</a>
-						<a href="#">Alterar Conta</a>
-						<a href="#">Gerenciar Conta</a>
-						<a href="#">Configurações</a>
-						<a href="#">Logout</a>
-					</div>
-				</div>
-                </div>
-            </div>
+            <?php include realpath($_SERVER['DOCUMENT_ROOT']) . '/../resources/template/dropdown.php';?>
         </div>
     </div>
     </div>
@@ -121,8 +102,9 @@
 											</form>
 											<?php 
 												$membros = $membroController->listar($cartao['id']);
-												foreach ($membros as $membro): ?>
-												<img class="membro-btn" src="<?php echo($membroController->getIcone($membro['usuario_id']));?>" alt="">
+												foreach ($membros as $membro):
+													$usuarioo = $membroController->getUsuario($membro['usuario_id'])?>
+												<img class="membro-btn" src="<?php echo $usuarioo['icone'];?>" title="<?php echo $usuarioo['nome'];?>">
 											<?php endforeach;?>
 										</div>
 									</div>
