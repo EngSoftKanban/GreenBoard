@@ -24,7 +24,7 @@
 		a:hover {
 			text-decoration: underline; 
 		}
-
+		
 		.quadro {
 			margin: 10px 0; 
 		}
@@ -33,7 +33,9 @@
 	<body>
 	<header>
 		<div class="board-title">
-			<img src="/resources/logo.png" alt="Logo GreenBoard" class="logo">
+			<a href="index.php">
+				<img src="/resources/logo.png" alt="Logo GreenBoard" class="logo">
+			</a>
 			<h1>GreenBoard</h1>
 		</div>
 		<div class="user-avatar">

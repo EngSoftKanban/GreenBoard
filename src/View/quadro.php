@@ -10,7 +10,9 @@
 <body>
     <div class="board-header">
         <div class="board-title">
+            <a href="painel.php">
             <img src="/resources/logo.png" alt="Logo GreenBoard" class="logo">
+            </a>
             <h1>GreenBoard</h1>
         </div>
         <div class="users">
@@ -42,7 +44,7 @@
 						<a href="#">Alterar Conta</a>
 						<a href="#">Gerenciar Conta</a>
 						<a href="#">Configurações</a>
-						<a href="#">Logout</a>
+						<a href="index.php">Logout</a>
 					</div>
 				</div>
                 </div>
