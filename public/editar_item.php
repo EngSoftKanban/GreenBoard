@@ -12,7 +12,7 @@ try {
 }
 
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_GET['action'] === 'editarItem') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['editar_item_id'])) {
     $item_id = $_POST['editar_item_id'];
     $item_tipo = $_POST['editar_item_tipo'];
     $item_texto = $_POST['editar_item_texto'];

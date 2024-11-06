@@ -47,3 +47,15 @@ Elaborar APIs para o serviço, o que o permitá receber e enviar dados ao exteri
 3. Entra via Google;
 4. Criar página inicial;
 5. Enviar eventos via Webhook.
+
+## Iteração 4
+
+### Valor da Sprint:
+Elaborar testes unitários para as várias feature e o aprimoramento de features já existentes.
+
+### Funcionalidades:
+1. Adicionar etiquetas;
+2. Testes unitários dos Adicionados, Cartões e Listas;
+3. Testes unitários dos Permissões, Quadros, Usuários e Webhooks;
+4. Mudar o icone do usuário;
+5. Editar quadros no painel.

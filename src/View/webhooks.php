@@ -27,11 +27,11 @@
 					<div class="tab-common">Dados pessoais</div>
 				</a>
 				<a href="/webhooks.php">
-					<div class="tab-selected">Webhooks</div>
+					<div class="tab-selected-shadow">Webhooks</div>
 				</a>
-				<a href="">
+				<!-- <a href="">
 					<div class="tab-common-shadow">Tokens de acesso pessoal</div>
-				</a>
+				</a> -->
 				<a href="quadro.php?quadro_id=<?php echo $_SESSION['quadro_id'];?>" style="position: fixed; left: 8px; bottom: 8px;">
 					<div class= "back-container">
 						<img src="/resources/arrow.svg" class="back-button">

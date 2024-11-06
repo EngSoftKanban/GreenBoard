@@ -389,3 +389,59 @@ N/A
 ### Dados:
 * Endpoint para receber webhook;
 * Url do webhook.
+
+## [US22 - Testes unitários dos Adicionados, Cartões e Listas.](https://trello.com/c/8KVju8nJ/50-rf23-testes-unit%C3%A1rios-dos-adicionados-cart%C3%B5es-e-listas)
+
+### Descrição:
+Como usuario, quero que minhas manipulações de cartões e listas sejam sempre consistentes.
+
+### Regras de negócio:
+N/A
+
+### Observações:
+N/A
+
+### Dados:
+N/A
+
+## [US23 - Testes unitários dos Permissões, Quadros, Usuários e Webhooks.](https://trello.com/c/iRpbiQMs/51-rf24-testes-unit%C3%A1rios-dos-models)
+
+### Descrição:
+Como usuario, quero que minhas manipulações de quadros, usuários e webhooks sejam sempre consistentes.
+
+### Regras de negócio:
+N/A
+
+### Observações:
+N/A
+
+### Dados:
+N/A
+
+## [US24 - Mudar o icone do usuário.](https://trello.com/c/Qmd4Lpn6/52-rf25-mudar-o-icone-do-usu%C3%A1rio)
+
+### Descrição:
+Como usuário, quero poder mudar o meu icone de usuário.
+
+### Regras de negócio:
+* Seja possível mudar o icone de usuário.
+
+### Observações:
+N/A
+
+### Dados:
+* Icone do usuário.
+
+## [US25 - Editar quadros no painel.](https://trello.com/c/znU49ZCI/53-rf26-editar-e-mover-quadros-no-painel)
+
+### Descrição:
+Como usuário, quero poder mudar o nome e cor dos quadros.
+
+### Regras de negócio:
+* Seja possível mudar nome e cor de quadros.
+
+### Observações:
+N/A
+
+### Dados:
+* Novo nome/cor do quadro;
