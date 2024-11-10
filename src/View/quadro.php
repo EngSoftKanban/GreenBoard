@@ -105,6 +105,17 @@
                         <?php $cartoes = $cartaoController->listarCartoesPorLista($lista['id']);
 							  foreach ($cartoes as $cartao): ?>
                             <div class="card" id="card_<?php echo $cartao['id']; ?>">
+                                <div class="tags-container" style="display: flex; gap: 5px; margin-bottom: 5px;">
+                                        <?php 
+                                        $etiquetas = $cartaoController->listarEtiquetasPorCartao($cartao['id']);
+                                        foreach ($etiquetas as $etiqueta): 
+                                            $cor = htmlspecialchars($etiqueta['cor']); // Garantir que a cor está escapada
+                                        ?>
+                                            <div class="tag" style="width: 20px; height: 8px; background-color: <?php echo $cor; ?>; border-radius: 2px;" title="<?php echo $etiqueta['nome']; ?>"
+                                                onclick="openEditForm('<?php echo $etiqueta['id']; ?>', '<?php echo $etiqueta['nome']; ?>', '<?php echo $cor; ?>')">
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
                                 <div class="card-header">
 									<div>
 										<p><?php echo $cartao['corpo']; ?></p>
@@ -131,9 +142,11 @@
 										<div class="card-options-menu" id="card_options_menu_<?php echo $cartao['id']; ?>">
 											<button class="edit-btn" onclick="editItem('cartao', <?php echo $cartao['id']; ?>, '<?php echo $cartao['corpo']; ?>')">Editar</button>
 											<button class="edit-btn" onclick="deleteCard(<?php echo $cartao['id']; ?>)">Excluir</button>
+                                            <button class="edit-btn" onclick="addTag(<?php echo $cartao['id']; ?>)">Adicionar Etiqueta</button>
 										</div>
 									</div>
                                 </div>
+                                
                             </div>
                         <?php endforeach; ?>
                         <div class="add-card-container">
@@ -167,6 +180,39 @@
                     </button>
                 </form>
             </div>
+        </div>
+    </div>
+    <div id="addTagModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 style="color: black; margin-bottom: 10px">Adicionar Etiqueta</h2>
+            <label style="color: black;">Título:</label>
+                <input type="text" id="tagInput" style="background-color: #bee9be; padding: 10px; margin-bottom: 10px; border-radius:15px; border: 2px solid #ccc;" placeholder="Nome da etiqueta" required>
+            <label style="color: black;">Cor:</label>
+                <input type="color" id="tagColorInput" style="background-color: #bee9be; border-radius:10px; border: 2px solid #ccc; margin-bottom: 20px;" value="#ffffff" required> 
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button type="button" style="border-radius: 15px;" onclick="saveTag()">Salvar Etiqueta</button>
+            </div>    
+        </div>
+    </div>
+    <div id="editTagForm" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditForm()">&times;</span>
+            <h3 style="color: black; margin-bottom: 10px">Editar Etiqueta</h3>
+            <form id="tagForm" method="POST">
+                <input type="hidden" id="editTagId" name="id">
+                
+                <label for="tagTitle" style="color: black; margin-bottom: 10px" >Título:</label>
+                <input style="background-color: #bee9be; padding: 10px; margin-bottom: 10px; border-radius:15px; border: 2px solid #ccc;" type="text" id="tagTitle" name="nome" required>
+
+                <label for="tagColor" style="color: black; margin-bottom: 10px">Cor:</label>
+                <input  style="background-color: #bee9be; border-radius:10px; border: 2px solid #ccc; margin-bottom: 20px;" type="color" id="tagColor" name="cor" required>
+                
+                <div style="display: flex; gap: 10px; justify-content: space-between;">
+                    <button type="submit" style="border-radius: 15px;">Salvar Alterações</button>
+                    <button type="button" onclick="deleteTag()" style="border-radius: 15px;">Excluir Etiqueta</button>
+                </div>
+            </form>
         </div>
     </div>
     <script src="./profileImage.js"></script>
@@ -434,32 +480,159 @@
         }
 
         function shareKanban(event) {
-    event.preventDefault();
-    const input = document.getElementById('shareInput').value;
-    const shareLink = document.getElementById('shareLink').checked;
+            event.preventDefault();
+            const input = document.getElementById('shareInput').value;
+            const shareLink = document.getElementById('shareLink').checked;
 
-    fetch('compartilhar_kanban.php', {
-        method: 'POST',
-        body: JSON.stringify({ user: input, link: shareLink }),
-        headers: {
-            'Content-Type': 'application/json'
+            fetch('compartilhar_kanban.php', {
+                method: 'POST',
+                body: JSON.stringify({ user: input, link: shareLink }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                // Atualizar a lista de membros dinamicamente
+                if (!shareLink) {
+                    const memberList = document.getElementById('memberList');
+                    const newUser = document.createElement('li');
+                    newUser.textContent = input;
+                    memberList.appendChild(newUser);
+                }
+                closeShareModal();
+            })
+            .catch(error => console.error('Erro:', error));
         }
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert(data.message);
-        // Atualizar a lista de membros dinamicamente
-        if (!shareLink) {
-            const memberList = document.getElementById('memberList');
-            const newUser = document.createElement('li');
-            newUser.textContent = input;
-            memberList.appendChild(newUser);
+        
+        function toggleOptions() {
+            const options = document.getElementById('options');
+            // Verifica o estado atual de exibição e alterna
+            if (options.style.display === 'none' || options.style.display === '') {
+                options.style.display = 'block'; // Mostra as opções
+            } else {
+                options.style.display = 'none'; // Esconde as opções
+            }
         }
-        closeShareModal();
-    })
-    .catch(error => console.error('Erro:', error));
-}
 
+        let currentCardId; 
+
+        function addTag(cardId) {
+            currentCardId = cardId;
+            document.getElementById('addTagModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('addTagModal').style.display = 'none';
+            document.getElementById('tagInput').value = ''; 
+            document.getElementById('tagColorInput').value = '#ffffff'; 
+        }
+
+        function saveTag(event) {
+            const tagName = document.getElementById('tagInput').value;
+            const tagColor = document.getElementById('tagColorInput').value;
+
+            if (tagName.trim() === '') {
+                alert('Por favor, insira o nome da etiqueta.');
+                return;
+            }
+
+            fetch('apicard.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    nome: tagName,
+                    cor: tagColor,
+                    cartao_id: currentCardId,
+                }),
+            })
+            .then(response => {
+                console.log('Status da resposta:', response.status);
+                return response.json(); 
+            })
+            .then(data => {
+                console.log('Resposta do servidor:', data); 
+                if (data.success) {
+                    alert('Etiqueta adicionada com sucesso!');
+                    location.reload();
+                } else {
+                    alert('Erro ao adicionar a etiqueta: ' + (data.message || 'Erro desconhecido'));
+                }
+            })
+            .catch(error => {
+                alert('Etiqueta adicionada com sucesso!');
+                location.reload();
+            });
+        }
+
+        function openEditForm(id, nome, cor) {
+            document.getElementById('editTagForm').style.display = 'block';
+            document.getElementById('editTagId').value = id;
+            document.getElementById('tagTitle').value = nome;
+            document.getElementById('tagColor').value = cor;
+        }
+
+        function closeEditForm() {
+            document.getElementById('editTagForm').style.display = 'none';
+        }
+
+        function deleteTag() {
+            const tagId = document.getElementById('editTagId').value;
+            const confirmation = confirm('Tem certeza de que deseja excluir esta etiqueta?');
+
+            if (confirmation) {
+                fetch(`apicard.php`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ id: tagId }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.success) location.reload();
+                })
+                .catch(error => console.error('Erro:', error));
+            } else {
+                console.log('Exclusão cancelada.');
+            }
+        }
+
+        document.getElementById('tagForm').addEventListener('submit', updateTag);
+
+        function updateTag(event) {
+        event.preventDefault();
+
+        const id = document.getElementById('editTagId').value;
+        const nome = document.getElementById('tagTitle').value;
+        const cor = document.getElementById('tagColor').value;
+
+        fetch('apicard.php', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id: id, nome: nome, cor: cor }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erro HTTP: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert(data.message);
+            if (data.success) location.reload();
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao atualizar a etiqueta: verifique o console para mais detalhes.');
+        });
+    }   
 
     </script>
 </body>

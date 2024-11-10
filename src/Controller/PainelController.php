@@ -1,7 +1,7 @@
 <?php
 namespace EngSoftKanban\GreenBoard\Controller;
 
-require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Model/Quadro.php';
+require_once __DIR__ . "/../Model/Quadro.php";
 
 use EngSoftKanban\GreenBoard\Model\Quadro;
 
