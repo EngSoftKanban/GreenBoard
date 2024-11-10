@@ -8,8 +8,8 @@ if (!isset($_SESSION['usuario_id'])) {
 }
 
 require_once 'db_connection.php';
-require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Model/Quadro.php';
-require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Controller/PainelController.php';
+require_once __DIR__ . '/../src/Model/Quadro.php';
+require_once __DIR__ . '/../src/Controller/PainelController.php';
 
 use EngSoftKanban\GreenBoard\Controller\PainelController;
 
@@ -19,4 +19,4 @@ $controller->post();
 $quadros = $controller->getAll($_SESSION['usuario_id']);
 $recente = $controller->getRecent($_SESSION['usuario_id']);
 
-require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/View/painel.php';
+require_once __DIR__ . '/../src/View/painel.php';

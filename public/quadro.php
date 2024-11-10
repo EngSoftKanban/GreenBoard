@@ -23,6 +23,7 @@ use EngSoftKanban\GreenBoard\Controller\ListaController;
 use EngSoftKanban\GreenBoard\Controller\CartaoController;
 use EngSoftKanban\GreenBoard\Controller\MembroController;
 
+
 $listaController = new ListaController($pdo);
 $listas = $listaController->listar($quadro_id);
 

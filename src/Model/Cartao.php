@@ -68,8 +68,8 @@ class Cartao {
         $stmt->execute();
         return $stmt->fetch();
     }
-
-	public function atualizarPosicoes($lista_id, $posicao_cartao) {
+    
+    public function atualizarPosicoes($lista_id, $posicao_cartao) {
 		$cartoes = $this->getCartoesByListaId($lista_id);
         foreach ($cartoes as $cartao) {
 			if ($cartao['posicao'] > $posicao_cartao) {
@@ -83,4 +83,40 @@ class Cartao {
 		}
 		return true;
 	}
+
+    public function addEtiqueta($nome, $cor, $cartao_id) {
+        $sql = "INSERT INTO etiquetas (nome, cor, cartao_id) VALUES (:nome, :cor, :cartao_id)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':nome', $nome);
+        $stmt->bindParam(':cor', $cor);
+        $stmt->bindParam(':cartao_id', $cartao_id);
+        return $stmt->execute();
+    }
+
+    // Método para obter etiquetas por cartão
+    public function getEtiquetasByCartao($cartao_id) {
+        $sql = "SELECT * FROM etiquetas WHERE cartao_id = :cartao_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':cartao_id', $cartao_id);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Método para editar uma etiqueta
+    public function updateEtiqueta($id, $nome, $cor) {
+        $sql = "UPDATE etiquetas SET nome = :nome, cor = :cor WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':nome', $nome);
+        $stmt->bindParam(':cor', $cor);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
+
+    // Método para excluir uma etiqueta
+    public function deleteEtiqueta($id) {
+        $sql = "DELETE FROM etiquetas WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
 }
