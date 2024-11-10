@@ -66,7 +66,7 @@ class CartaoController {
     }
 
 	public function acharPorCorpo($corpo) {
-        return $this->cartaoModel->acharPorCorpo($corpo);
+		return $this->cartaoModel->acharPorCorpo($corpo);
 	}
 
 	public function post() {
@@ -78,7 +78,7 @@ class CartaoController {
 			$this->remover($_SESSION['usuario_id'], $_POST['cartao_id']);
 		}
 	}
-    
+
     public function adicionarEtiqueta() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $input = json_decode(file_get_contents('php://input'), true);
@@ -158,5 +158,4 @@ class CartaoController {
                 break;
         }
     }
-
 }

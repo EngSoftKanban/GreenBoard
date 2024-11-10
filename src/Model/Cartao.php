@@ -18,13 +18,18 @@ class Cartao {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function adicionarCartao($corpo, $lista_id) {
-        $sql = "INSERT INTO cartoes (corpo, posicao, lista_id) VALUES (:corpo, 0, :lista_id)";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindParam(':corpo', $corpo);
-        $stmt->bindParam(':lista_id', $lista_id);
-        return $stmt->execute();
-    }
+	public function adicionarCartao($corpo, $lista_id) {
+		$stmt = $this->pdo->prepare('SELECT * FROM cartoes WHERE lista_id = :lista_id');
+		$stmt->bindParam(':lista_id', $lista_id);
+		$stmt->execute();
+		$cartoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		$num = count($cartoes);
+		$stmt2 = $this->pdo->prepare('INSERT INTO cartoes (corpo, posicao, lista_id) VALUES (:corpo, :pos, :lista_id)');
+		$stmt2->bindParam(':corpo', $corpo);
+		$stmt2->bindParam(':pos', $num);
+		$stmt2->bindParam(':lista_id', $lista_id);
+		return $stmt2->execute();
+	}
 
     public function atualizarCartao($id, $corpo) {
         $sql = "UPDATE cartoes SET corpo = :corpo WHERE id = :id";
@@ -48,7 +53,6 @@ class Cartao {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
 
     public function getCartaoById($id) {
         $sql = "SELECT * FROM cartoes WHERE id = :id";
@@ -58,16 +62,11 @@ class Cartao {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function atualizarPosicoes($cartoes) {
-        foreach ($cartoes as $cartao) {
-            $sql = "UPDATE cartoes SET posicao = :posicao, lista_id = :lista_id WHERE id = :id";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->bindParam(':posicao', $cartao['position'], PDO::PARAM_INT);
-            $stmt->bindParam(':lista_id', $cartao['lista_id'], PDO::PARAM_INT);
-            $stmt->bindParam(':id', $cartao['id'], PDO::PARAM_INT);
-            $stmt->execute();
-        }
-        return true;
+	public function acharPorCorpo($corpo) {
+        $stmt = $this->pdo->prepare('SELECT * FROM cartoes WHERE corpo = :corpo');
+        $stmt->bindParam(':corpo', $corpo);
+        $stmt->execute();
+        return $stmt->fetch();
     }
     
     public function atualizarPosicoes($lista_id, $posicao_cartao) {
