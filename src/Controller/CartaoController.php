@@ -65,6 +65,20 @@ class CartaoController {
         }
     }
 
+    public function acharPorCorpo($corpo) {
+		return $this->cartaoModel->acharPorCorpo($corpo);
+	}
+
+	public function post() {
+		if (isset($_POST['membro_add'])) {
+			error_log($_POST['cartao_id']);
+			$this->adicionar($_SESSION['usuario_id'], $_POST['cartao_id']);
+		}
+		else if (isset($_POST['membro_rm'])) {
+			$this->remover($_SESSION['usuario_id'], $_POST['cartao_id']);
+		}
+	}
+    
     public function adicionarEtiqueta() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $input = json_decode(file_get_contents('php://input'), true);

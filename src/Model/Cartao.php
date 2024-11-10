@@ -70,6 +70,21 @@ class Cartao {
         return true;
     }
     
+    public function atualizarPosicoes($lista_id, $posicao_cartao) {
+		$cartoes = $this->getCartoesByListaId($lista_id);
+        foreach ($cartoes as $cartao) {
+			if ($cartao['posicao'] > $posicao_cartao) {
+				$sql = "UPDATE cartoes SET posicao = :posicao WHERE id = :id";
+				$stmt = $this->pdo->prepare($sql);
+				$nova_pos = $cartao['posicao'] - 1;
+				$stmt->bindParam(':posicao', $nova_pos, PDO::PARAM_INT);
+				$stmt->bindParam(':id', $cartao['id'], PDO::PARAM_INT);
+				$stmt->execute();
+			}
+		}
+		return true;
+	}
+
     public function addEtiqueta($nome, $cor, $cartao_id) {
         $sql = "INSERT INTO etiquetas (nome, cor, cartao_id) VALUES (:nome, :cor, :cartao_id)";
         $stmt = $this->pdo->prepare($sql);
