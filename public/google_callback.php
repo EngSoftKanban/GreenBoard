@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . '/../src/carregar_bd.php';
-require_once __DIR__ . '/../src/Model/User.php';
-require_once __DIR__ . '/../src/Controller/LoginController.php';
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once 'src/bdpdo.php';
+require_once 'src/Model/User.php';
+require_once 'src/Controller/LoginController.php';
+require_once 'vendor/autoload.php';
 
 use EngSoftKanban\GreenBoard\Controller\LoginController;
 

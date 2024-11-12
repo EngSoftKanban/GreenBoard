@@ -7,6 +7,6 @@ if (!isset($_SESSION['usuario_id'])) {
 	header('Location: login.php');
 }
 
-require_once 'db_connection.php';
+require_once 'src/bdpdo.php';
 
-require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/View/perfil.php';
+require_once 'src/View/perfil.php';

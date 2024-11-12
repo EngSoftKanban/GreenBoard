@@ -8,9 +8,9 @@ if (!isset($_SESSION['usuario_id'])) {
     exit();
 }
 
-require_once 'db_connection.php';
+require_once 'src/bdpdo.php';
 
-require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Controller/CartaoController.php';
+require_once 'src/Controller/CartaoController.php';
 
 use EngSoftKanban\GreenBoard\Controller\CartaoController;
 

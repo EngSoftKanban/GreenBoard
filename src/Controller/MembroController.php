@@ -1,12 +1,12 @@
 <?php
 namespace EngSoftKanban\GreenBoard\Controller;
 
-require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Model/Membro.php';
+require_once 'src/Model/Membro.php';
 
 use EngSoftKanban\GreenBoard\Model\Membro;
 
 class MembroController {
-	private $membroModel;
+	private Membro $membroModel;
 
 	public function __construct($pdo) {
 		$this->membroModel = new Membro($pdo);
@@ -34,10 +34,9 @@ class MembroController {
 
 	public function post() {
 		if (isset($_POST['membro_add'])) {
-			error_log($_POST['cartao_id']);
 			$this->adicionar($_SESSION['usuario_id'], $_POST['cartao_id']);
 		}
-		else if (isset($_POST['membro_rm'])) {
+		elseif (isset($_POST['membro_rm'])) {
 			$this->remover($_SESSION['usuario_id'], $_POST['cartao_id']);
 		}
 	}

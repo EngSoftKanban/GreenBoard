@@ -4,7 +4,9 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>GreenBoard - Kanban</title>
-		<link rel="stylesheet" href="/resources/css/styles.css">
+		<style>
+			<?php require_once "resources/css/styles.css";?>
+		</style>
 	</head>
 	<body class="profile-body">
 		<div class="profile-header2">
@@ -17,7 +19,7 @@
 					<div class="profile-icon" onclick="toggleMenu()">
 						<img id="profileImageTopBar" src="<?php echo $_SESSION['icone'];?>" class="profile-image-menu">
 					</div>
-					<?php include realpath($_SERVER['DOCUMENT_ROOT']) . '/../resources/template/dropdown.php';?>
+					<?php include 'resources/template/dropdown.php';?>
 				</div>
 			</div>
 		</div>

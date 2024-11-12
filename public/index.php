@@ -1,4 +1,4 @@
 <?php
 namespace EngSoftKanban\GreenBoard;
 
-require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/View/home.php';
+require_once 'src/View/home.php';

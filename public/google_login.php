@@ -1,7 +1,7 @@
 <?php
-require_once 'db_connection.php';
-require realpath(__DIR__ . '/../src/Controller/LoginController.php');
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once 'src/bdpdo.php';
+require_once 'src/Controller/LoginController.php';
+require_once 'vendor/autoload.php';
 
 
 use EngSoftKanban\GreenBoard\Controller\LoginController;

@@ -1,8 +1,8 @@
 <?php
 namespace EngSoftKanban\GreenBoard;
 
-require_once '../vendor/autoload.php'; // Autoloader do Composer
-require_once '../db_connection.php'; // Verifique se este caminho está correto
+require_once 'vendor/autoload.php'; // Autoloader do Composer
+require_once 'src/bdpdo.php';
 
 use EngSoftKanban\GreenBoard\Controller\PasswordController;
 

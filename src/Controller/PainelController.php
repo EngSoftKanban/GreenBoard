@@ -1,7 +1,7 @@
 <?php
 namespace EngSoftKanban\GreenBoard\Controller;
 
-require_once __DIR__ . "/../Model/Quadro.php";
+require_once "src/Model/Quadro.php";
 
 use EngSoftKanban\GreenBoard\Model\Quadro;
 
