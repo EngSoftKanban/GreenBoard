@@ -1,6 +1,6 @@
 <?php
-require_once 'db_connection.php';
-require_once 'functions.php';
+require_once 'src/bdpdo.php';
+require_once 'src/functions.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
@@ -16,4 +16,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 }
-?>

@@ -1,4 +1,8 @@
 <?php
+namespace EngSoftKanban\GreenBoard;
+
+use \PDO;
+
 $host = apache_getenv('DB_HOST');
 $db = apache_getenv('DB_NAME');
 $user = apache_getenv('DB_USER');

@@ -1,9 +1,9 @@
 <?php
-namespace Src\Controller;
+namespace EngSoftKanban\GreenBoard\Controller;
 
 class HomeController {
     public function index() {
         // Renderiza a view da página inicial
-        require_once __DIR__ . '/../View/home.php';
+        require_once 'src/View/home.php';
     }
 }

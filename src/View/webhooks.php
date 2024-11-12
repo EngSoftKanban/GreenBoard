@@ -4,7 +4,9 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>GreenBoard - Kanban</title>
-		<link rel="stylesheet" href="/resources/css/styles.css">
+		<style>
+			<?php require_once "resources/css/styles.css";?>
+		</style>
 	</head>
 	<body class="profile-body">
 		<div class="profile-header2">
@@ -17,7 +19,7 @@
 					<div class="profile-icon" onclick="toggleMenu()">
 						<img id="profileImageTopBar" src="<?php echo $_SESSION['icone'];?>" class="profile-image-menu">
 					</div>
-					<?php include realpath($_SERVER['DOCUMENT_ROOT']) . '/../resources/template/dropdown.php';?>
+					<?php include 'resources/template/dropdown.php';?>
 				</div>
 			</div>
 		</div>
@@ -43,28 +45,26 @@
 					<h2 style="font-size: 20px">Webhooks</h2>
 				</div>
 				<div style="display: flex;flex-direction: column;align-items: center;margin-bottom: 32px">
-					<!-- <div style=""> -->
-						<?php foreach ($hooks as $hook) {?>
-							<div class="hooks-item">
-								<?php 
-								foreach ($opcoes as $opcao) {
-									if ($hook['quadro_id'] == $opcao['quadro_id'] && $hook['lista_id'] == $opcao['lista_id']) {;?>
-									<div style="text-align: left">
-										<?php echo 'Quadro: ' . $opcao['quadro_nome'];?><br>
-										<?php echo 'Lista: ' . $opcao['titulo'];?><br>
-									</div>										
-								<?php }
-								} ?>
-								http://locahost/hooks.php?token=<?php echo $hook['token'];?>
-								<form action="" method="post" onclick="return confirm('Tem certeza que deseja excluir este Webhook?')">
-									<input type="hidden" name="hookid" value="<?php echo $hook['id'];?>">
-									<button>
-										<img src="/resources/trash.svg" style="width: 16px;color:white">
-									</button>
-								</form>
-							</div>
-						<?php } ?>
-					<!-- </div> -->
+					<?php foreach ($hooks as $hook) {?>
+						<div class="hooks-item">
+							<?php 
+							foreach ($opcoes as $opcao) {
+								if ($hook['quadro_id'] == $opcao['quadro_id'] && $hook['lista_id'] == $opcao['lista_id']) {;?>
+								<div style="text-align: left">
+									<?php echo 'Quadro: ' . $opcao['quadro_nome'];?><br>
+									<?php echo 'Lista: ' . $opcao['titulo'];?><br>
+								</div>										
+							<?php }
+							} ?>
+							http://locahost/hooks.php?token=<?php echo $hook['token'];?>
+							<form action="" method="post" onclick="return confirm('Tem certeza que deseja excluir este Webhook?')">
+								<input type="hidden" name="hookid" value="<?php echo $hook['id'];?>">
+								<button>
+									<img src="/resources/trash.svg" style="width: 16px;color:white">
+								</button>
+							</form>
+						</div>
+					<?php } ?>
 				</div>
 				<div>
 					<form action="" method="post">

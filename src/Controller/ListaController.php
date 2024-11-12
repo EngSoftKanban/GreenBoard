@@ -1,90 +1,74 @@
 <?php
 namespace EngSoftKanban\GreenBoard\Controller;
 
-require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Model/Lista.php';
-require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Model/User.php';
-require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Model/Cartao.php';
+require_once 'src/Model/Lista.php';
+require_once 'src/Model/User.php';
+require_once 'src/Model/Cartao.php';
 
 use EngSoftKanban\GreenBoard\Model\Lista;
 use EngSoftKanban\GreenBoard\Model\User;
 use EngSoftKanban\GreenBoard\Model\Cartao;
 
-class ListaController {
-    private $listaModel;
-    private $cartaoModel;  
-    private $pdo;
+use \PDO;
 
-    public function __construct($pdo) {
-        $this->listaModel = new Lista();
-        $this->cartaoModel = new Cartao($pdo);  
-        $this->pdo = $pdo;
-    }
+class ListaController {
+	private Lista $listaModel;
+	private Cartao $cartaoModel;  
+	private PDO $pdo;
+
+	public function __construct($pdo) {
+		$this->listaModel = new Lista($pdo);
+		$this->cartaoModel = new Cartao($pdo);  
+		$this->pdo = $pdo;
+	}
 
 	public function listar($quadro_id) {
 		return $this->listaModel->listar($quadro_id);
 	}
 
-    public function buscarUsuarios() {
+	public function criar($lista_titulo, $quadro_id) {
+		return $this->listaModel->criar($lista_titulo, $quadro_id);
+	}
+
+	public function atualizarLista($lista_id, $titulo) {
+		return $this->listaModel->atualizar($lista_id, $titulo);
+	}
+
+    public function remover($lista_id) {
+		if ($this->listaModel->possuiCartao($lista_id)) {
+			return false;
+		}
+		$lista = $this->listaModel->lerListaPorId($lista_id);
+		
+		if (!$lista) {
+			return false; // Retorna false se o cartão não for encontrado
+		}
+
+		$quadro_id = $lista['quadro_id'];
+		$lista_pos = $lista['posicao'];
+
+		if ($this->listaModel->remover($lista_id)) {
+			$this->listaModel->atualizarPosicoes($quadro_id, $lista_pos);
+			return true; // Retorna true se a exclusão for bem-sucedida
+		} else {
+			return false; // Retorna false se a exclusão falhar
+		}
     }
 
-    public function adicionarLista($titulo, $quadro_id) {
-        try {
-            if (empty($titulo) || empty($quadro_id)) {
-                return json_encode(["success" => false, "message" => "Título ou ID do quadro não podem estar vazios."]);
-            }
-    
-            $resultado = $this->listaModel->adicionarLista($titulo, $quadro_id);
-            return json_encode(["success" => $resultado, "message" => $resultado ? "Lista adicionada com sucesso!" : "Erro ao adicionar a lista."]);
-        } catch (Exception $e) {
-            return json_encode(["success" => false, "message" => "Erro: " . $e->getMessage()]);
-        }
-    }
-
-    public function atualizarLista($id, $titulo) {
-        if (empty($id) || empty($titulo)) {
-            return json_encode(["success" => false, "message" => "ID ou título não podem estar vazios."]);
-        }
-
-        $sql = "UPDATE listas SET titulo = :titulo WHERE id = :id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindParam(':id', $id);
-        $stmt->bindParam(':titulo', $titulo);
-        return json_encode(["success" => $stmt->execute(), "message" => $stmt->execute() ? "Lista atualizada com sucesso!" : "Erro ao atualizar a lista."]);
-    }
-
-    public function deletarLista($id) {
-        try {
-            $this->pdo->beginTransaction();
-    
-            $cartoes = $this->cartaoModel->getCartoesByListaId($id);
-            foreach ($cartoes as $cartao) {
-                if (!$this->cartaoModel->deletarCartao($cartao['id'])) {
-                    throw new Exception("Erro ao excluir o cartão ID {$cartao['id']}");
-                }
-            }
-            
-            $stmt = $this->pdo->prepare("DELETE FROM listas WHERE id = :id");
-            $stmt->bindParam(':id', $id);
-            
-            if (!$stmt->execute()) {
-                throw new Exception("Erro ao excluir a lista ID $id");
-            }
-    
-            $this->pdo->commit();
-            return json_encode(["success" => true, "message" => "Lista excluída com sucesso."]);
-        } catch (Exception $e) {
-            $this->pdo->rollBack();
-            return json_encode(["success" => false, "message" => $e->getMessage()]);
-        }
-    }
-
-    public function atualizarPosicoes($data) {
-        if ($data) {
-            return $this->listaModel->atualizarPosicoes($data);
-        }
-        return false;
-    }
-
-    
-    
+	public function post() {
+		if (isset($_POST['lista_add'])) {
+			$this->criar($_POST['lista_titulo'], $_POST['quadro_id']);
+		}
+		elseif (isset($_POST['lista_rm'])) {
+			$this->remover($_POST['lista_id']);
+		}
+		elseif (isset($_POST['editar_item_id'])) {
+			$item_id = $_POST['editar_item_id'];
+			$item_tipo = $_POST['editar_item_tipo'];
+			$item_texto = $_POST['editar_item_texto'];
+			
+			return strcmp($item_tipo, "lista") == 0 ? $this->atualizarLista($item_id, $item_texto) : $this->cartaoModel->atualizarCartao($item_id, $item_texto);
+		}
+		echo(print_r(json_decode(file_get_contents('php://input'), true),true));
+	}
 }

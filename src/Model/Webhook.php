@@ -4,7 +4,7 @@ namespace EngSoftKanban\GreenBoard\Model;
 use \PDO;
 
 class Webhook {
-	private $pdo;
+	private PDO $pdo;
 
 	public function __construct($pdo) {
 		$this->pdo = $pdo;
