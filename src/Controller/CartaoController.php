@@ -88,19 +88,19 @@ class CartaoController {
             $cartao_id = $input['cartao_id'] ?? null;
     
             if (empty($nome) || empty($cor) || !$cartao_id) {
-                json_encode(['success' => false, 'message' => 'Dados inválidos!']);
+                echo json_encode(['success' => false, 'message' => 'Dados inválidos!']);
                 return;
             }
     
             $result = $this->cartaoModel->addEtiqueta($nome, $cor, $cartao_id);
     
             if ($result) {
-                json_encode(['success' => true, 'message' => 'Etiqueta adicionada com sucesso!']);
+                echo json_encode(['success' => true, 'message' => 'Etiqueta adicionada com sucesso!']);
             } else {
-                json_encode(['success' => false, 'message' => 'Erro ao adicionar etiqueta.']);
+                echo json_encode(['success' => false, 'message' => 'Erro ao adicionar etiqueta.']);
             }
         } else {
-            json_encode(['success' => false, 'message' => 'Método inválido']);
+            echo json_encode(['success' => false, 'message' => 'Método inválido']);
         }
     }
 

@@ -93,7 +93,6 @@ class Cartao {
         return $stmt->execute();
     }
 
-    // Método para obter etiquetas por cartão
     public function getEtiquetasByCartao($cartao_id) {
         $sql = "SELECT * FROM etiquetas WHERE cartao_id = :cartao_id";
         $stmt = $this->pdo->prepare($sql);
@@ -102,7 +101,6 @@ class Cartao {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Método para editar uma etiqueta
     public function updateEtiqueta($id, $nome, $cor) {
         $sql = "UPDATE etiquetas SET nome = :nome, cor = :cor WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
@@ -112,7 +110,6 @@ class Cartao {
         return $stmt->execute();
     }
 
-    // Método para excluir uma etiqueta
     public function deleteEtiqueta($id) {
         $sql = "DELETE FROM etiquetas WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);

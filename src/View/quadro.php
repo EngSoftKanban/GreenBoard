@@ -545,7 +545,7 @@
                 }
             })
             .catch(error => {
-                alert('Etiqueta adicionada com sucesso!');
+                console.error('Erro:', error);
                 location.reload();
             });
         }

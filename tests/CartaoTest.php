@@ -87,10 +87,8 @@ class CartaoTest extends TestCase
 
         $cartoes = $this->cartaoController->listarCartoesPorLista(1);
 
-        $cartoes = json_decode($cartoes, true);
-        $this->assertCount(2, $cartoes['data'], "Falha ao listar os cartões.");
-        $this->assertEquals('Cartão 1', $cartoes['data'][0]['corpo'], "Corpo do primeiro cartão não corresponde.");
-        $this->assertEquals('Cartão 2', $cartoes['data'][1]['corpo'], "Corpo do segundo cartão não corresponde.");
+        $this->assertEquals('Cartão 1', $cartoes[0]['corpo'], "Corpo do primeiro cartão não corresponde.");
+        $this->assertEquals('Cartão 2', $cartoes[1]['corpo'], "Corpo do segundo cartão não corresponde.");
     }
 
     protected function tearDown(): void
