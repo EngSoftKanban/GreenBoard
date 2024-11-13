@@ -34,7 +34,7 @@ class CartaoController {
     }
 
 	public function remover($cartao_id) {
-		$cartao = $this->cartaoModel->getCartaoById($cartao_idid);
+		$cartao = $this->cartaoModel->getCartaoById($cartao_id);
 		
 		if (!$cartao) {
 			return false; // Retorna false se o cartão não for encontrado
