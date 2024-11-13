@@ -1,7 +1,7 @@
 <?php
 namespace EngSoftKanban\GreenBoard\Controller;
 
-require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Model/Cartao.php';
+require_once __DIR__ . '/../Model/Cartao.php';
 
 use EngSoftKanban\GreenBoard\Model\Cartao;
 use PDO;
@@ -88,19 +88,19 @@ class CartaoController {
             $cartao_id = $input['cartao_id'] ?? null;
     
             if (empty($nome) || empty($cor) || !$cartao_id) {
-                echo json_encode(['success' => false, 'message' => 'Dados inválidos!']);
+                json_encode(['success' => false, 'message' => 'Dados inválidos!']);
                 return;
             }
     
             $result = $this->cartaoModel->addEtiqueta($nome, $cor, $cartao_id);
     
             if ($result) {
-                echo json_encode(['success' => true, 'message' => 'Etiqueta adicionada com sucesso!']);
+                json_encode(['success' => true, 'message' => 'Etiqueta adicionada com sucesso!']);
             } else {
-                echo json_encode(['success' => false, 'message' => 'Erro ao adicionar etiqueta.']);
+                json_encode(['success' => false, 'message' => 'Erro ao adicionar etiqueta.']);
             }
         } else {
-            echo json_encode(['success' => false, 'message' => 'Método inválido']);
+            json_encode(['success' => false, 'message' => 'Método inválido']);
         }
     }
 
