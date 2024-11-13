@@ -1,12 +1,12 @@
 <?php
 namespace EngSoftKanban\GreenBoard\Controller;
 
-require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Model/Webhook.php';
+require_once 'src/Model/Webhook.php';
 
 use EngSoftKanban\GreenBoard\Model\Webhook;
 
 class WebhookController {
-	private $hookModel;
+	private Webhook $hookModel;
 
 	public function __construct($pdo) {
 		$this->hookModel = new Webhook($pdo);

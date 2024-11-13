@@ -1,9 +1,9 @@
 <?php
 namespace EngSoftKanban\GreenBoard;
 
-require_once 'db_connection.php'; // O caminho deve ser correto se o arquivo está em public
-require realpath(__DIR__ . '/../src/Model/PasswordModel.php'); // Ajuste o caminho para o PasswordModel
-require realpath(__DIR__ . '/../src/Controller/PasswordController.php'); // Ajuste o caminho para o PasswordController
+require_once 'src/bdpdo.php';
+require 'src/Model/PasswordModel.php'; // Ajuste o caminho para o PasswordModel
+require 'src/Controller/PasswordController.php'; // Ajuste o caminho para o PasswordController
 
 use EngSoftKanban\GreenBoard\Controller\PasswordController;
 

@@ -1,5 +1,5 @@
 <?php
-require_once 'db_connection.php'; 
+require_once 'src/bdpdo.php'; 
 
 
 if (isset($_POST['token'], $_POST['tipo'], $_POST['id'])) {
