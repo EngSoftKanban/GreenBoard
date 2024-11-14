@@ -56,8 +56,8 @@
 								</div>										
 							<?php }
 							} ?>
-							http://locahost/hooks.php?token=<?php echo $hook['token'];?>
-							<form action="" method="post" onclick="return confirm('Tem certeza que deseja excluir este Webhook?')">
+							http://localhost/hooks.php?token=<?php echo $hook['token'];?>
+							<form action="" method="post" onsubmit="return confirm('Tem certeza que deseja excluir este Webhook?')">
 								<input type="hidden" name="hookid" value="<?php echo $hook['id'];?>">
 								<button>
 									<img src="/resources/trash.svg" style="width: 16px;color:white">

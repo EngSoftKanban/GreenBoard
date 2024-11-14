@@ -13,32 +13,32 @@ class PainelController {
     }
 
 	public function getRecent($usuario_id) {
-		return $this->quadroModel->getRecent($usuario_id);
+		return $this->quadroModel->lerRecente($usuario_id);
 	}
 
     public function getAll($usuario_id) {
-		return $this->quadroModel->getAll($usuario_id);
+		return $this->quadroModel->lerTodos($usuario_id);
     }
 
-    public function deleteQuadro($id) {
+    public function remover($id) {
         
-        $this->quadroModel->deleteQuadro($id); 
+        $this->quadroModel->remover($id); 
     }
 
-    public function create($nome, $usuario_id) {
-        $this->quadroModel->create($nome, $usuario_id);
+    public function criar($nome, $usuario_id) {
+        $this->quadroModel->criar($nome, $usuario_id);
     }
 
 	public function post() {
 		if (isset($_POST['action'])) {
 			if ($_POST['action'] === 'delete') {
 				try {
-					$this->deleteQuadro($_POST['quadro_id']);
+					$this->remover($_POST['quadro_id']);
 				} catch (Exception $e) {
 					echo "Erro ao remover quadro: " . $e->getMessage();
 				}
 			} elseif ($_POST['action'] === 'create') {
-				$this->create($_POST['nome_quadro'], $_SESSION['usuario_id']);
+				$this->criar($_POST['nome_quadro'], $_SESSION['usuario_id']);
 			}
 		}
 	}
