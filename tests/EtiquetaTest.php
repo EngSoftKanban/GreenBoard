@@ -37,10 +37,10 @@ class EtiquetaTest extends TestCase
         $cor = '#FF0000';
         $cartao_id = 1;
 
-        $response = $this->cartaoController->adicionarEtiqueta($nome, $cor, $cartao_id);
-        $result = json_decode($response, true);
+		$_SERVER['REQUEST_METHOD'] = 'POST';
+        $result = json_decode($this->cartaoController->adicionarEtiqueta($nome, $cor, $cartao_id), true);
 
-        $this->assertTrue($result['success'], "Falha ao adicionar etiqueta através do controller.");
+        $this->assertTrue($result['success'], "Falha ao adicionar etiqueta através do controller: " . $result['message']);
 
         $stmt = $this->pdo->query("SELECT * FROM etiquetas WHERE nome = '$nome'");
         $etiqueta = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -87,13 +87,12 @@ class EtiquetaTest extends TestCase
         $this->pdo->exec("INSERT INTO etiquetas (nome, cor, cartao_id) VALUES ('Etiqueta 1', '#FF0000', 1)");
         $this->pdo->exec("INSERT INTO etiquetas (nome, cor, cartao_id) VALUES ('Etiqueta 2', '#00FF00', 1)");
 
-        $response = $this->cartaoController->listarEtiquetasPorCartao(1);
-        $result = json_decode($response, true);
+        $result = $this->cartaoController->listarEtiquetasPorCartao(1);
 
-        $this->assertEquals('success', $result['status'], "Falha ao listar as etiquetas.");
-        $this->assertCount(2, $result['data'], "Número de etiquetas não corresponde.");
-        $this->assertEquals('Etiqueta 1', $result['data'][0]['nome'], "Nome da primeira etiqueta não corresponde.");
-        $this->assertEquals('Etiqueta 2', $result['data'][1]['nome'], "Nome da segunda etiqueta não corresponde.");
+        // $this->assertEquals('success', $result['status'], "Falha ao listar as etiquetas.");
+        $this->assertCount(2, $result, "Número de etiquetas não corresponde.");
+        $this->assertEquals('Etiqueta 1', $result[0]['nome'], "Nome da primeira etiqueta não corresponde.");
+        $this->assertEquals('Etiqueta 2', $result[1]['nome'], "Nome da segunda etiqueta não corresponde.");
     }
 
     protected function tearDown(): void
