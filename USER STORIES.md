@@ -390,7 +390,35 @@ N/A
 * Endpoint para receber webhook;
 * Url do webhook.
 
-## [US23 - Mudar o icone do usuário.](https://trello.com/c/Qmd4Lpn6/52-rf25-mudar-o-icone-do-usu%C3%A1rio)
+## [US22 - Testes unitários dos Adicionados, Cartões e Listas.](https://trello.com/c/8KVju8nJ/50-rf23-testes-unit%C3%A1rios-dos-adicionados-cart%C3%B5es-e-listas)
+
+### Descrição:
+Como usuario, quero que minhas manipulações de cartões e listas sejam sempre consistentes.
+
+### Regras de negócio:
+N/A
+
+### Observações:
+N/A
+
+### Dados:
+N/A
+
+## [US23 - Testes unitários dos Permissões, Quadros, Usuários e Webhooks.](https://trello.com/c/iRpbiQMs/51-rf24-testes-unit%C3%A1rios-dos-models)
+
+### Descrição:
+Como usuario, quero que minhas manipulações de quadros, usuários e webhooks sejam sempre consistentes.
+
+### Regras de negócio:
+N/A
+
+### Observações:
+N/A
+
+### Dados:
+N/A
+
+## [US24 - Mudar o icone do usuário.](https://trello.com/c/Qmd4Lpn6/52-rf25-mudar-o-icone-do-usu%C3%A1rio)
 
 ### Descrição:
 Como usuário, quero poder mudar o meu icone de usuário.
@@ -404,7 +432,7 @@ N/A
 ### Dados:
 * Icone do usuário.
 
-## [US24 - Editar nome dos quadros no painel.](https://trello.com/c/znU49ZCI/53-rf26-editar-e-mover-quadros-no-painel)
+## [US25 - Editar quadros no painel.](https://trello.com/c/znU49ZCI/53-rf26-editar-e-mover-quadros-no-painel)
 
 ### Descrição:
 Como usuário, quero poder mudar o nome e cor dos quadros.
@@ -417,101 +445,3 @@ N/A
 
 ### Dados:
 * Novo nome/cor do quadro;
-
-## [US25 - Testes unitários dos adicionados](https://trello.com/c/iRpbiQMs/51-rf24-testes-unit%C3%A1rios-dos-models)
-
-### Descrição:
-Como usuario, quero que minhas manipulações de adicionados sejam sempre consistentes.
-
-### Regras de negócio:
-N/A
-
-### Observações:
-N/A
-
-### Dados:
-N/A
-
-## [US26 - Testes unitários das Permissões e Usuários](https://trello.com/c/iRpbiQMs/51-rf24-testes-unit%C3%A1rios-dos-models)
-
-### Descrição:
-Como usuario, quero que minhas manipulações de usuários e permissões sejam sempre consistentes.
-
-### Regras de negócio:
-N/A
-
-### Observações:
-N/A
-
-### Dados:
-N/A
-
-## [US27 - Testes unitários dos Cartões](https://trello.com/c/iRpbiQMs/51-rf24-testes-unit%C3%A1rios-dos-models)
-
-### Descrição:
-Como usuario, quero que minhas manipulações de cartões sejam sempre consistentes.
-
-### Regras de negócio:
-N/A
-
-### Observações:
-N/A
-
-### Dados:
-N/A
-
-## [US28 - Testes unitários das Listas](https://trello.com/c/iRpbiQMs/51-rf24-testes-unit%C3%A1rios-dos-models)
-
-### Descrição:
-Como usuario, quero que minhas manipulações de listas sejam sempre consistentes.
-
-### Regras de negócio:
-N/A
-
-### Observações:
-N/A
-
-### Dados:
-N/A
-
-## [US29 - Testes unitários das Permissões e Usuários](https://trello.com/c/iRpbiQMs/51-rf24-testes-unit%C3%A1rios-dos-models)
-
-### Descrição:
-Como usuario, quero que minhas manipulações de usuários e permissões sejam sempre consistentes.
-
-### Regras de negócio:
-N/A
-
-### Observações:
-N/A
-
-### Dados:
-N/A
-
-## [US30 - Testes unitários dos Webhooks](https://trello.com/c/iRpbiQMs/51-rf24-testes-unit%C3%A1rios-dos-models)
-
-### Descrição:
-Como usuario, quero que minhas manipulações de webhooks sejam sempre consistentes.
-
-### Regras de negócio:
-N/A
-
-### Observações:
-N/A
-
-### Dados:
-N/A
-
-## [US32 - Testes unitários das etiquetas](https://trello.com/c/iRpbiQMs/51-rf24-testes-unit%C3%A1rios-dos-models)
-
-### Descrição:
-Como usuario, quero que minhas manipulações de etiquetas sejam sempre consistentes.
-
-### Regras de negócio:
-N/A
-
-### Observações:
-N/A
-
-### Dados:
-N/A
