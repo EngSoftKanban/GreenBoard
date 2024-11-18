@@ -6,11 +6,11 @@ if (!isset($_GET['token'])) {
 	die();
 }
 
-require_once 'db_connection.php';
-require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Model/Quadro.php';
-require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Controller/ListaController.php';
-require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Controller/CartaoController.php';
-require_once realpath($_SERVER['DOCUMENT_ROOT']) . '/../src/Controller/WebhookController.php';
+require_once 'src/bdpdo.php';
+require_once 'src/Model/Quadro.php';
+require_once 'src/Controller/ListaController.php';
+require_once 'src/Controller/CartaoController.php';
+require_once 'src/Controller/WebhookController.php';
 
 use EngSoftKanban\GreenBoard\Controller\ListaController;
 use EngSoftKanban\GreenBoard\Controller\CartaoController;

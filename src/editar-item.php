@@ -1,5 +1,5 @@
 <?php
-require_once 'db_connection.php'; 
+require_once 'src/bdpdo.php'; 
 
 
 if (isset($_POST['id'], $_POST['tipo'], $_POST['novo_valor'])) {

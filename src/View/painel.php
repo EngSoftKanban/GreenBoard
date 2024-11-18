@@ -4,8 +4,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Quadros - GreenBoard</title>
-	<link rel="stylesheet" href="resources/css/quadros.css">
 	<style>
+		<?php require_once "resources/css/painel.css";?>
 		#create-modal {
 			display: none; 
 			position: absolute; 

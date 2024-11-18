@@ -6,10 +6,7 @@ if (!isset($_SESSION['usuario_id'])) {
     exit();
 }
 
-$host = apache_getenv("DB_HOST");
-$dbname = apache_getenv("DB_NAME");
-$user = apache_getenv("DB_USER");
-$password = apache_getenv("DB_PASS");
+require_once 'src/bdpdo.php';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);

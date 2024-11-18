@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-require_once 'db_connection.php'; 
+require_once 'src/bdpdo.php'; 
 
 
 if (isset($_POST['token'], $_POST['tipo'], $_POST['valor'])) {
