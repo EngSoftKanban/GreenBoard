@@ -72,7 +72,7 @@ class CartaoTest extends TestCase
         $this->pdo->exec("INSERT INTO cartoes (corpo, lista_id, posicao) VALUES ('Cartão para Deletar', 1, 1)");
         $cartao_id = $this->pdo->lastInsertId();
 
-        $response = $this->cartaoController->deletar($cartao_id);
+        $response = $this->cartaoController->remover($cartao_id);
         $this->assertTrue($response, "Falha ao deletar o cartão através do controller.");
 
         $stmt = $this->pdo->query("SELECT * FROM cartoes WHERE id = $cartao_id");
