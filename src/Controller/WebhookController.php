@@ -12,6 +12,10 @@ class WebhookController {
 		$this->hookModel = new Webhook($pdo);
 	}
 
+	public function criar($usuario_id, $quadro_id, $lista_id) {
+		return $this->hookModel->criar($usuario_id, $quadro_id, $lista_id);
+	}
+
 	public function listarQuadrosEListas($usuario_id) {
 		return $this->hookModel->listarQuadrosEListas($usuario_id);
 	}
@@ -20,8 +24,16 @@ class WebhookController {
 		return $this->hookModel->listarWebhooks($usuario_id);
 	}
 
-	public function lerWebhook($token) {
-		return $this->hookModel->lerWebhook($token);
+	public function ler($hook_id) {
+		return $this->hookModel->ler($hook_id);
+	}
+
+	public function lerPorToken($token) {
+		return $this->hookModel->lerPorToken($token);
+	}
+
+	public function destruir($hook_id) {
+		return $this->hookModel->destruir($hook_id);
 	}
 
 	public function postWebhooks($usuario_id) {
@@ -30,28 +42,30 @@ class WebhookController {
 			unset($post['WEBHOOK']);
 			$option = implode($post);
 			$commapos = strpos($option, ',');
-			$this->hookModel->criarWebhook($usuario_id, substr($option, 0, $commapos), substr($option, $commapos + 1));
+			return $this->criar($usuario_id, substr($option, 0, $commapos), substr($option, $commapos + 1));
 		} else if (isset($_POST['hookid'])) {
-			$this->hookModel->deletarWebhook($_POST['hookid']);
+			return $this->destruir($_POST['hookid']);
 		}
 	}
 
-	public function postHooks($webhookController, $cartaoController) {
+	public function postHooks($webhookController, $cartaoController, $payload = null) {
 		if (isset($_SERVER['CONTENT_TYPE'])) {
-			$payload = json_decode(file_get_contents('php://input'));
+			$payload ??= json_decode(file_get_contents('php://input'));
 			switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
 				case 'issues':
 					switch ($payload->action) {
 						case 'closed':
 							$cartao = $cartaoController->acharPorCorpo($payload->issue->title);
 							if(!empty($cartao)) {
-								$cartaoController->deletar($cartao['id']);
+								$cartaoController->remover($cartao['id']);
 							}
+							echo 'Sucesso\n' . print_r($payload, true);
 							break;
 						case 'reopened':
 						case 'opened':
-							$hook = $webhookController->lerWebhook($_GET['token']);
+							$hook = $webhookController->lerPorToken($_GET['token']);
 							$cartaoController->adicionar($payload->issue->title, $hook['lista_id']);
+							echo 'Sucesso\n' . print_r($payload, true);
 							break;
 						case 'edited':
 							if (empty($payload->changes->title)) {
@@ -61,10 +75,9 @@ class WebhookController {
 							if(!empty($cartao)) {
 								$cartaoController->atualizar($cartao['id'], $payload->issue->title);
 							}
+							echo 'Sucesso\n' . print_r($payload, true);
 							break;
 					}
-					echo 'Sucesso\n';
-					print_r($payload);
 					break;
 				default:
 					header('HTTP/1.O 404 Not Found');
