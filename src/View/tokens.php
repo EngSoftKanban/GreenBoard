@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Webhooks - GreenBoard</title>
+		<title>Tokens - GreenBoard</title>
 		<style>
 			<?php require_once "resources/css/styles.css";?>
 		</style>
@@ -29,10 +29,10 @@
 					<div class="tab-common">Dados pessoais</div>
 				</a>
 				<a href="/webhooks.php">
-					<div class="tab-selected">Webhooks</div>
+					<div class="tab-common">Webhooks</div>
 				</a>
 				<a href="/tokens.php">
-					<div class="tab-common-shadow">Tokens da API</div>
+					<div class="tab-selected-shadow">Tokens da API</div>
 				</a>
 				<a href="quadro.php?quadro_id=<?php echo $_SESSION['quadro_id'];?>" style="position: fixed; left: 8px; bottom: 8px;">
 					<div class= "back-container">
@@ -42,23 +42,22 @@
 			</div>
 			<div class="profile-container">
 				<div style="margin-bottom: 20px">
-					<h2 style="font-size: 20px">Webhooks</h2>
+					<h2 style="font-size: 20px">Tokens</h2>
 				</div>
 				<div style="display: flex;flex-direction: column;align-items: center;margin-bottom: 32px">
-					<?php foreach ($hooks as $hook) {?>
+					<?php foreach ($tokens as $token) {?>
 						<div class="hooks-item">
 							<?php 
 							foreach ($opcoes as $opcao) {
-								if ($hook['quadro_id'] == $opcao['quadro_id'] && $hook['lista_id'] == $opcao['lista_id']) {;?>
+								if ($token['quadro_id'] == $opcao['id']) {;?>
 								<div style="text-align: left">
-									<?php echo 'Quadro: ' . $opcao['quadro_nome'];?><br>
-									<?php echo 'Lista: ' . $opcao['titulo'];?><br>
-								</div>										
+									<?php echo 'Quadro: ' . $opcao['nome'];?><br>
+								</div>
 							<?php }
 							} ?>
-							http://localhost/hooks.php?token=<?php echo $hook['token'];?>
-							<form action="" method="post" onsubmit="return confirm('Tem certeza que deseja excluir este Webhook?')">
-								<input type="hidden" name="hookid" value="<?php echo $hook['id'];?>">
+							Token: <?php echo $token['token'];?>
+							<form action="" method="post" onsubmit="return confirm('Tem certeza que deseja excluir esta Token?')">
+								<input type="hidden" name="token_id" value="<?php echo $token['id'];?>">
 								<button>
 									<img src="/resources/trash.svg" style="width: 16px;color:white">
 								</button>
@@ -68,15 +67,15 @@
 				</div>
 				<div>
 					<form action="" method="post">
-						<input type="hidden" name="WEBHOOK" value="">
-						<select name="quadro-lista" id="">
+						<input type="hidden" name="TOKEN" value="">
+						<select name="quadro" id="">
 							<?php foreach ($opcoes as $opcao) {?>
-								<option value="<?php echo $opcao['quadro_id'] . ',' . $opcao['lista_id'];?>">
-									<?php echo $opcao['quadro_nome'] . ' - ' . $opcao['titulo'];?>
+								<option value="<?php echo $opcao['id'];?>">
+									<?php echo $opcao['nome'];?>
 								</option>
 							<?php } ?>
 						</select>
-						<button>Criar Webhook</button>
+						<button>Criar Token</button>
 					</form>
 				</div>
 			</div>

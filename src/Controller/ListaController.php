@@ -30,8 +30,16 @@ class ListaController {
 		return $this->listaModel->criar($lista_titulo, $quadro_id);
 	}
 
+	public function ler($lista_id) {
+		return $this->listaModel->ler($lista_id);
+	}
+
 	public function atualizarLista($lista_id, $titulo) {
 		return $this->listaModel->atualizar($lista_id, $titulo);
+	}
+
+	public function editarPosListas($listas) {
+		return $this->listaModel->editarPosListas($listas);
 	}
 
     public function remover($lista_id) {
@@ -56,6 +64,7 @@ class ListaController {
     }
 
 	public function post() {
+		$payload = json_decode(file_get_contents('php://input'));
 		if (isset($_POST['lista_add'])) {
 			$this->criar($_POST['lista_titulo'], $_POST['quadro_id']);
 		}
@@ -69,6 +78,9 @@ class ListaController {
 			
 			return strcmp($item_tipo, "lista") == 0 ? $this->atualizarLista($item_id, $item_texto) : $this->cartaoModel->atualizarCartao($item_id, $item_texto);
 		}
-		echo(print_r(json_decode(file_get_contents('php://input'), true),true));
+		elseif ($payload != null && property_exists($payload, 'lista_pos')) {
+			echo json_encode(['resultado' => $this->editarPosListas($payload->lista_pos)]);
+			exit();
+		}
 	}
 }

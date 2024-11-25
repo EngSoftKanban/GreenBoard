@@ -12,7 +12,7 @@ class QuadroController {
         $this->quadroModel = new Quadro($pdo);
 	}
 
-	public function ler(int $quadro_id) {
+	public function ler($quadro_id) {
 		return $this->quadroModel->ler($quadro_id);
 	}
 
