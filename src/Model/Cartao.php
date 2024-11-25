@@ -10,7 +10,13 @@ class Cartao {
 		$this->pdo = $pdo;
 	}
 
-	public function listarPorLista($listaId) {
+	public function ler($cartao_id) {
+		$stmt = $this->pdo->prepare("SELECT * FROM cartoes WHERE id = $cartao_id");
+		$stmt->execute();
+		return $stmt->fetch();
+	}
+
+	public function lerPorLista($listaId) {
 		$sql = "SELECT * FROM cartoes WHERE lista_id = :lista_id ORDER BY posicao";
 		$stmt = $this->pdo->prepare($sql);
 		$stmt->bindParam(':lista_id', $listaId);
@@ -84,6 +90,18 @@ class Cartao {
 		return true;
 	}
 
+	public function editarPosCartoes($cartoes) {
+		foreach ($cartoes as $cartao) {
+			$stmt = $this->pdo->prepare("UPDATE cartoes SET posicao = $cartao->posicao, lista_id = :lista_id WHERE id = :id");
+			$stmt->bindParam(':id', $cartao->id, PDO::PARAM_INT);
+			$stmt->bindParam(':lista_id', $cartao->lista_id, PDO::PARAM_INT);
+			if (!$stmt->execute()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public function addEtiqueta($nome, $cor, $cartao_id) {
 		$sql = "INSERT INTO etiquetas (nome, cor, cartao_id) VALUES (:nome, :cor, :cartao_id)";
 		$stmt = $this->pdo->prepare($sql);
@@ -100,6 +118,12 @@ class Cartao {
 		$stmt->bindParam(':cartao_id', $cartao_id);
 		$stmt->execute();
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+	}
+
+	public function lerEtiqueta($etiqueta_id) {
+		$stmt = $this->pdo->prepare("SELECT * FROM etiquetas WHERE id = $etiqueta_id");
+		$stmt->execute();
+		return $stmt->fetch();
 	}
 
 	// Método para editar uma etiqueta

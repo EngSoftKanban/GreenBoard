@@ -31,11 +31,13 @@
 					<div class="tab-selected">Dados pessoais</div>
 				</a>
 				<a href="/webhooks.php">
-					<div class="tab-common-shadow">Webhooks</div>
+					<div class="tab-common">Webhooks</div>
 				</a>
-				<a href="quadro.php?quadro_id=<?php echo $_SESSION['quadro_id'] ?? 0; ?>" 
-                   style="position: fixed; left: 8px; bottom: 8px;">
-					<div class="back-container">
+				<a href="/tokens.php">
+					<div class="tab-common-shadow">Tokens da API</div>
+				</a>
+				<a href="quadro.php?quadro_id=<?php echo $_SESSION['quadro_id'];?>" style="position: fixed; left: 8px; bottom: 8px;">
+					<div class= "back-container">
 						<img src="/resources/arrow.svg" class="back-button">
 					</div>
 				</a>

@@ -72,6 +72,17 @@ class Lista {
 		return true;
 	}
 
+	public function editarPosListas($listas) {
+		foreach ($listas as $lista) {
+			$stmt = $this->pdo->prepare("UPDATE listas SET posicao = $lista->posicao WHERE id = :id");
+			$stmt->bindParam(':id', $lista->id, PDO::PARAM_INT);
+			if (!$stmt->execute()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public function possuiCartao($lista_id) {
 		$stmt = $this->pdo->prepare('SELECT * FROM cartoes WHERE lista_id = :lista_id');
 		$stmt->bindParam(':lista_id', $lista_id);

@@ -94,7 +94,7 @@
 						</div>
 					</div>
 					<div class="cards-container">
-					<?php	$cartoes = $cartaoController->listarCartoesPorLista($lista['id']); // TODO Fazer inline de todos os icones svg
+					<?php	$cartoes = $cartaoController->lerPorLista($lista['id']); // TODO Fazer inline de todos os icones svg
 							foreach ($cartoes as $cartao) {
 								require 'resources/template/cartao.php';
 							}?>
@@ -236,7 +236,7 @@
 					listas.forEach((lista, index) => {
 						order.push({
 							id: lista.id.replace('lista_', ''),
-							position: index + 1
+							posicao: index + 1
 						});
 					});
 					atualizarOrdemListas(order);
@@ -256,7 +256,7 @@
 						order.push({
 							id: cartao.id.replace('card_', ''),
 							lista_id: evt.to.closest('.column').id.replace('lista_', ''),
-							position: index + 1
+							posicao: index + 1
 						});
 					});
 					atualizarOrdemCartoes(order);
@@ -269,11 +269,11 @@
 			fetch(document.URL, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(order)
+				body: '{"lista_pos":' + JSON.stringify(order) + '}'
 			})
 			.then(response => response.json())
 			.then(result => {
-				if (result.success) {
+				if (result.resultado) {
 					console.log('Ordem das listas atualizada com sucesso');
 				} else {
 					console.error('Erro ao atualizar a ordem das listas');
@@ -283,21 +283,21 @@
 		}
 
 		function atualizarOrdemCartoes(order) {
-			fetch('atualizar_ordem_cartoes.php', {
+			fetch(document.URL, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(order)
+				body: '{"cartao_pos":' + JSON.stringify(order) + '}'
 			})
 			.then(response => response.json())
 			.then(result => {
-				if (result.success) {
+				if (result.resultado) {
 					console.log('Ordem dos cartões atualizada com sucesso');
 				} else {
 					console.error('Erro ao atualizar a ordem dos cartões');
 				}
 			})
 			.catch(error => console.error('Erro:', error));
-		}/**/
+		}
 
 		function openShareModal() {
 			document.getElementById('shareModal').style.display = 'block';

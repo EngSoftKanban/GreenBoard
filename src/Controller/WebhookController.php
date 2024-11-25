@@ -64,7 +64,7 @@ class WebhookController {
 						case 'reopened':
 						case 'opened':
 							$hook = $webhookController->lerPorToken($_GET['token']);
-							$cartaoController->adicionar($payload->issue->title, $hook['lista_id']);
+							$cartaoController->criar($payload->issue->title, $hook['lista_id']);
 							echo 'Sucesso\n' . print_r($payload, true);
 							break;
 						case 'edited':

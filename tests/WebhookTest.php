@@ -52,7 +52,11 @@ final class WebhookTest extends TestCase {
 		$this->assertEquals(null, $this->controller->ler(hook_id: $hook['id']));
 	}
 
+<<<<<<< HEAD
 	// Testes sobre receber evento {"action": "opened", "issue": {"title": "Título da issue"}}
+=======
+	// Testes sobre receber evento
+>>>>>>> develop
 
 	public function testAbrirIssue(): void {
 		$cartaoController = new CartaoController($this->pdo);
@@ -72,7 +76,11 @@ final class WebhookTest extends TestCase {
 	public function testFecharIssue(): void {
 		$cartaoController = new CartaoController($this->pdo);
 		$cartao = ['id' => 4, 'corpo' => 'Título da issue', 'lista_id' => 2, 'posicao' => 1];
+<<<<<<< HEAD
 		$cartaoController->adicionar($cartao['corpo'], $cartao['lista_id']);
+=======
+		$cartaoController->criar($cartao['corpo'], $cartao['lista_id']);
+>>>>>>> develop
 		
 		$_GET['token'] = '32a7942c40d5180e7f8624c5bb8f2ca0';
 		$_SERVER['CONTENT_TYPE'] = 'application/json';
@@ -88,7 +96,11 @@ final class WebhookTest extends TestCase {
 	public function testEditarIssue(): void {
 		$cartaoController = new CartaoController($this->pdo);
 		$cartao = ['id' => 4, 'corpo' => 'Título da issue', 'lista_id' => 2, 'posicao' => 1];
+<<<<<<< HEAD
 		$cartaoController->adicionar($cartao['corpo'], $cartao['lista_id']);
+=======
+		$cartaoController->criar($cartao['corpo'], $cartao['lista_id']);
+>>>>>>> develop
 
 		$_GET['token'] = '32a7942c40d5180e7f8624c5bb8f2ca0';
 		$_SERVER['CONTENT_TYPE'] = 'application/json';
