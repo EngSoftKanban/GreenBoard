@@ -78,28 +78,27 @@ class CartaoController {
 		}
 	}
 
-    public function adicionarEtiqueta() {
+    public function adicionarEtiqueta($nome, $cor, $cartao_id) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $input = json_decode(file_get_contents('php://input'), true);
             
-            $nome = $input['nome'] ?? '';
-            $cor = $input['cor'] ?? '';
-            $cartao_id = $input['cartao_id'] ?? null;
+            $nome ??= $input['nome'];
+            $cor ??= $input['cor'];
+            $cartao_id ??= $input['cartao_id'];
     
             if (empty($nome) || empty($cor) || !$cartao_id) {
-                echo json_encode(['success' => false, 'message' => 'Dados inválidos!']);
-                return;
+                return json_encode(['success' => false, 'message' => 'Dados inválidos!']);
             }
     
             $result = $this->cartaoModel->addEtiqueta($nome, $cor, $cartao_id);
     
             if ($result) {
-                echo json_encode(['success' => true, 'message' => 'Etiqueta adicionada com sucesso!']);
+                return json_encode(['success' => true, 'message' => 'Etiqueta adicionada com sucesso!']);
             } else {
-                echo json_encode(['success' => false, 'message' => 'Erro ao adicionar etiqueta.']);
+                return json_encode(['success' => false, 'message' => 'Erro ao adicionar etiqueta.']);
             }
         } else {
-            echo json_encode(['success' => false, 'message' => 'Método inválido']);
+            return json_encode(['success' => false, 'message' => 'Método inválido']);
         }
     }
 

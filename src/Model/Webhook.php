@@ -21,14 +21,14 @@ class Webhook {
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
 
-	public function criarWebHook($usuario_id, $quadro_id, $lista_id) {
+	public function criar($usuario_id, $quadro_id, $lista_id) {
 		$token = md5(strval(time()));
 		$stmt = $this->pdo->prepare('INSERT INTO webhooks (token, usuario_id, quadro_id, lista_id) VALUES (:token, :usuario_id, :quadro_id, :lista_id)');
 		$stmt->bindParam(':token', $token);
 		$stmt->bindParam(':usuario_id', $usuario_id);
 		$stmt->bindParam(':quadro_id', $quadro_id);
 		$stmt->bindParam(':lista_id', $lista_id);
-		$stmt->execute(); 
+		return $stmt->execute(); 
 	}
 
 	public function listarWebhooks($usuario_id) {
@@ -38,16 +38,23 @@ class Webhook {
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
 
-	public function lerWebhook($token) {
+	public function ler($hook_id) {
+		$stmt = $this->pdo->prepare('SELECT * from webhooks WHERE id = :hook_id');
+		$stmt->bindParam(':hook_id', $hook_id);
+		$stmt->execute(); 
+		return $stmt->fetch();
+	}
+
+	public function lerPorToken($token) {
 		$stmt = $this->pdo->prepare('SELECT * from webhooks WHERE token = :token');
 		$stmt->bindParam(':token', $token);
 		$stmt->execute(); 
 		return $stmt->fetch();
 	}
 
-	public function deletarWebhook($hook_id) {
+	public function destruir($hook_id) {
 		$stmt = $this->pdo->prepare('DELETE FROM webhooks WHERE id = :hook_id');
 		$stmt->bindParam(':hook_id', $hook_id);
-		$stmt->execute();
+		return $stmt->execute();
 	}
 }
