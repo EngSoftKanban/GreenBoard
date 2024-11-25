@@ -41,9 +41,18 @@ class Quadro {
 
 	public function updateAcesso($quadro_id) { // TODO Mudar isso para permissoes
 		$sqlUpdateAcesso = "UPDATE quadros SET acessado_em = NOW() WHERE id = :quadro_id";
-		$stmtUpdate = $pdo->prepare($sqlUpdateAcesso);
+		$stmtUpdate = $this->pdo->prepare($sqlUpdateAcesso);
 		$stmtUpdate->bindParam(':quadro_id', $quadro_id);
 		return $stmtUpdate->execute();
+	}
+
+	// Método para editar o nome do quadro
+	public function editar($quadro_id, $novo_nome) {
+		$sql = "UPDATE quadros SET nome = :novo_nome WHERE id = :quadro_id";
+		$stmt = $this->pdo->prepare($sql);
+		$stmt->bindParam(':novo_nome', $novo_nome);
+		$stmt->bindParam(':quadro_id', $quadro_id);
+		return $stmt->execute();
 	}
 
 	public function remover($quadro_id) {
