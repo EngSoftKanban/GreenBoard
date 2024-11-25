@@ -1,6 +1,5 @@
 <?php // TODO Impedir usuário não autorizado de acessar o quadro via URL
 namespace EngSoftKanban\GreenBoard;
-// $startt = microtime(true);
 
 session_start();
 
@@ -36,5 +35,3 @@ $membroController->post();
 $listas = $listaController->listar($quadro_id);
 
 require_once 'src/View/quadro.php';
-
-// echo (microtime(true) - $startt) * 1000;

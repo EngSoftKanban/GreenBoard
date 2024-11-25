@@ -1,4 +1,5 @@
 <?php
+namespace EngSoftKanban\GreenBoard\Teste;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 

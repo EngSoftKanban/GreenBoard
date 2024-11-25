@@ -13,11 +13,15 @@ class CartaoController {
         $this->cartaoModel = new Cartao($pdo);
     }
 
-    public function listarCartoesPorLista($lista_id) {
-        return $this->cartaoModel->listarPorLista($lista_id);
-    }
+	public function ler($cartao_id) {
+		return $this->cartaoModel->ler($cartao_id);
+	}
 
-    public function adicionar($corpo, $lista_id) {
+	public function lerPorLista($lista_id) {
+		return $this->cartaoModel->lerPorLista($lista_id);
+	}
+
+    public function criar($corpo, $lista_id) {
         if (empty($corpo) || empty($lista_id)) {
             return json_encode(["success" => false, "message" => "Corpo ou ID da lista não podem estar vazios."]);
         }
@@ -25,7 +29,7 @@ class CartaoController {
         return json_encode(["success" => $resultado, "message" => $resultado ? "Cartão adicionado com sucesso!" : "Erro ao adicionar o cartão."]);
     }
 
-    public function atualizar($id, $corpo) {
+    public function editar($id, $corpo) {
         if (empty($id) || empty($corpo)) {
             return json_encode(["success" => false, "message" => "ID ou corpo do cartão não podem estar vazios."]);
         }
@@ -33,7 +37,7 @@ class CartaoController {
         return json_encode(["success" => $resultado, "message" => $resultado ? "Cartão atualizado com sucesso!" : "Erro ao atualizar o cartão."]);
     }
 
-	public function remover($cartao_id) {
+	public function excluir($cartao_id) {
 		$cartao = $this->cartaoModel->getCartaoById($cartao_id);
 		
 		if (!$cartao) {
@@ -65,16 +69,25 @@ class CartaoController {
         }
     }
 
+	public function editarPosCartoes($cartoes) {
+		return $this->cartaoModel->editarPosCartoes($cartoes);
+	}
+
 	public function acharPorCorpo($corpo) {
 		return $this->cartaoModel->acharPorCorpo($corpo);
 	}
 
 	public function post() {
+		$payload = json_decode(file_get_contents('php://input'));
 		if (isset($_POST['cartao_add'])) {
-			$this->adicionar($_POST['cartao_corpo'], $_POST['lista_id']);
+			$this->criar($_POST['cartao_corpo'], $_POST['lista_id']);
 		}
 		elseif (isset($_POST['cartao_rm'])) {
-			$this->remover($_POST['cartao_id']);
+			$this->excluir($_POST['cartao_id']);
+		}
+		elseif ($payload != null && property_exists($payload, 'cartao_pos')) {
+			echo json_encode(['resultado' => $this->editarPosCartoes($payload->cartao_pos)]);
+			exit();
 		}
 	}
 

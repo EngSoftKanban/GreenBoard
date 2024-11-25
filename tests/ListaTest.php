@@ -1,4 +1,6 @@
 <?php
+namespace EngSoftKanban\GreenBoard\Teste;
+
 use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/../src/Model/Lista.php';
