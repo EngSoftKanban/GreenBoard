@@ -6,10 +6,10 @@ require_once 'src/Model/Quadro.php';
 use EngSoftKanban\GreenBoard\Model\Quadro;
 
 class QuadroController {
-    private $quadroModel;
+	private $quadroModel;
 
-    public function __construct($pdo) {
-        $this->quadroModel = new Quadro($pdo);
+	public function __construct($pdo) {
+		$this->quadroModel = new Quadro($pdo);
 	}
 
 	public function ler($quadro_id) {
@@ -28,9 +28,13 @@ class QuadroController {
 		return $this->quadroModel->remover($quadro_id); 
 	}
 
-    public function criar($nome, $usuario_id) {
-        return $this->quadroModel->criar($nome, $usuario_id);
-    }
+	public function criar($nome, $usuario_id) {
+  		return $this->quadroModel->criar($nome, $usuario_id);
+	}
+
+	public function editar($quadro_id, $novo_nome) {
+		return $this->quadroModel->editar($quadro_id, $novo_nome);
+	}
 
 	public function post() {
 		if (isset($_POST['action'])) {
@@ -42,6 +46,12 @@ class QuadroController {
 				}
 			} elseif ($_POST['action'] === 'create') {
 				$this->criar($_POST['nome_quadro'], $_SESSION['usuario_id']);
+			} elseif ($_POST['action'] === 'edit') { 
+				try {
+					$this->editar($_POST['quadro_id'], $_POST['novo_nome']);
+				} catch (Exception $e) {
+					echo "Erro ao editar quadro: " . $e->getMessage();
+				}
 			}
 		}
 	}
