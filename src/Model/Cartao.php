@@ -24,6 +24,12 @@ class Cartao {
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
 
+	public function lerPorListas($listas_id) {
+		$stmt = $this->pdo->prepare('SELECT * FROM cartoes WHERE lista_id IN (' . implode(',', $listas_id) . ') ORDER BY posicao');
+		$stmt->execute();
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+	}
+
 	public function adicionarCartao($corpo, $lista_id) {
 		$stmt = $this->pdo->prepare('SELECT * FROM cartoes WHERE lista_id = :lista_id');
 		$stmt->bindParam(':lista_id', $lista_id);

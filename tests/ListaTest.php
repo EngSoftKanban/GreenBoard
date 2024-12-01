@@ -1,13 +1,10 @@
 <?php
-<<<<<<< HEAD
-=======
 namespace EngSoftKanban\GreenBoard\Teste;
 
->>>>>>> develop
 use PHPUnit\Framework\TestCase;
 
-require_once __DIR__ . '/../src/Model/Lista.php';
-require_once __DIR__ . '/../src/Controller/ListaController.php';
+require_once '/src/Model/Lista.php';
+require_once '/src/Controller/ListaController.php';
 
 use EngSoftKanban\GreenBoard\Model\Lista;
 use EngSoftKanban\GreenBoard\Controller\ListaController;

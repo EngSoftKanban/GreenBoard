@@ -17,13 +17,15 @@ class Quadro {
 	}
 
 	public function lerTodos($usuario_id) {
-		$stmt = $this->pdo->query("SELECT q.* FROM quadros q WHERE q.id IN (SELECT p.quadro_id FROM permissoes p WHERE p.usuario_id = $usuario_id)");
+		$stmt = $this->pdo->query("SELECT q.* FROM quadros q WHERE q.id IN (SELECT p.quadro_id FROM permissoes p
+				WHERE p.usuario_id = $usuario_id)");
 		$stmt->execute();
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
 
 	public function lerRecente($usuario_id) {
-		$stmt = $this->pdo->query("SELECT q.* FROM quadros q WHERE q.id IN (SELECT p.quadro_id FROM permissoes p WHERE p.usuario_id = $usuario_id) ORDER BY q.acessado_em DESC LIMIT 5");
+		$stmt = $this->pdo->query("SELECT q.* FROM quadros q WHERE q.id IN (SELECT p.quadro_id FROM permissoes p
+				WHERE p.usuario_id = $usuario_id) ORDER BY q.acessado_em DESC LIMIT 5");
 		$stmt->execute();
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
@@ -32,7 +34,8 @@ class Quadro {
 		$stmt = $this->pdo->prepare("INSERT INTO quadros (nome) VALUES (:nome)");
 		$stmt->bindParam(':nome', $nome);
 		$rs = $stmt->execute();
-		$stmt = $this->pdo->prepare("INSERT INTO permissoes (eh_dono, eh_admin, usuario_id, quadro_id) VALUES (1, 1, :usuario_id, :quadro_id)");
+		$stmt = $this->pdo->prepare("INSERT INTO permissoes (eh_dono, eh_admin, usuario_id, quadro_id)
+				VALUES (1, 1, :usuario_id, :quadro_id)");
 		$stmt->bindParam(':usuario_id', $usuario_id);
 		$quadro_id = $this->pdo->lastInsertId('quadros');
 		$stmt->bindParam(':quadro_id', $quadro_id);

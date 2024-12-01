@@ -2,11 +2,11 @@
 namespace EngSoftKanban\GreenBoard\Controller;
 
 require_once 'src/Model/Lista.php';
-require_once 'src/Model/User.php';
+require_once 'src/Model/Usuario.php';
 require_once 'src/Model/Cartao.php';
 
 use EngSoftKanban\GreenBoard\Model\Lista;
-use EngSoftKanban\GreenBoard\Model\User;
+use EngSoftKanban\GreenBoard\Model\Usuario;
 use EngSoftKanban\GreenBoard\Model\Cartao;
 
 use \PDO;

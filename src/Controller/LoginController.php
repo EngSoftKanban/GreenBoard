@@ -1,7 +1,7 @@
 <?php
 namespace EngSoftKanban\GreenBoard\Controller;
 
-use EngSoftKanban\GreenBoard\Model\User;
+use EngSoftKanban\GreenBoard\Model\Usuario;
 use Google_Client;
 
 class LoginController {
@@ -79,4 +79,4 @@ class LoginController {
     }
     
 }
-?>
+
