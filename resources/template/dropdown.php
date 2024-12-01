@@ -11,9 +11,8 @@
 	</div>
 	<div class="dropdown-content">
 		<a href="/perfil.php">Dados Pessoais</a>
-		<a href="#">Alterar Conta</a>
-		<a href="#">Gerenciar Conta</a>
-		<a href="#">Configurações</a>
+		<a href="/webhooks.php">Webhooks</a>
+		<a href="/tokens.php">Tokens</a>
 		<a href="/logout.php">Logout</a>
 	</div>
 </div>

@@ -1,16 +1,20 @@
 <?php
 namespace EngSoftKanban\GreenBoard\Controller;
 
-use EngSoftKanban\GreenBoard\Model\User;
+use EngSoftKanban\GreenBoard\Model\Usuario;
 
-class RegisterController {
-    private $userModel;
+class UsuarioController {
+    private Usuario $usuario;
 
     public function __construct($pdo) {
-        $this->userModel = new User($pdo);
+        $this->usuario = new Usuario($pdo);
     }
 
-	public function register() {
+	public function lerPorIds($usuarios_id) {
+		return $this->usuario->lerPorIds($usuarios_id);
+	}
+
+	public function resposta() {
 		$erro = null;
 
 		if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -26,14 +30,13 @@ class RegisterController {
 					$erro = "As senhas não são iguais.";
 				} else {
 					// Chame o método register do modelo
-					if ($this->userModel->register($nome, $email, $senha)) {
+					if ($this->usuario->cadastrar($nome, $email, $senha)) {
 						session_start();
 						session_regenerate_id();
 						$_SESSION['usuario_id'] = $usuario['id'];
 						$_SESSION['nome'] = $usuario['nome'];
 						$_SESSION['email'] = $usuario['email'];
 						$_SESSION['icone'] = $usuario['icone'];
-						//Ssession_commit();
 						// Redirecionar o usuário para a página principal ou anterior
 						header("Location: " . ($_SESSION['redirect_url'] ?? 'painel.php'));
 					} else {
@@ -45,4 +48,3 @@ class RegisterController {
 		return $erro; // Retorna erro, se houver
     }
 }
-?>

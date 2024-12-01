@@ -1,13 +1,9 @@
 <?php
-<<<<<<< HEAD
-=======
 namespace EngSoftKanban\GreenBoard\Teste;
->>>>>>> develop
-
-require_once __DIR__ . '/../vendor/autoload.php';
 
 use PHPUnit\Framework\TestCase;
 use EngSoftKanban\GreenBoard\Model\Lista;
+use \PDO;
 
 class ListaTeste extends TestCase
 {
