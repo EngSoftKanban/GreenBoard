@@ -177,7 +177,7 @@ N/A
 #### Convidar membros a um quadro:
 ![Convidar membros a um quadro](./resources/prototipo/Kanban%20-%20Compartilhar%202.png)
 
-## [[US10 - Criar ou remover quadros](https://trello.com/c/VaOzGoA4)
+## [US10 - Criar ou remover quadros](https://trello.com/c/VaOzGoA4)
 
 ### Descrição:
 Como usuário, quero acessar uma tela que me mostre todos os meus quadros e que me permita adicionar ou remover um quadro para organizar minhas atividades de forma eficiente.
@@ -204,7 +204,7 @@ N/A
 #### Manipulação de quadros:
 ![Quadros](./resources/prototipo/Quadros.png)
 
-## [US10 - Reconfigurar Apache](https://trello.com/c/RnnbSaO5)
+## [US11 - Reconfigurar Apache](https://trello.com/c/RnnbSaO5)
 
 ### Descrição:
 Como hosteador do serviço, quero que as regras de configuração do servidor Apaches sejam seguras e sólidas, tal que o hosteamento fique mais fácil.
