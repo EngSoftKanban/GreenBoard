@@ -10,6 +10,8 @@ GreenBoard é o projeto de um de quadro Kanban simples e mínimo para de fato au
 
 #### [Versão atual](https://github.com/EngSoftKanban/GreenBoard/releases)
 
+#### [Apresentação final](https://github.com/EngSoftKanban/GreenBoard/blob/main/GREENBOARD.pdf)
+
 ## Equipe
 
 | Nome | Github |
