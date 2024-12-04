@@ -1,7 +1,7 @@
 <?php
 namespace EngSoftKanban\GreenBoard\Controller;
 
-use EngSoftKanban\GreenBoard\Model\User;
+use EngSoftKanban\GreenBoard\Model\Usuario;
 use Google_Client;
 
 class LoginController {
@@ -10,7 +10,7 @@ class LoginController {
 
     public function __construct($pdo) {
         $this->pdo = $pdo;  // Inicialize $pdo
-        $this->userModel = new User($pdo);
+        $this->userModel = new Usuario($pdo);
     }
 
     public function login() {
@@ -79,4 +79,4 @@ class LoginController {
     }
     
 }
-?>
+

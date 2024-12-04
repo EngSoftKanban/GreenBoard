@@ -4,6 +4,14 @@
 
 GreenBoard é o projeto de um de quadro Kanban simples e mínimo para de fato aumentar sua produtividade.
 
+#### [Landing Page](https://engsoftkanban.github.io)
+
+#### [Vídeo](https://github.com/EngSoftKanban/GreenBoard/blob/feature/main/resources/v%C3%ADdeo/V%C3%ADdeo%20de%20Demonstra%C3%A7%C3%A3o.mp4)
+
+#### [Versão atual](https://github.com/EngSoftKanban/GreenBoard/releases/latest)
+
+#### [Apresentação final](https://github.com/EngSoftKanban/GreenBoard/blob/main/GREENBOARD.pdf)
+
 ## Equipe
 
 | Nome | Github |
@@ -32,4 +40,24 @@ GreenBoard é o projeto de um de quadro Kanban simples e mínimo para de fato au
 
 ## Instalação e uso
 
-Foi usado o [XAMPP 8.2.12](https://www.apachefriends.org/pt_br/index.html), especificamente o PHP, o Apache 2 e MariaDB. Ademais, emm termos de PHP, com o XAMPP não são necessárias configurações adicionais, se instalando o servidor Apache manualmente é necessário instalar o módulo PHP, também é preciso que, nas configurações do seu servidor Apache, mudar o diretório `root` para `./public` ou adicionar um link simbólico a `./public` na `root`. Por fim quanto ao setup do banco de dados MariaDB, sera disponibilizados em breve.
+É necessário instalar o [XAMPP 8.2.12](https://www.apachefriends.org/pt_br/index.html) primeiramente. Após, é necessário mudar o valor da variável DocumentRoot do Apache para o caminho para a pasta `public` dentro da pasta do projeto, além disso é necessário adicionar o conteúdo abaixo ao `httpd.conf`:
+```
+Alias "/resources/" "/caminho/à/pasta/do/projeto/resources/"
+<Directory "/caminho/à/pasta/do/projeto/resources/">
+    Options Indexes FollowSymLinks ExecCGI Includes
+    AllowOverride All
+    Require all granted
+</Directory>
+
+<Directory "/caminho/à/pasta/do/projeto/resources/prototipo">
+    Require all denied
+</Directory>
+
+Alias "/src/" "/caminho/à/pasta/do/projeto/src/"
+<Directory "/caminho/à/pasta/do/projeto/src/">
+    Options Indexes FollowSymLinks ExecCGI Includes
+    AllowOverride All
+    Require all granted
+</Directory>
+```
+Ademais, é necessario adicionar o caminho à pasta do projeto ao `include_path` do `php.ini`. Quanto ao banco de dados, crie um banco de dados de nome 'GreenBoard' e importe as configurações expostas em `GreenTest.sql`, os dados padrões criados pela importação podem ser apagados sem problemas.

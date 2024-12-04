@@ -9,14 +9,14 @@ if (!isset($_SESSION['usuario_id'])) {
 
 require_once 'src/bdpdo.php';
 require_once 'src/Model/Quadro.php';
-require_once 'src/Controller/PainelController.php';
+require_once 'src/Controller/QuadroController.php';
 
-use EngSoftKanban\GreenBoard\Controller\PainelController;
+use EngSoftKanban\GreenBoard\Controller\QuadroController;
 
-$controller = new PainelController($pdo);
+$controller = new QuadroController($pdo);
 $controller->post();
 
-$quadros = $controller->getAll($_SESSION['usuario_id']);
-$recente = $controller->getRecent($_SESSION['usuario_id']);
+$quadros = $controller->lerTodos($_SESSION['usuario_id']);
+$recente = $controller->lerRecente($_SESSION['usuario_id']);
 
 require_once 'src/View/painel.php';

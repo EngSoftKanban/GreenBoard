@@ -20,20 +20,20 @@
 			<h1>GreenBoard</h1>
 		</div>
 		<div class="users">
-		<img src="/resources/olivia.jpeg" alt="Usuário 1" class="user-icon">
-		<img src="/resources/taylor.jpg" alt="Usuário 2" class="user-icon">
-		<img src="/resources/lalisa.jpg" alt="Usuário 3" class="user-icon">
+			<?php foreach ($usuarios as $usuario) {?>
+				<img src="<?php echo $usuario['icone']?>" class="user-icon" title="<?php echo $usuario['nome']?>">
+			<?php } ?>
 
-		<button class="share-button" onclick="openShareModal()">Compartilhar</button>
-		
-		<div class="menu-container">
-			<div class="profile-icon" onclick="toggleMenu()">
-				<img id="profileImageTopBar" 
-					src="<?php echo $_SESSION['icone']; ?>" class="profile-image-menu">
+			<button class="share-button" onclick="openShareModal()">Compartilhar</button>
+			
+			<div class="menu-container">
+				<div class="profile-icon" onclick="toggleMenu()">
+					<img id="profileImageTopBar" 
+						src="<?php echo $_SESSION['icone']; ?>" class="profile-image-menu">
+				</div>
+				<?php require_once 'resources/template/dropdown.php';?>
 			</div>
-			<?php require_once 'resources/template/dropdown.php';?>
 		</div>
-	</div>
 	</div>
 
 	<div id="shareModal" class="share-modal">
@@ -57,16 +57,18 @@
 			</div>     
 			<h4 style="color: black; font-size: 15px; margin-top: 20px;">Membros do Kanban</h4>
 			<ul id="memberList">
-				<li style="color: black; margin-top: 15px; margin-left: 15px;">Fulana (você) - Administrador do Kanban</li>
-				<?php
-
-				$stmt = $pdo->query("SELECT nome FROM usuarios");
-				$usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
-				
-				foreach ($usuarios as $usuario) {
-					echo "<li>" . htmlspecialchars($usuario['nome']) . "</li>";
-				}
-				?>
+				<?php foreach ($usuarios as $usuario) { ?>
+					<li style="margin-top: 16px; margin-left: 15px; align-content: center;">
+						<img style="margin-bottom: -16px; max-width: 48px" src="<?php echo $_SESSION['icone']; ?>" class="profile-image-menu">
+						<?php
+						$perm = array_filter($permissoes, function ($item) use ($usuario) {
+							return $item['usuario_id'] == $usuario['id'];
+						});
+						$perm = array_pop($perm);
+						echo htmlspecialchars($usuario['nome']) . ' - ' . ($perm['eh_dono'] == 1 ? 'Dono' :
+							($perm['eh_admin'] == 1 ? 'Administrador' : 'Membro comum')) ;?>
+					</li>
+				<?php }?>
 			</ul>
 		</div>
 	</div>
@@ -94,9 +96,10 @@
 						</div>
 					</div>
 					<div class="cards-container">
-					<?php	$cartoes = $cartaoController->lerPorLista($lista['id']); // TODO Fazer inline de todos os icones svg
-							foreach ($cartoes as $cartao) {
-								require 'resources/template/cartao.php';
+					<?php	foreach ($cartoes as $cartao) {// TODO Fazer inline de todos os icones svg
+								if($cartao['lista_id'] == $lista['id']) {
+									require 'resources/template/cartao.php';
+								}
 							}?>
 						<div class="add-card-container">
 							<button id="addCardButton_<?php echo $lista['id']; ?>" class="add-card-btn" onclick="showAddCardForm(<?php echo $lista['id']; ?>)">
@@ -401,16 +404,16 @@
 				return;
 			}
 
-			fetch('apicard.php', {
+			fetch(document.URL, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify({
+				body: '{"etiqueta_criar":' + JSON.stringify({
 					nome: tagName,
 					cor: tagColor,
 					cartao_id: currentCardId,
-				}),
+				}) + '}',
 			})
 			.then(response => {
 				console.log('Status da resposta:', response.status);
@@ -447,12 +450,12 @@
 			const confirmation = confirm('Tem certeza de que deseja excluir esta etiqueta?');
 
 			if (confirmation) {
-				fetch(`apicard.php`, {
-					method: 'DELETE',
+				fetch(document.URL, {
+					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
 					},
-					body: JSON.stringify({ id: tagId }),
+					body: '{"etiqueta_excluir":' + JSON.stringify({ id: tagId }) + '}',
 				})
 				.then(response => response.json())
 				.then(data => {
@@ -474,12 +477,12 @@
 			const nome = document.getElementById('tagTitle').value;
 			const cor = document.getElementById('tagColor').value;
 
-			fetch('apicard.php', {
-				method: 'PUT',
+			fetch(document.URL, {
+				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify({ id: id, nome: nome, cor: cor }),
+				body: '{"etiqueta_editar":' + JSON.stringify({ id: id, nome: nome, cor: cor }) + '}',
 			})
 			.then(response => {
 				if (!response.ok) {
