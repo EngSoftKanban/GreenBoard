@@ -40,6 +40,8 @@ GreenBoard é o projeto de um de quadro Kanban simples e mínimo para de fato au
 
 ## Instalação e uso
 
+1. Instalação e setup do XAMPP
+
 É necessário instalar o [XAMPP 8.2.12](https://www.apachefriends.org/pt_br/index.html) primeiramente. Após, é necessário mudar o valor da variável DocumentRoot do Apache para o caminho para a pasta `public` dentro da pasta do projeto, além disso é necessário adicionar o conteúdo abaixo ao `httpd.conf`:
 ```
 Alias "/resources/" "/caminho/à/pasta/do/projeto/resources/"
@@ -60,4 +62,15 @@ Alias "/src/" "/caminho/à/pasta/do/projeto/src/"
     Require all granted
 </Directory>
 ```
-Ademais, é necessario adicionar o caminho à pasta do projeto ao `include_path` do `php.ini`. Quanto ao banco de dados, crie um banco de dados de nome 'GreenBoard' e importe as configurações expostas em `GreenTest.sql`, os dados padrões criados pela importação podem ser apagados sem problemas.
+Ademais, é necessario adicionar o caminho à pasta do projeto ao `include_path` do `php.ini`:
+![Captura de tela_2024-11-24_17-50-06](https://github.com/user-attachments/assets/3f5d2a2e-bae9-44d2-90d6-524629487c55)
+
+Quanto ao banco de dados, crie um banco de dados de nome 'GreenBoard' e importe as configurações expostas em `GreenTest.sql`, os dados padrões criados pela importação podem ser apagados sem problemas.
+
+2. Instalação e setup do Composer
+
+O Composer é um gerenciador de pacotes, que serve para ajudar no gerenciamento de dependências de um projeto. O Composer pode ser baixado [aqui](https://getcomposer.org/), após instalá-lo, na pasta do projeto faça:
+```
+composer install
+```
+Esse comando fará o Composer baixar e instalar todas as dependências especificadas pelo projeto, após isso o projeto estará pronto para uso.
